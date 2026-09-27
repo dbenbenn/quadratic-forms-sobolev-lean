@@ -1,0 +1,510 @@
+\documentclass[11pt]{amsart}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1.15in]{geometry}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\renewcommand{\thetheorem}{\Alph{theorem}}
+\newtheorem*{bksthm}{Theorem 1.3 of \cite{BKS}}
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{proposition}[lemma]{Proposition}
+\newtheorem{corollary}[lemma]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[lemma]{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\abs}[1]{\lvert #1\rvert}
+\newcommand{\norm}[1]{\lvert #1\rvert}
+\newcommand{\supn}[1]{\lvert #1\rvert_\infty}
+\newcommand{\1}{\mathbf{1}}
+\newcommand{\Qd}{\mathcal{Q}_\delta}
+
+\title[A gap in Bux--Kassmann--Schulze and a repair]{The discretization step in
+Bux--Kassmann--Schulze:\\ a gap and a repair by random lattice sampling}
+\author{Claude}
+\address{Anthropic}
+\date{September 2026}
+
+
+
+\begin{document}
+\begin{abstract}
+Bux, Kassmann and Schulze prove that quadratic forms whose kernels are nondegenerate only on
+double cones of arbitrary orientation are comparable, on every ball, to the Gagliardo seminorm of
+$H^{\alpha/2}$. Their proof passes from a discrete comparability theorem on $\Z^d$ to the
+continuous one by a limit which, as written, requires the function to lie a priori in
+$H^{\alpha/2}$ of a larger ball, which is what is to be proved. We explain the gap and close
+it along the paper's own route. Instead of averaging the function over lattice cells, we sample
+it at the points of a randomly shifted and randomly distorted lattice, apply the discrete theorem
+to each lattice, and average over the lattices. This proves the enlarged-ball comparability for
+every measurable function, with no finiteness assumption, and with it all the continuous results
+of the paper. The argument has been checked in Lean~4.
+\end{abstract}
+\maketitle
+
+\section{Introduction}
+
+We use the notation of Bux, Kassmann and Schulze~\cite{BKS}, and cite the numbering of the arXiv
+version~\cite{BKS}. A \emph{double cone} with axis a unit vector $v\in\R^d$ and apex angle
+$\theta\in(0,\pi/2]$ is
+\[
+  V=\{\,u\in\R^d\setminus\{0\} : \abs{\langle u,v\rangle}>\cos\theta\,\norm{u}\,\},
+\]
+the set of nonzero vectors making an angle less than $\theta$ with the line $\R v$. A
+\emph{configuration} $\Gamma$ assigns to each $x\in\R^d$ a double cone $\Gamma(x)$, and
+$V^\Gamma[x]=x+\Gamma(x)$. It is \emph{$\vartheta$-bounded} if all apex angles are at least
+$\vartheta>0$.\footnote{\cite{BKS} phrase this with the infimum of the apex angles; only the positive
+lower bound is ever used. We read ``apex angle'' as the angle to the axis. Nothing below depends
+on this reading beyond the value of the constants.} Let $\alpha\in(0,2)$ and $\Lambda\ge1$. We
+consider measurable $k\colon\R^d\times\R^d\to[0,\infty]$ with $k(x,y)=k(y,x)$ and
+\begin{equation}\label{eq:2}
+  \Lambda^{-1}\bigl(\1_{V^\Gamma[x]}(y)+\1_{V^\Gamma[y]}(x)\bigr)\norm{x-y}^{-d-\alpha}
+  \le k(x,y)\le \Lambda\norm{x-y}^{-d-\alpha}\qquad(x\neq y).
+\end{equation}
+This is condition (2) of \cite{BKS}. For a set $D\subseteq\R^d$ and $f\colon\R^d\to\R$ write
+\[
+  \abs{f}^2_{H_k(D)}=\iint_{D\times D}\bigl(f(y)-f(x)\bigr)^2k(x,y)\dd x\dd y,\qquad
+  \abs{f}^2_{H^{\alpha/2}(D)}=\iint_{D\times D}\frac{(f(y)-f(x))^2}{\norm{x-y}^{d+\alpha}}\dd x\dd y,
+\]
+with values in $[0,\infty]$.
+
+The main result of \cite{BKS}, Theorem~1.1, is that for a $\vartheta$-admissible $\Gamma$ (see
+Section~\ref{sec:consequences}) there is $c$, depending only on $d$, $\vartheta$ and $\Lambda$,
+such that $\abs{f}^2_{H^{\alpha/2}(B)}\le c\,\abs{f}^2_{H_k(B)}$ for every ball $B$ and every
+$f\in L^2(B)$. The proof has three steps.
+\begin{enumerate}
+\item A discrete analogue on $\Z^d$, Theorem~1.3 of \cite{BKS}, restated in Section~3.1. It is the heart of
+  the paper.
+\item The passage from the discrete to the continuous setting, in \S3.2 of \cite{BKS} (proof of
+  Lemma~3.7). It yields the \emph{enlarged-ball} inequality
+  $c\,\abs{f}^2_{H^{\alpha/2}(B)}\le\abs{f}^2_{H_k(B^*)}$, with $B=B_R(x_0)$ and $B^*=B_{\kappa R}(x_0)$.
+\item The removal of the enlargement, Lemma~A.1 of \cite{BKS}, via a Whitney decomposition and an
+  inequality of Dyda~\cite{Dyda}.
+\end{enumerate}
+
+Step~2 contains a gap, described in Section~\ref{sec:gap}. As written, the limit $h\to0$ on the
+kernel side of the discretized inequality is justified by dominated convergence. That step needs
+$f\in H^{\alpha/2}(B^*)$, while the lemma is applied, and must be applied, to every
+$f\in H_k(B^*)$.
+
+Our main result closes the gap. It uses nothing from \cite{BKS} beyond Theorem~1.3.
+
+\begin{theorem}\label{thm:A}
+Let $d\ge1$, $\vartheta\in(0,\pi/2]$, $\Lambda\ge1$ and $\alpha\in(0,2)$. There are $\kappa\ge1$
+and $C<\infty$, depending only on $d$, $\vartheta$, $\Lambda$ and $\alpha$, with the following
+property. Let $\Gamma$ be a $\vartheta$-bounded configuration, which need not satisfy any
+measurability condition. Let $k$ be measurable, symmetric and satisfy \eqref{eq:2}, and let
+$f\colon\R^d\to\R$ be measurable. Then for every ball $B=B_R(x_0)$,
+\[
+  \abs{f}^2_{H^{\alpha/2}(B_R(x_0))}\le C\,\abs{f}^2_{H_k(B_{\kappa R}(x_0))}.
+\]
+\end{theorem}
+
+No finiteness of either side is assumed. This is exactly the enlarged-ball inequality that
+Step~2 is meant to provide, now for every measurable $f$, so Steps~1 and~3 complete the proof of
+Theorem~1.1 of \cite{BKS} (Section~\ref{sec:consequences}).
+
+\medskip\noindent\textbf{The idea.} In \cite{BKS} the function is replaced by its averages
+$f_h$ over the cells of $h\Z^d$. The averages destroy the oscillation of $f$ inside a cell, and
+recovering the continuous form in the limit is what requires domination. We instead
+\emph{sample} $f$ at the points of a lattice. Sampling keeps every difference $f(s)-f(t)$ between
+lattice points exactly, so the discrete theorem applies to the sampled function for every
+lattice, with no limit to take. The lattice is then made random, by a shift
+$\eta\in[-\tfrac12,\tfrac12)^d$ and a small linear distortion $A=I+E$. Averaging the discrete
+inequality over the lattices reproduces both continuous forms, up to constants and up to pairs at
+distance $O(h)$. The random shift alone would sample only differences in directions of $h\Z^d$;
+the random distortion spreads the differences over all directions.
+
+\medskip\noindent\textbf{Related work.} Chaker and Silvestre \cite[Theorem~1.3]{CS} prove a
+localized coercivity estimate, $\iint_{B_2\times B_2}(u(x)-u(y))^2K\ge c\lambda\abs{u}^2_{\dot H^s(B_1)}$
+for every $u$, under a condition on the density of the nondegeneracy set of the kernel. They
+remark that their result implies that of \cite{BKS}. Their method is different: an iteration on
+kernels with a covering argument, not a discretization. So the continuous conclusions of
+\cite{BKS} were already available through \cite{CS}. The point of the present note is that the
+discretization route of \cite{BKS}, through their Theorem~1.3, can itself be completed. We are
+not aware of any earlier discussion of the gap.
+
+\medskip\noindent\textbf{Formal verification.} Theorem~\ref{thm:A} and every lemma below have
+been formalized and checked in Lean~4 with Mathlib (Section~\ref{sec:lean}). The formalization
+also proves Theorem~1.3 of \cite{BKS} itself.
+
+\section{The gap}\label{sec:gap}
+
+We follow the proof of Lemma~3.7 of \cite{BKS} (pp.~14--16). Let $f\in H_k(B^*)$. For $h\in(0,1)$
+let $f_h(x)=h^{-d}\int_{A_h(x)\cap B^*}f$ for $x\in h\Z^d\cap B^*$, where $A_h(x)$ is the cell of
+side $h$ about $x$. Theorem~1.3, applied to $f_h$ and a discretized kernel $\omega^k_h$, gives the
+discrete inequality (15) of \cite{BKS}:
+\begin{multline*}
+  c\sum_{\substack{x,y\in B\cap h\Z^d\\ \abs{x-y}>\sqrt d h}}(f_h(x)-f_h(y))^2
+    \int_{A_h(x)\times A_h(y)}\abs{s-t}^{-d-\alpha}\dd(s,t)\\
+  \le\sum_{\substack{x,y\in B^*\cap h\Z^d\\ \abs{x-y}>\sqrt d h}}(f_h(x)-f_h(y))^2
+    \int_{A_h(x)\times A_h(y)}k(s,t)\dd(s,t).
+\end{multline*}
+The right-hand side is $\int g_h$, where $g_h(s,t)=(f_h(x)-f_h(y))^2k(s,t)$ for
+$(s,t)\in\tilde A_h(x)\times\tilde A_h(y)$ with $x,y$ as in the sum, and $g_h=0$ otherwise.
+By Lebesgue differentiation (their Lemma~A.2), $g_h\to g=(f(s)-f(t))^2k(s,t)\1_{B^*\times B^*}$
+almost everywhere. The proof then states, on p.~16:
+\begin{quote}
+``For the right hand side in (15) this implies with help of dominated convergence
+[$\,\int g_h\to\int g\,$].''
+\end{quote}
+No dominating function is given, and none is available from the hypothesis $f\in H_k(B^*)$.
+
+The only upper bound on $g_h$ comes from Jensen's inequality,
+\[
+  (f_h(x)-f_h(y))^2\le h^{-2d}\int_{A_h(x)\times A_h(y)}(f(s')-f(t'))^2\dd(s',t'),
+\]
+together with the upper bound in \eqref{eq:2},
+$k(s,t)\le\Lambda\norm{s-t}^{-d-\alpha}\lesssim\norm{s'-t'}^{-d-\alpha}$.
+This bounds $g_h$ by local averages of $(f(s')-f(t'))^2\norm{s'-t'}^{-d-\alpha}$. Any integrable
+majorant built this way requires at least $f\in H^{\alpha/2}(B^*)$, which is the conclusion
+being proved.
+
+The hypothesis controls $(f(s)-f(t))^2k(s,t)$, and this cannot be used here. The function $g_h$
+pairs the value $k(s,t)$ with differences of \emph{averages} of $f$ over the two cells, and the
+lower bound in \eqref{eq:2} controls $k$ only on the cones. The kernel may vanish at $(s',t')$
+while being of full size at $(s,t)$ in the same pair of cells.
+
+Nor can the step be rescued cheaply:
+\begin{itemize}
+\item Restricting to $f\in H^{\alpha/2}(B^*)$ makes the step valid, but then the resulting
+  inequality holds only for such $f$. It does not yield the inclusion
+  $H_k(B)\subseteq H^{\alpha/2}(B)$, which is the content of Lemma~3.7.
+\item Approximating $f\in H_k(B^*)$ by smooth functions in the $H_k$ norm would require the
+  density statement of Theorem~1.4, whose proof uses Lemma~3.7.
+\end{itemize}
+The final inequality of Lemma~3.7 is true, by Theorem~\ref{thm:A} or by \cite{CS}. But its proof
+in \cite{BKS} is incomplete at this step.
+
+\section{Proof of Theorem~\ref{thm:A}}
+
+Throughout, $d\ge1$, $\norm{\cdot}$ is the Euclidean norm and $\supn{\cdot}$ the maximum norm, and
+$\abs{\,\cdot\,}$ also denotes Lebesgue measure. Balls $B_r(x)$ are open and $\bar B_r(x)$
+closed. Integrals of $[0,\infty]$-valued functions are Lebesgue integrals, and all identities
+and inequalities are between elements of $[0,\infty]$.
+
+\subsection{The discrete theorem}
+
+\begin{bksthm}
+Let $\Gamma$ be a $\vartheta$-bounded configuration and $\alpha\in(0,2)$. Let
+$\omega\colon\Z^d\times\Z^d\to[0,\infty]$ satisfy $\omega(x,y)=\omega(y,x)$ and
+\[
+  \Lambda^{-1}\bigl(\1_{V^\Gamma[x]}(y)+\1_{V^\Gamma[y]}(x)\bigr)\abs{x-y}^{-d-\alpha}
+  \le\omega(x,y)\le\Lambda\abs{x-y}^{-d-\alpha}
+\]
+for $\abs{x-y}>R_0$, where $R_0>0$ and $\Lambda\ge1$. There are $\kappa\ge1$ and $c\ge1$ such that
+for every $R>0$, every $x_0\in\R^d$ and every $f\colon B_{\kappa R}(x_0)\cap\Z^d\to\R$,
+\[
+  \sum_{\substack{x,y\in B_R(x_0)\cap\Z^d\\ \abs{x-y}>R_0}}(f(x)-f(y))^2\abs{x-y}^{-d-\alpha}
+  \le c\sum_{\substack{x,y\in B_{\kappa R}(x_0)\cap\Z^d\\ \abs{x-y}>R_0}}(f(x)-f(y))^2\omega(x,y).
+\]
+The constants depend on $\Lambda$, $\vartheta$, $R_0$ and $d$, and not on $\omega$ or $\Gamma$.
+\end{bksthm}
+
+We use it with $R_0=\tfrac12$. Then the condition $\abs{x-y}>R_0$ holds for all distinct lattice
+points, and the sums run over all pairs of distinct points, or all pairs, since diagonal terms
+vanish.
+
+\subsection{Random lattices}
+
+Fix
+\[
+  \varepsilon=\min\bigl(\tfrac12,\tfrac12\sin(\vartheta/2)\bigr),\qquad \delta=\varepsilon/d .
+\]
+For $Q=(Q_1,\dots,Q_d)\in(\R^d)^d$ let $A_Q$ be the linear map $A_Qu=u+\sum_j u_jQ_j$, and let
+$\Qd=\bar B_\delta(0)^d\subseteq(\R^d)^d$. For $Q\in\Qd$,
+$\norm{A_Qu-u}\le\sum_j\abs{u_j}\delta\le d\delta\norm{u}=\varepsilon\norm{u}$. Hence
+\begin{equation}\label{eq:nearid}
+  (1-\varepsilon)\norm{u}\le\norm{A_Qu}\le(1+\varepsilon)\norm{u},\qquad
+  (1-\varepsilon)^d\le\abs{\det A_Q}\le(1+\varepsilon)^d,
+\end{equation}
+the second because the singular values of $A_Q$ lie in $[1-\varepsilon,1+\varepsilon]$. Let
+$P=[-\tfrac12,\tfrac12)^d$. For $h>0$, $Q\in\Qd$ and $\eta\in P$, the lattice map is
+\[
+  T(z)=T_{h,Q,\eta}(z)=h\,A_Q(z+\eta)\qquad(z\in\Z^d),
+\]
+an injective affine map.
+
+\subsection{One lattice}
+
+\begin{lemma}[Cones]\label{lem:cone}
+Let $V$ be a double cone with axis $v$ and apex angle $\theta\ge\vartheta$, and let $V'$ be the
+double cone with the same axis and apex angle $\theta/2$. Let $A$ be linear with
+$\norm{Au-u}\le\varepsilon\norm{u}$ for all $u$, where $\varepsilon<\sin(\vartheta/2)$. Then
+$AV'\subseteq V$.
+\end{lemma}
+
+\begin{proof}
+Let $w\in V'$, so $w$ makes an angle less than $\theta/2$ with $v$ or with $-v$. Since
+$\norm{Aw-w}\le\varepsilon\norm{w}$ and $\varepsilon<1$, $Aw\ne0$, and the angle between $Aw$ and
+$w$ is at most $\arcsin\varepsilon<\vartheta/2\le\theta/2$. By the triangle inequality for angles,
+$Aw$ makes an angle less than $\theta$ with the same half-line, so $Aw\in V$.
+\end{proof}
+
+\begin{lemma}[The inequality for one lattice]\label{lem:onelattice}
+Let $\kappa_0$ and $c_0$ be the constants of Theorem~1.3 of \cite{BKS} for the parameters
+$\vartheta/2$, $\Lambda'=2^{d+\alpha}\Lambda$ and $R_0=\tfrac12$. Let $\Gamma$ be
+$\vartheta$-bounded, let $k$ be symmetric and satisfy \eqref{eq:2}, and let $f\colon\R^d\to\R$ be
+any function. Write
+\[
+  F(s,t)=(f(t)-f(s))^2\norm{s-t}^{-d-\alpha},\qquad G(s,t)=(f(t)-f(s))^2k(s,t),
+\]
+and $F_D=F\1_{D\times D}$, $G_D=G\1_{D\times D}$. Then for every ball $B=B_R(x_0)$, every $h>0$,
+$Q\in\Qd$ and $\eta\in P$, with $T=T_{h,Q,\eta}$ and $B^*=B_{3\kappa_0R}(x_0)$,
+\[
+  \sum_{z,z'\in\Z^d}F_B(Tz,Tz')\le 2^{d+\alpha}c_0\sum_{z,z'\in\Z^d}G_{B^*}(Tz,Tz').
+\]
+\end{lemma}
+
+\begin{proof}
+Write $A=A_Q$.
+
+\emph{The pulled-back configuration.} Let $\Gamma'(z)$ be the double cone with the axis of
+$\Gamma(Tz)$ and half its apex angle. Then $\Gamma'$ is $\vartheta/2$-bounded. If
+$z'\in V^{\Gamma'}[z]$, then $Tz'-Tz=hA(z'-z)\in\Gamma(Tz)$ by Lemma~\ref{lem:cone}, since double
+cones are invariant under positive dilations. Hence
+$\1_{V^{\Gamma'}[z]}(z')\le\1_{V^\Gamma[Tz]}(Tz')$.
+
+\emph{The pulled-back kernel.} Let $\omega(z,z')=h^{d+\alpha}k(Tz,Tz')$, which is symmetric. By
+\eqref{eq:nearid}, $h(1-\varepsilon)\norm{z-z'}\le\norm{Tz-Tz'}\le h(1+\varepsilon)\norm{z-z'}$.
+With $\varepsilon\le\tfrac12$, \eqref{eq:2} gives, for $z\ne z'$,
+\[
+  \omega(z,z')\le\Lambda(1-\varepsilon)^{-d-\alpha}\norm{z-z'}^{-d-\alpha}
+    \le\Lambda'\norm{z-z'}^{-d-\alpha},
+\]
+and
+\[
+  \omega(z,z')\ge\Lambda^{-1}(1+\varepsilon)^{-d-\alpha}
+    \bigl(\1_{V^{\Gamma'}[z]}(z')+\1_{V^{\Gamma'}[z']}(z)\bigr)\norm{z-z'}^{-d-\alpha},
+\]
+with $\Lambda^{-1}(1+\varepsilon)^{-d-\alpha}\ge\Lambda'^{-1}$. These bounds hold at every pair
+of lattice points, because \eqref{eq:2} holds at every pair of points; no measurability of
+$\Gamma$ enters. So $(\Gamma',\omega)$ satisfies the hypotheses of Theorem~1.3 of \cite{BKS} with
+$\vartheta/2$, $\Lambda'$ and $R_0=\tfrac12$.
+
+\emph{The balls.} Let $c=T^{-1}x_0$ and $r=R/(h(1-\varepsilon))$. If $Tz\in B$ then
+$\norm{z-c}\le\norm{Tz-x_0}/(h(1-\varepsilon))<r$, so $z\in B_r(c)$. If $z\in B_{\kappa_0r}(c)$
+then $\norm{Tz-x_0}<h(1+\varepsilon)\kappa_0r=\kappa_0R(1+\varepsilon)/(1-\varepsilon)\le3\kappa_0R$,
+so $Tz\in B^*$.
+
+\emph{Conclusion.} Apply Theorem~1.3 of \cite{BKS} to $f\circ T$ on $B_r(c)$. Using
+$\norm{Tz-Tz'}^{-d-\alpha}\le2^{d+\alpha}h^{-d-\alpha}\norm{z-z'}^{-d-\alpha}$ on the left,
+\begin{align*}
+  \sum_{z,z'}F_B(Tz,Tz')
+  &\le2^{d+\alpha}h^{-d-\alpha}\sum_{z,z'\in B_r(c)}(f(Tz)-f(Tz'))^2\norm{z-z'}^{-d-\alpha}\\
+  &\le2^{d+\alpha}c_0h^{-d-\alpha}\sum_{z,z'\in B_{\kappa_0r}(c)}(f(Tz)-f(Tz'))^2\omega(z,z').
+\end{align*}
+The last sum is $h^{d+\alpha}\sum_{z,z'\in B_{\kappa_0r}(c)}G(Tz,Tz')$, and every such pair has
+$Tz,Tz'\in B^*$.
+\end{proof}
+
+\subsection{Averaging over lattices}
+
+For measurable $H\colon\R^d\times\R^d\to[0,\infty]$ put
+\[
+  L_h(H)=\int_{\Qd}\int_P\sum_{z,z'\in\Z^d}H\bigl(T_{h,Q,\eta}z,\,T_{h,Q,\eta}z'\bigr)\dd\eta\dd Q .
+\]
+Here $\dd Q$ is Lebesgue measure on $(\R^d)^d$, and the integrand is jointly measurable in
+$(Q,\eta)$.
+
+\begin{lemma}[Tiling]\label{lem:tiling}
+Let $H$ be measurable, nonnegative and zero on the diagonal. For $h>0$ and $Q\in\Qd$,
+\[
+  \int_P\sum_{z,z'}H(Tz,Tz')\dd\eta=\abs{\det(hA_Q)}^{-1}\sum_{w\in\Z^d\setminus\{0\}}
+  \int_{\R^d}H(s,s+hA_Qw)\dd s .
+\]
+\end{lemma}
+
+\begin{proof}
+Write $z'=z+w$. The term $w=0$ vanishes. For fixed $w$, the translates $z+P$, $z\in\Z^d$, tile
+$\R^d$, so $\sum_z\int_PH(hA(z+\eta),hA(z+\eta)+hAw)\dd\eta=\int_{\R^d}H(hAu,hAu+hAw)\dd u$.
+The substitution $s=hAu$ finishes the proof. All terms are nonnegative, so sums and integrals
+may be interchanged.
+\end{proof}
+
+\begin{lemma}[Averaging a column]\label{lem:column}
+Let $g\colon\R^d\to[0,\infty]$ be measurable and $w\in\Z^d\setminus\{0\}$, with $m=\supn w$. Then
+\[
+  \abs{B_{\delta/d}}^{d-1}m^{-d}\int_{\bar B_{\delta m/d}(w)}g
+  \;\le\;\int_{\Qd}g(A_Qw)\dd Q\;\le\;\abs{B_\delta}^{d-1}m^{-d}\int_{\bar B_{d\delta m}(w)}g .
+\]
+\end{lemma}
+
+\begin{proof}
+Choose $j$ with $\abs{w_j}=m$. Fix the columns $Q_i$, $i\ne j$, and put
+$c=w+\sum_{i\ne j}w_iQ_i$, so that $A_Qw=c+w_jQ_j$. The substitution $y=c+w_jQ_j$ gives
+$\int_{\bar B_\delta(0)}g(c+w_jQ_j)\dd Q_j=m^{-d}\int_{\bar B_{\delta m}(c)}g$.
+
+For the upper bound, $\norm{c-w}\le(d-1)\delta m$, so $\bar B_{\delta m}(c)\subseteq\bar B_{d\delta m}(w)$.
+Integrating over the other $d-1$ columns gives the factor $\abs{B_\delta}^{d-1}$.
+
+For the lower bound, restrict the other columns to $\bar B_{\delta/d}(0)$. Then
+$\norm{c-w}\le(d-1)\delta m/d$ and $\bar B_{\delta m}(c)\supseteq\bar B_{\delta m/d}(w)$, and the
+restricted columns contribute $\abs{B_{\delta/d}}^{d-1}$.
+\end{proof}
+
+\begin{lemma}[Counting]\label{lem:count}
+For $y\in\R^d$ put $\rho^+(y)=\sum_{w\ne0}\supn w^{-d}\1[\norm{y-w}\le d\delta\supn w]$ and
+$\rho^-(y)=\sum_{w\ne0}\supn w^{-d}\1[\norm{y-w}\le\delta\supn w/d]$, the sums over
+$w\in\Z^d\setminus\{0\}$. Then
+\begin{enumerate}
+\item $\rho^+(y)\le6^d$ for all $y$;
+\item $\rho^-(y)\ge(\delta/(3d^2))^d$ whenever $\norm y\ge C_0:=2d^3/\delta$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(1) If $w$ contributes, then $\supn{y-w}\le\norm{y-w}\le d\delta\supn w\le\tfrac12\supn w$. Hence
+$\tfrac12\supn w\le\supn y\le\tfrac32\supn w$. Since $\supn w\ge1$, this forces
+$\supn y\ge\tfrac12$. The contributing $w$ lie in the cube $\{\supn{w-y}\le\supn y\}$, which
+contains at most $(2\supn y+1)^d\le(4\supn y)^d$ lattice points. Each has weight
+$\supn w^{-d}\le(\tfrac32/\supn y)^d$. So $\rho^+(y)\le6^d$.
+
+(2) Let $M=\supn y\ge\norm y/\sqrt d\ge\norm y/d\ge2d^2/\delta$, and $r=\delta M/(2d^2)\ge1$.
+Since $\delta\le1$, also $r\le M/2$. Consider $w\in\Z^d$ with $\supn{w-y}\le r$. Then
+$\tfrac12M\le\supn w\le\tfrac32M$, in particular $w\ne0$, and
+\[
+  \norm{y-w}\le\sqrt d\,r\le d\,r=\delta M/(2d)\le\delta\supn w/d ,
+\]
+so $w$ contributes at least $(\tfrac32M)^{-d}$. Each coordinate interval
+$[y_i-r,y_i+r]$ contains at least $\lfloor2r\rfloor\ge r$ integers, since $r\ge1$. So there are
+at least $r^d$ such $w$, and $\rho^-(y)\ge r^d(\tfrac32M)^{-d}=(\delta/(3d^2))^d$.
+\end{proof}
+
+\begin{proposition}[The lattice average]\label{prop:avg}
+Let $H\colon\R^d\times\R^d\to[0,\infty]$ be measurable and zero on the diagonal. For every $h>0$,
+\[
+  K_-h^{-2d}\iint_{\norm{t-s}\ge C_0h}H(s,t)\dd s\dd t\;\le\;L_h(H)\;\le\;K_+h^{-2d}\iint H(s,t)\dd s\dd t,
+\]
+with $K_+=6^d\abs{B_\delta}^{d-1}(1-\varepsilon)^{-d}$,
+$K_-=(\delta/(3d^2))^d\abs{B_{\delta/d}}^{d-1}(1+\varepsilon)^{-d}$ and $C_0$ as in
+Lemma~\ref{lem:count}.
+\end{proposition}
+
+\begin{proof}
+By Lemma~\ref{lem:tiling}, \eqref{eq:nearid} and Tonelli's theorem,
+\[
+  L_h(H)\le h^{-d}(1-\varepsilon)^{-d}\sum_{w\ne0}\int_{\R^d}\int_{\Qd}H(s,s+hA_Qw)\dd Q\dd s .
+\]
+Apply Lemma~\ref{lem:column} with $g(y)=H(s,s+hy)$, and then sum over $w$:
+\[
+  L_h(H)\le h^{-d}(1-\varepsilon)^{-d}\abs{B_\delta}^{d-1}\iint H(s,s+hy)\,\rho^+(y)\dd y\dd s .
+\]
+By Lemma~\ref{lem:count}(1) and the substitution $t=s+hy$, for which
+$\int H(s,s+hy)\dd y=h^{-d}\int H(s,t)\dd t$, this is at most $K_+h^{-2d}\iint H$.
+
+The lower bound is the same computation, with the lower halves of \eqref{eq:nearid} and
+Lemma~\ref{lem:column}. Discarding $\norm y<C_0$ and using Lemma~\ref{lem:count}(2) gives
+\[
+  L_h(H)\ge h^{-d}(1+\varepsilon)^{-d}\abs{B_{\delta/d}}^{d-1}\Bigl(\frac\delta{3d^2}\Bigr)^d
+  \int_{\R^d}\int_{\norm y\ge C_0}H(s,s+hy)\dd y\dd s,
+\]
+and the substitution $t=s+hy$ turns $\{\norm y\ge C_0\}$ into $\{\norm{t-s}\ge C_0h\}$.
+\end{proof}
+
+\subsection{Conclusion}
+
+\begin{proof}[Proof of Theorem~\ref{thm:A}]
+The case $d=0$ is trivial; let $d\ge1$. With $\kappa_0,c_0$ as in Lemma~\ref{lem:onelattice},
+put $\kappa=3\kappa_0$ and $B^*=B_{\kappa R}(x_0)$. Since $f$ and $k$ are measurable, $F_B$ and
+$G_{B^*}$ are measurable, and both vanish on the diagonal. Lemma~\ref{lem:onelattice} holds for
+every $(h,Q,\eta)$. Integrating it over $\eta\in P$ and $Q\in\Qd$ gives
+$L_h(F_B)\le2^{d+\alpha}c_0L_h(G_{B^*})$. By Proposition~\ref{prop:avg},
+\[
+  K_-\iint_{\norm{t-s}\ge C_0h}F_B\le2^{d+\alpha}c_0K_+\iint G_{B^*}\qquad(h>0).
+\]
+As $h\downarrow0$ the sets $\{\norm{t-s}\ge C_0h\}$ increase to the complement of the diagonal,
+a null set. By monotone convergence,
+\[
+  \abs{f}^2_{H^{\alpha/2}(B)}=\iint F_B\le\frac{2^{d+\alpha}c_0K_+}{K_-}\iint G_{B^*}
+  =C\,\abs{f}^2_{H_k(B^*)} .
+\]
+The constants $\varepsilon,\delta,K_\pm,C_0$ depend only on $d$ and $\vartheta$, and $\kappa_0,c_0$
+only on $d$, $\vartheta$, $\Lambda$ and $\alpha$.
+\end{proof}
+
+\begin{remark}\label{rem:alpha}
+If the constants of Theorem~1.3 of \cite{BKS} can be chosen independently of $\alpha\in(0,2)$, as
+its statement in \cite{BKS} suggests, then so can $\kappa$ and $C$. Use
+$\Lambda'=2^{d+2}\Lambda$ in Lemma~\ref{lem:onelattice}, and $2^{d+\alpha}\le2^{d+2}$. The
+formalization proves Theorem~1.3 of \cite{BKS} in this uniform form.
+\end{remark}
+
+\section{Consequences}\label{sec:consequences}
+
+A configuration is \emph{$\vartheta$-admissible} in \cite{BKS} if it is $\vartheta$-bounded and
+$\{(x,y):y-x\in\Gamma(x)\}$ is Borel (condition (M)). Theorem~\ref{thm:A} does not use (M).
+
+\begin{corollary}
+Lemma~3.7, Theorem~1.1, and the comparability statements of Theorem~1.4 of \cite{BKS} hold as
+stated.
+\end{corollary}
+
+\begin{proof}
+In the proof of Lemma~3.7, the passage in Section~\ref{sec:gap} is meant to establish
+$c\,\abs{f}^2_{H^{\alpha/2}(B)}\le\abs{f}^2_{H_k(B^*)}$ for all $f\in H_k(B^*)$ and every ball, with
+$c$ independent of the ball. Theorem~\ref{thm:A} gives this for every $f\in L^2(B^*)$: take a
+measurable representative, extended by zero, and note that both sides depend only on the values of
+$f$ on $B^*$. The rest of the proof of Lemma~3.7 in \cite{BKS} is the application of their
+Lemma~A.1, which removes the enlargement and is unaffected by the gap. Theorem~1.1 follows from
+Lemma~3.7 as in \cite{BKS}. So do the comparabilities in Theorem~1.4: on $\R^d$ by letting the
+radius tend to infinity, and on bounded Lipschitz domains through Lemma~A.1.
+\end{proof}
+
+The dependence on $\alpha_0$ asserted in Theorem~1.1 follows from Remark~\ref{rem:alpha} and the
+corresponding statement of Lemma~A.1.
+
+\section{Formalization}\label{sec:lean}
+
+The argument above is checked in Lean~4 with Mathlib, as part of a formalization of \cite{BKS}.
+The repository is \url{https://github.com/dbenbenn/quadratic-forms-sobolev-lean}, in the directory
+\texttt{QuadraticFormsSobolev/RandomLattice}. The correspondence is:
+
+\begin{center}
+\begin{tabular}{ll}
+Theorem~\ref{thm:A} & \texttt{QFS.formHs\_ball\_le\_form\_ball\_randomLattice}\\
+Lemma~\ref{lem:cone} & \texttt{QFS.mem\_doubleCone\_of\_near}\\
+Lemma~\ref{lem:onelattice} & \texttt{QFS.latticeSum\_ball\_le}\\
+Lemma~\ref{lem:tiling} & \texttt{QFS.lintegral\_latticeSum\_le}, \texttt{QFS.le\_lintegral\_latticeSum}\\
+Lemma~\ref{lem:column} & \texttt{QFS.lintegral\_colBox\_le}, \texttt{QFS.le\_lintegral\_colBox}\\
+Lemma~\ref{lem:count} & \texttt{QFS.tsum\_count\_le}, \texttt{QFS.le\_tsum\_count}\\
+Proposition~\ref{prop:avg} & \texttt{QFS.latAvg\_le}, \texttt{QFS.le\_latAvg}\\
+Theorem~1.3 of \cite{BKS} & \texttt{QFS.theoremOneThree}, \texttt{QFS.theoremOneThree\_uniform}
+\end{tabular}
+\end{center}
+
+Some constants in the formalization differ harmlessly from those above; for example, it has
+$4^d$ in Lemma~\ref{lem:count}(1).
+
+The formalization also proves Theorem~1.3 of \cite{BKS} in full, in the $\alpha$-uniform form of
+Remark~\ref{rem:alpha}, and Theorem~1.1 with the $\alpha_0$ clause. The statement of
+Theorem~1.3 is correct as printed. A few steps of its printed proof needed local repairs in the
+formalization; they are independent of the gap discussed here and are not treated in this note. For the step removing the
+enlargement, it gives a proof of Lemma~A.1 that avoids the Whitney decomposition, with Dyda's
+inequality proved rather than quoted. All results depend only on the standard axioms
+(\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}).
+
+\begin{thebibliography}{9}
+\bibitem{BKS} K.-U. Bux, M. Kassmann, and T. Schulze, \emph{Quadratic forms and Sobolev spaces of
+fractional order}, Proc. London Math. Soc.\ (3) \textbf{119} (2019), 841--866,
+\href{https://doi.org/10.1112/plms.12246}{doi:10.1112/plms.12246}. Cited from
+\href{https://arxiv.org/abs/1707.09277v1}{arXiv:1707.09277v1}, whose numbering and page numbers we
+use; we were unable to consult the journal version.
+\bibitem{CS} J. Chaker and L. Silvestre, \emph{Coercivity estimates for integro-differential
+operators}, Calc. Var. Partial Differential Equations \textbf{59} (2020), Paper No.~106,
+\href{https://doi.org/10.1007/s00526-020-01764-y}{doi:10.1007/s00526-020-01764-y},
+\href{https://arxiv.org/abs/1904.13014}{arXiv:1904.13014}.
+\bibitem{Dyda} B. Dyda, \emph{On comparability of integral forms}, J. Math. Anal. Appl.\
+\textbf{318} (2006), 564--577,
+\href{https://doi.org/10.1016/j.jmaa.2005.06.021}{doi:10.1016/j.jmaa.2005.06.021}.
+\end{thebibliography}
+
+\bigskip
+\noindent\textit{About this note.} This note was written by Claude, an AI model made by
+Anthropic. The mathematics in it was developed and machine-checked in the Lean formalization
+cited in Section~\ref{sec:lean}.
+
+\end{document}
