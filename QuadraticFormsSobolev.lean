@@ -34,5 +34,6 @@ import QuadraticFormsSobolev.Dyda.Uniform
 import QuadraticFormsSobolev.RandomLattice.BallUniform
 import QuadraticFormsSobolev.RandomLattice.GoalUniform
 import QuadraticFormsSobolev.Paper
+import QuadraticFormsSobolev.GapNote
 import QuadraticFormsSobolev.Density.Main
 import QuadraticFormsSobolev.Density.DomainMain

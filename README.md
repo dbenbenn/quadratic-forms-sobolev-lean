@@ -48,7 +48,8 @@ This formalization closes the argument by a different route.
    applied on each lattice, and the lattice sums are averaged. The average reproduces the two double
    integrals up to constants, and no a priori finiteness is needed. This gives §3.2's conclusion
    (`section_3_2`) and Theorem 1.4 on `ℝ^d`. The gap and this repair are written up in the note
-   [`paper/gap-note.pdf`](paper/gap-note.pdf).
+   [`paper/gap-note.pdf`](paper/gap-note.pdf), whose headline results are stated exactly in
+   [`QuadraticFormsSobolev/GapNote.lean`](QuadraticFormsSobolev/GapNote.lean).
 2. **Dyda's inequality (13)** is proved for the unit ball (`dyda_13`, `Dyda/`). Step 1 follows
    Dyda's proof. Step 2, Dyda's case (c), uses a pulled-in midpoint instead. It then moves to every
    ball by scaling (`dyda_13_ball`). It is also proved on every bounded Lipschitz domain
@@ -580,7 +581,7 @@ grep -rn 'sorry' --include='*.lean' QuadraticFormsSobolev   # no occurrences
 #print axioms QFS.Paper.theorem_1_1                     # [propext, Classical.choice, Quot.sound]
 ```
 
-and the same `#print axioms` for every theorem of `Paper.lean`.
+and the same `#print axioms` for every theorem of `Paper.lean` and `GapNote.lean`.
 
 ## The files
 
@@ -613,6 +614,7 @@ and the same `#print axioms` for every theorem of `Paper.lean`.
 | `Density/` | density of smooth functions in `H_k`: on `ℝ^d` (the seminorm as an average of `L²` differences, continuity of translation, mollification, cutting off) and on a bounded Lipschitz domain (a partition of unity over the boundary charts, translation into the domain along each chart direction before mollifying) |
 | `LemmaA1Domain` | Dyda's inequality on dilates of a domain in the paper's forms; Lemma A.1 and Theorem 1.4 on bounded Lipschitz domains |
 | `Nonvacuous` | witnesses that the hypotheses are satisfiable |
+| `GapNote` | the note's Theorem A and Remark 3.7, stated exactly as in the note |
 | `paper/` | the note on the §3.2 gap and its repair by random lattice sampling (LaTeX source and PDF) |
 
 ## Building

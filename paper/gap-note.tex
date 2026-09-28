@@ -60,7 +60,7 @@ $\vartheta$ of the apex angles of the cones in $\Gamma(\R^d)$ is positive. Let $
 consider measurable $k\colon\R^d\times\R^d\to[0,\infty]$ with $k(x,y)=k(y,x)$ and
 \begin{equation}\label{eq:2}
   \Lambda^{-1}\bigl(\1_{V^\Gamma[x]}(y)+\1_{V^\Gamma[y]}(x)\bigr)\norm{x-y}^{-d-\alpha}
-  \le k(x,y)\le \Lambda\norm{x-y}^{-d-\alpha}\qquad(x\neq y).
+  \le k(x,y)\le \Lambda\norm{x-y}^{-d-\alpha}\qquad(x\neq y).\tag{2}
 \end{equation}
 This is condition (2) of \cite{BKS}. For a set $D\subseteq\R^d$ and $f\colon\R^d\to\R$ write
 \[
@@ -217,7 +217,7 @@ $\Qd=\bar B_\delta(0)^d\subseteq(\R^d)^d$. For $Q\in\Qd$,
 $\norm{A_Qu-u}\le\sum_j\abs{u_j}\delta\le d\delta\norm{u}=\varepsilon\norm{u}$. Hence
 \begin{equation}\label{eq:nearid}
   (1-\varepsilon)\norm{u}\le\norm{A_Qu}\le(1+\varepsilon)\norm{u},\qquad
-  (1-\varepsilon)^d\le\abs{\det A_Q}\le(1+\varepsilon)^d,
+  (1-\varepsilon)^d\le\abs{\det A_Q}\le(1+\varepsilon)^d,\tag{$\ast$}
 \end{equation}
 the second because the singular values of $A_Q$ lie in $[1-\varepsilon,1+\varepsilon]$. Let
 $P=[-\tfrac12,\tfrac12)^d$. For $h>0$, $Q\in\Qd$ and $\eta\in P$, the lattice map is
@@ -430,8 +430,7 @@ The constants $\kappa$ and $C$ of Theorem~\ref{thm:A} can be chosen independentl
 $\alpha\in(0,2)$. Indeed, the constants of Theorem~1.3 of \cite{BKS} can be: its statement lists no
 dependence on $\alpha$, and its proof produces a factor $\lambda^{d+\alpha}\le\lambda^{d+2}$, since
 $\lambda\ge1$. Then use $\Lambda'=2^{d+2}\Lambda$ in Lemma~\ref{lem:onelattice}, and
-$2^{d+\alpha}\le2^{d+2}$. Both uniform statements are formalized
-(\texttt{QFS.theoremOneThree\_uniform} and \texttt{QFS.formHs\_ball\_le\_form\_ball\_uniform}).
+$2^{d+\alpha}\le2^{d+2}$. Both uniform statements are formalized (Section~\ref{sec:lean}).
 \end{remark}
 
 \section{Consequences}\label{sec:consequences}
@@ -461,28 +460,37 @@ corresponding statement of Lemma~A.1.
 \section{Formalization}\label{sec:lean}
 
 The argument above is checked in Lean~4 with Mathlib, as part of a formalization of \cite{BKS}.
-The repository is \url{https://github.com/dbenbenn/quadratic-forms-sobolev-lean}, in the directory
-\texttt{QuadraticFormsSobolev/RandomLattice}. The correspondence is:
+The repository is \url{https://github.com/dbenbenn/quadratic-forms-sobolev-lean}. The headline
+results are stated in Lean exactly as above, with $\vartheta$-boundedness as in Definition~2.1 of
+\cite{BKS} (\texttt{QFS.IsThetaBounded}):
 
 \begin{center}
 \begin{tabular}{ll}
-Theorem~\ref{thm:A} & \texttt{QFS.formHs\_ball\_le\_form\_ball\_randomLattice}\\
-Remark~\ref{rem:alpha} & \texttt{QFS.formHs\_ball\_le\_form\_ball\_uniform}\\
+Theorem~\ref{thm:A} & \texttt{QFS.GapNote.theorem\_A}\\
+Remark~\ref{rem:alpha} & \texttt{QFS.GapNote.remark\_3\_7}\\
+Theorem~1.3 of \cite{BKS} & \texttt{QFS.Paper.theorem\_1\_3}
+\end{tabular}
+\end{center}
+
+The first two are in the file \texttt{GapNote.lean}, the third in \texttt{Paper.lean}, and the
+lemmas in the directory \texttt{RandomLattice}, all under \texttt{QuadraticFormsSobolev}:
+
+\begin{center}
+\begin{tabular}{ll}
 Lemma~\ref{lem:cone} & \texttt{QFS.mem\_doubleCone\_of\_near}\\
 Lemma~\ref{lem:onelattice} & \texttt{QFS.latticeSum\_ball\_le}\\
 Lemma~\ref{lem:tiling} & \texttt{QFS.lintegral\_latticeSum\_le}, \texttt{QFS.le\_lintegral\_latticeSum}\\
 Lemma~\ref{lem:column} & \texttt{QFS.lintegral\_colBox\_le}, \texttt{QFS.le\_lintegral\_colBox}\\
 Lemma~\ref{lem:count} & \texttt{QFS.tsum\_count\_le}, \texttt{QFS.le\_tsum\_count}\\
-Proposition~\ref{prop:avg} & \texttt{QFS.latAvg\_le}, \texttt{QFS.le\_latAvg}\\
-Theorem~1.3 of \cite{BKS} & \texttt{QFS.theoremOneThree}, \texttt{QFS.theoremOneThree\_uniform}
+Proposition~\ref{prop:avg} & \texttt{QFS.latAvg\_le}, \texttt{QFS.le\_latAvg}
 \end{tabular}
 \end{center}
 
-The formalization states the results of \cite{BKS} with $\vartheta$-boundedness exactly as in
-Definition~2.1 (\texttt{QFS.IsThetaBounded}). The lemmas above are proved under the weaker
-hypothesis that $\vartheta$ is a lower bound for the apex angles (\texttt{QFS.ApexLowerBound}),
-which every $\vartheta$-bounded configuration satisfies. Some constants in the formalization differ harmlessly from those above; for example, it has
-$4^d$ in Lemma~\ref{lem:count}(1).
+These are the forms the Lean proof uses, not transcriptions. The Lean form of
+Lemma~\ref{lem:onelattice} assumes only that $\vartheta$ is a lower bound for the apex angles
+(\texttt{QFS.ApexLowerBound}), and allows $\alpha\ge0$. The two tiling inequalities combine Lemma~\ref{lem:tiling} with the bound
+\eqref{eq:nearid} on the determinant. Some constants differ harmlessly: $4^d$ in
+Lemma~\ref{lem:count}(1) and $(\delta/(4d^2))^d$ in Lemma~\ref{lem:count}(2).
 
 The formalization also proves Theorem~1.3 of \cite{BKS} in full, in the $\alpha$-uniform form of
 Remark~\ref{rem:alpha}, and Theorem~1.1 with the $\alpha_0$ clause. The statement of
