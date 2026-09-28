@@ -3,13 +3,15 @@ Copyright (c) 2026. Released under the Apache 2.0 license.
 -/
 import QuadraticFormsSobolev.RandomLattice.Ball
 import QuadraticFormsSobolev.RandomLattice.BallUniform
+import QuadraticFormsSobolev.ChakerSilvestre
 
 /-! # The gap note's headline results, as stated there
 
-`paper/gap-note.tex` states Theorem A and Remark 7 with the hypotheses of Bux, Kassmann and
-Schulze: a `ϑ`-bounded configuration, a measurable kernel satisfying (2), and `α ∈ (0, 2)`. The
-theorems here are exactly those statements. They are wrappers around the more general
-`QFS.formHs_ball_le_form_ball_randomLattice` and `QFS.formHs_ball_le_form_ball_uniform`.
+`paper/gap-note.tex` states Theorem A, Remark 7 and Lemma 9 with the hypotheses of Bux, Kassmann
+and Schulze: a `ϑ`-bounded configuration, a (measurable) kernel satisfying (2), and `α ∈ (0, 2)`.
+The theorems here are exactly those statements. They are wrappers around the more general
+`QFS.formHs_ball_le_form_ball_randomLattice`, `QFS.formHs_ball_le_form_ball_uniform` and
+`QFS.chakerSilvestre_assumption`.
 -/
 
 open MeasureTheory Metric
@@ -55,5 +57,16 @@ theorem remark_7 (hd : 1 ≤ d) {ϑ Λ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ Real
   obtain ⟨κ, C, hκ, hC, H⟩ := formHs_ball_le_form_ball_uniform hd hϑ hϑ' hΛ
   exact ⟨κ, C, hκ, hC, fun α h1 h2 Γ hΓ k hkm hk f hf =>
     H α h1 h2 Γ hΓ.apexLowerBound k hk f hf (integrand_measurable hf hkm)⟩
+
+/-- **Lemma 9.** A kernel satisfying (2) satisfies Assumption 1.1 of Chaker and Silvestre, with
+`s = α/2`, `λ = Λ⁻¹` and `μ = (sin²ϑ / 16)^d`. -/
+theorem lemma_9 {Γ : Configuration (EuclideanSpace ℝ (Fin d))} {ϑ : ℝ} (hΓ : IsThetaBounded Γ ϑ)
+    {α Λ : ℝ} {k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞}
+    (hk : KernelBounds Γ α Λ k) (p : EuclideanSpace ℝ (Fin d)) {r : ℝ} (hr : 0 < r)
+    {x : EuclideanSpace ℝ (Fin d)} (hx : x ∈ ball p r) :
+    ENNReal.ofReal ((Real.sin ϑ ^ 2 / 16) ^ d) * volume (ball p r)
+      ≤ volume {z ∈ ball p r | ENNReal.ofReal (Λ⁻¹ * ‖x - z‖ ^ (-(d : ℝ) - α)) ≤ k x z} :=
+  chakerSilvestre_assumption hΓ.apexLowerBound
+    ((hΓ.apexLowerBound.2 x).trans (Γ x).apex_le) hk p hr hx
 
 end QFS.GapNote

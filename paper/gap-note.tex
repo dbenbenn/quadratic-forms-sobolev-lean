@@ -119,15 +119,13 @@ the random distortion spreads the differences over all directions.
 \medskip\noindent\textbf{Related work.} Chaker and Silvestre \cite[Theorem~1.3]{CS} prove
 $\iint_{B_2\times B_2}(u(x)-u(y))^2K\ge c\lambda\abs{u}^2_{\dot H^s(B_1)}$ for every $u$, with $c$
 depending only on $d$ and $\mu$, under their Assumption~1.1: for every ball $B$ and $x\in B$, the
-set of $z\in B$ with $K(x,z)\ge\lambda\norm{x-z}^{-d-2s}$ has measure at least $\mu\abs B$. After
-scaling, this is the enlarged-ball inequality of Theorem~\ref{thm:A} with $\kappa=2$. They remark
-that their result implies that of \cite{BKS}. For this, a kernel satisfying \eqref{eq:2} should
-satisfy Assumption~1.1 with $s=\alpha/2$, $\lambda=\Lambda^{-1}$ and $\mu$ depending only on $d$
-and $\vartheta$, since a double cone of apex angle $\vartheta$ at $x$ meets every ball containing
-$x$ in a proportion of its volume bounded below. We have not checked the details. With
-Lemma~A.1 of \cite{BKS}, the continuous conclusions of \cite{BKS} would then follow from
-\cite{CS}. Their method is different: an iteration on kernels with a covering argument, not a
-discretization. The point of the present note is that the
+set of $z\in B$ with $K(x,z)\ge\lambda\norm{x-z}^{-d-2s}$ has measure at least $\mu\abs B$. They
+remark that their result implies that of \cite{BKS}. Indeed, a kernel satisfying \eqref{eq:2}
+satisfies Assumption~1.1 with $s=\alpha/2$, $\lambda=\Lambda^{-1}$ and $\mu=(\sin^2\vartheta/16)^d$
+(Lemma~\ref{lem:cs}), and after scaling their theorem is Theorem~\ref{thm:A} with $\kappa=2$
+(Remark~\ref{rem:cs}). Their method is different: an iteration on kernels with a covering
+argument, not a discretization. So, with Lemma~A.1 of \cite{BKS}, the continuous conclusions of
+\cite{BKS} were already available through \cite{CS}. The point of the present note is that the
 discretization route of \cite{BKS}, through their Theorem~1.3, can itself be completed. We are
 not aware of any earlier discussion of the gap.
 
@@ -183,11 +181,11 @@ Nor can the step be rescued cheaply:
 \item Approximating $f\in H_k(B^*)$ by smooth functions in the $H_k$ norm would require the
   density statement of Theorem~1.4, whose proof uses Lemma~3.7.
 \end{itemize}
-The final inequality of Lemma~3.7 is true, by Theorem~\ref{thm:A} (or, modulo the verification
-mentioned in Section~\ref{sec:intro}, by \cite{CS}). But its proof
+The final inequality of Lemma~3.7 is true, by Theorem~\ref{thm:A}, or by \cite{CS} through
+Lemma~\ref{lem:cs}. But its proof
 in \cite{BKS} is incomplete at this step.
 
-\section{Proof of Theorem~\ref{thm:A}}
+\section{Proof of Theorem~\ref{thm:A}}\label{sec:proof}
 
 Throughout, $d\ge1$, $\norm{\cdot}$ is the Euclidean norm and $\supn{\cdot}$ the maximum norm, and
 $\abs{\,\cdot\,}$ also denotes Lebesgue measure. Balls $B_r(x)$ are open and $\bar B_r(x)$
@@ -449,7 +447,7 @@ $2^{d+\alpha}\le2^{d+2}$. Both uniform statements are formalized (Section~\ref{s
 A configuration is \emph{$\vartheta$-admissible} in \cite{BKS} if it is $\vartheta$-bounded and
 $\{(x,y):y-x\in\Gamma(x)\}$ is Borel (condition (M)). Theorem~\ref{thm:A} does not use (M).
 
-\begin{corollary}
+\begin{corollary}\label{cor:bks}
 Lemma~3.7, Theorem~1.1, and the comparability statements of Theorem~1.4 of \cite{BKS} hold as
 stated.
 \end{corollary}
@@ -468,6 +466,60 @@ radius tend to infinity, and on bounded Lipschitz domains through Lemma~A.1.
 The dependence on $\alpha_0$ asserted in Theorem~1.1 follows from Remark~\ref{rem:alpha} and the
 corresponding statement of Lemma~A.1.
 
+\subsection{The route through Chaker and Silvestre}
+
+Chaker and Silvestre \cite[Assumption~1.1]{CS} ask for $\mu\in(0,1)$ and $\lambda>0$ such that
+for every ball $B$ and every $x\in B$,
+$\abs{\{z\in B:K(x,z)\ge\lambda\norm{x-z}^{-d-2s}\}}\ge\mu\abs B$.
+
+\begin{lemma}\label{lem:cs}
+Let $\Gamma$ be $\vartheta$-bounded, and let $k$ be symmetric and satisfy \eqref{eq:2}. Then for
+every ball $B=B_r(p)$ and every $x\in B$,
+\[
+  \abs{\{z\in B:k(x,z)\ge\Lambda^{-1}\norm{x-z}^{-d-\alpha}\}}\ge\Bigl(\frac{\sin^2\vartheta}{16}\Bigr)^d\abs B .
+\]
+That is, $k$ satisfies Assumption~1.1 of \cite{CS} with $s=\alpha/2$, $\lambda=\Lambda^{-1}$ and
+$\mu=(\sin^2\vartheta/16)^d$.
+\end{lemma}
+
+\begin{proof}
+Put $\sigma=\sin\vartheta$. Let $v$ be the axis of $\Gamma(x)$, with its sign chosen so that
+$\langle v,p-x\rangle\ge0$. Since the apex angle of $\Gamma(x)$ is at least $\vartheta$, $\Gamma(x)$
+contains the half-cone $W=\{h\ne0:\angle(h,v)<\vartheta\}$. For $h\in\R^d$ put
+$g(h)=\langle v,h\rangle\sigma-\norm{h-\langle v,h\rangle v}\cos\vartheta$. Then
+$g(h)=\norm h\sin(\vartheta-\angle(h,v))$ for $h\ne0$, so $g>0$ exactly on $W$. By the
+Cauchy--Schwarz inequality for the pair $(\sigma,\cos\vartheta)$, $g$ is $1$-Lipschitz, and
+$g(h+tv)=g(h)+t\sigma$.
+
+Let $a=r\sigma/4$, $\varepsilon=\sigma^2/8$, $\rho=r\sigma^2/16$ and
+$q=x+av+\varepsilon(p-x)$. We show that $B_\rho(q)\subseteq B$ and $B_\rho(q)-x\subseteq W$.
+
+First, $q-p=av-(1-\varepsilon)(p-x)$, and $\langle v,p-x\rangle\ge0$, $\norm{p-x}<r$, so
+\[
+  \norm{q-p}^2\le a^2+(1-\varepsilon)^2r^2=(r-\rho)^2-\frac{r^2\sigma^2(16-3\sigma^2)}{256}\le(r-\rho)^2 .
+\]
+Hence $\norm{q-p}+\rho\le r$, and $B_\rho(q)\subseteq B$.
+
+Second, $g(q-x)=g(\varepsilon(p-x))+a\sigma\ge-\varepsilon\norm{p-x}+a\sigma>-\varepsilon r+a\sigma
+=r\sigma^2/8$, using $g(0)=0$. For $z\in B_\rho(q)$, $g(z-x)\ge g(q-x)-\norm{z-q}>r\sigma^2/8-\rho>0$,
+so $z-x\in W\subseteq\Gamma(x)$.
+
+For $z\in B_\rho(q)$, therefore, $z\in B$ and $z\in V^\Gamma[x]$, and \eqref{eq:2} gives
+$k(x,z)\ge\Lambda^{-1}\norm{x-z}^{-d-\alpha}$. Finally $\abs{B_\rho(q)}=(\rho/r)^d\abs B
+=(\sigma^2/16)^d\abs B$.
+\end{proof}
+
+\begin{remark}\label{rem:cs}
+Theorem~1.3 of \cite{CS} states: under Assumption~1.1, there is $c>0$, depending only on $d$ and
+$\mu$, such that $\iint_{B_2\times B_2}(u(x)-u(y))^2K\ge c\lambda\abs{u}^2_{\dot H^s(B_1)}$ for every
+$u$. Given a ball $B_R(x_0)$, put $u(y)=f(x_0+Ry)$ and $K(y,y')=R^{d+\alpha}k(x_0+Ry,x_0+Ry')$.
+Then $K$ satisfies \eqref{eq:2} for the configuration $y\mapsto\Gamma(x_0+Ry)$, since double cones
+are invariant under positive dilations, and so Assumption~1.1 by Lemma~\ref{lem:cs}. Both sides of
+the inequality scale by the same power of $R$. So \cite[Theorem~1.3]{CS} gives Theorem~\ref{thm:A}
+with $\kappa=2$ and $C=\Lambda/c$, where $c$ depends only on $d$ and $\vartheta$, not on $\alpha$.
+With Lemma~A.1 of \cite{BKS} this gives Corollary~\ref{cor:bks} independently of Section~\ref{sec:proof}.
+\end{remark}
+
 \section{Formalization}\label{sec:lean}
 
 The argument above is checked in Lean~4 with Mathlib, as part of a formalization of \cite{BKS}.
@@ -479,11 +531,12 @@ results are stated in Lean exactly as above, with $\vartheta$-boundedness as in 
 \begin{tabular}{ll}
 Theorem~\ref{thm:A} & \texttt{QFS.GapNote.theorem\_A}\\
 Remark~\ref{rem:alpha} & \texttt{QFS.GapNote.remark\_7}\\
+Lemma~\ref{lem:cs} & \texttt{QFS.GapNote.lemma\_9}\\
 Theorem~1.3 of \cite{BKS} & \texttt{QFS.Paper.theorem\_1\_3}
 \end{tabular}
 \end{center}
 
-The first two are in the file \texttt{GapNote.lean}, the third in \texttt{Paper.lean}, and the
+The first three are in the file \texttt{GapNote.lean}, the last in \texttt{Paper.lean}, and the
 lemmas in the directory \texttt{RandomLattice}, all under \texttt{QuadraticFormsSobolev}:
 
 \begin{center}
