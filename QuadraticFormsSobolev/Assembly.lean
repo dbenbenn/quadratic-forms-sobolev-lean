@@ -198,7 +198,7 @@ a single choice of favored cones, which is what Step 2 needs. -/
 theorem renormalization_choice {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2) {r : ℝ}
     (hr : 0 < r) :
     ∃ R : ℝ, r ≤ R ∧
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ ϑ →
       ∀ h ℓ : ℝ, 0 < h → 1 ≤ ℓ → SparselyPopulated d ϑ h ℓ →
       ∃ W : ConeChoice d,
         (∀ B, B.Finite → FavoredIn Γ B (W B)) ∧
@@ -230,7 +230,7 @@ theorem renormalization_choice {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2) 
   set Γ' : Configuration (EuclideanSpace ℝ (Fin d)) :=
     fun p => ⟨(W (townIndex h ℓ p)).axis, (W (townIndex h ℓ p)).norm_axis, ϑ / 2, hϑ2, hϑ2'⟩
     with hΓ'
-  have hΓ'b : IsBounded Γ' (ϑ / 2) := ⟨hϑ2, fun p => le_refl _⟩
+  have hΓ'b : ApexLowerBound Γ' (ϑ / 2) := ⟨hϑ2, fun p => le_refl _⟩
   -- each edge of `Γ'` becomes an edge of the choice graph
   have hedge : ∀ p q : EuclideanSpace ℝ (Fin d), p ∈ lattice d → q ∈ lattice d →
       q ∈ coneAt Γ' p → choiceAdj Γ W (townIndex h ℓ p) (townIndex h ℓ q) := by

@@ -222,7 +222,7 @@ theorem PathPropsLong.toPathProps {Γ : Configuration (EuclideanSpace ℝ (Fin d
 /-- Theorem 5.15 in the strengthened form, with constants independent of `Γ`. -/
 def PathPropsLongHolds (d : ℕ) (ϑ R₀ : ℝ) : Prop :=
   ∃ (N M : ℕ) (lam : ℝ), 0 < N ∧ 0 < M ∧ R₀ ≤ lam ∧
-    ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ →
+    ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ ϑ →
       PathPropsLong Γ N M lam R₀
 
 theorem PathPropsLongHolds.toPathPropsHolds {ϑ R₀ : ℝ}

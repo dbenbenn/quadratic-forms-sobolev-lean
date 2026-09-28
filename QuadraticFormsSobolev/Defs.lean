@@ -195,10 +195,54 @@ lemma DCone.zero_notMem (V : DCone E) : (0 : E) ∉ V.carrier := zero_notMem_dou
 abbrev Configuration (E : Type*) [NormedAddCommGroup E] [InnerProductSpace ℝ E] :=
   E → DCone E
 
-/-- `Γ` is *`ϑ`-bounded*: `ϑ` is a positive lower bound for all apex angles
-occurring in `Γ(ℝ^d)` (Definition 2.1). -/
-def IsBounded (Γ : Configuration E) (ϑ : ℝ) : Prop :=
+/-- `ϑ` is a positive *lower bound* for all apex angles occurring in `Γ(ℝ^d)`. This is weaker
+than the paper's `ϑ`-boundedness (`IsThetaBounded`), which asks `ϑ` to be the infimum, and it is
+the form every proof here uses: halving the angles or passing to subconfigurations keeps a lower
+bound but changes the infimum. -/
+def ApexLowerBound (Γ : Configuration E) (ϑ : ℝ) : Prop :=
   0 < ϑ ∧ ∀ x, ϑ ≤ (Γ x).apex
+
+/-- `Γ` is *`ϑ`-bounded* (Definition 2.1): the infimum `ϑ` of the apex angles of the cones in
+`Γ(ℝ^d)` is positive. -/
+def IsThetaBounded (Γ : Configuration E) (ϑ : ℝ) : Prop :=
+  0 < ϑ ∧ ⨅ x, (Γ x).apex = ϑ
+
+lemma bddBelow_apex (Γ : Configuration E) : BddBelow (Set.range fun x => (Γ x).apex) :=
+  ⟨0, by rintro _ ⟨x, rfl⟩; exact (Γ x).apex_pos.le⟩
+
+/-- A `ϑ`-bounded configuration has `ϑ` as a lower bound of its apex angles. -/
+lemma IsThetaBounded.apexLowerBound {Γ : Configuration E} {ϑ : ℝ} (h : IsThetaBounded Γ ϑ) :
+    ApexLowerBound Γ ϑ :=
+  ⟨h.1, fun x => h.2 ▸ ciInf_le (bddBelow_apex Γ) x⟩
+
+/-- A configuration with apex angles bounded below by `ϑ` is `ϑ'`-bounded for its infimum
+`ϑ' ≥ ϑ`. -/
+lemma ApexLowerBound.isThetaBounded_iInf {Γ : Configuration E} {ϑ : ℝ} (h : ApexLowerBound Γ ϑ) :
+    IsThetaBounded Γ (⨅ x, (Γ x).apex) ∧ ϑ ≤ ⨅ x, (Γ x).apex := by
+  have hle : ϑ ≤ ⨅ x, (Γ x).apex := le_ciInf h.2
+  exact ⟨⟨lt_of_lt_of_le h.1 hle, rfl⟩, hle⟩
+
+/-- A configuration whose apex angles all equal `θ > 0` is `θ`-bounded. -/
+lemma isThetaBounded_of_apex_eq {Γ : Configuration E} {θ : ℝ} (hθ : 0 < θ)
+    (h : ∀ x, (Γ x).apex = θ) : IsThetaBounded Γ θ :=
+  ⟨hθ, by simp only [h, ciInf_const]⟩
+
+/-- Shrinking every cone to apex angle exactly `θ`, keeping its axis. -/
+noncomputable def shrinkConfig (Γ : Configuration E) {θ : ℝ} (h : ApexLowerBound Γ θ) :
+    Configuration E := fun x =>
+  { axis := (Γ x).axis
+    norm_axis := (Γ x).norm_axis
+    apex := θ
+    apex_pos := h.1
+    apex_le := (h.2 x).trans (Γ x).apex_le }
+
+lemma shrinkConfig_subset (Γ : Configuration E) {θ : ℝ} (h : ApexLowerBound Γ θ) (x : E) :
+    (shrinkConfig Γ h x).carrier ⊆ (Γ x).carrier :=
+  doubleCone_mono h.1.le (by linarith [(Γ x).apex_le, Real.pi_pos]) (h.2 x)
+
+lemma isThetaBounded_shrinkConfig (Γ : Configuration E) {θ : ℝ} (h : ApexLowerBound Γ θ) :
+    IsThetaBounded (shrinkConfig Γ h) θ :=
+  isThetaBounded_of_apex_eq h.1 fun _ => rfl
 
 /-- `V^Γ[x] = x + Γ(x)` (Definition 2.1). -/
 def coneAt (Γ : Configuration E) (x : E) : Set E := shift (Γ x).carrier x
@@ -226,11 +270,18 @@ variable [MeasurableSpace E]
 def CondM (Γ : Configuration E) : Prop :=
   MeasurableSet {p : E × E | p.2 - p.1 ∈ (Γ p.1).carrier}
 
-/-- `Γ` is *`ϑ`-admissible*: `ϑ`-bounded and satisfying (M) (Definition 2.1). -/
-def IsAdmissible (Γ : Configuration E) (ϑ : ℝ) : Prop := IsBounded Γ ϑ ∧ CondM Γ
+/-- `ϑ` is a lower bound for the apex angles of `Γ`, and `Γ` satisfies (M): the working form of
+`ϑ`-admissibility (`IsThetaAdmissible`). -/
+def ApexAdmissible (Γ : Configuration E) (ϑ : ℝ) : Prop := ApexLowerBound Γ ϑ ∧ CondM Γ
 
-lemma IsAdmissible.isBounded {Γ : Configuration E} {ϑ : ℝ} (h : IsAdmissible Γ ϑ) :
-    IsBounded Γ ϑ := h.1
+lemma ApexAdmissible.apexLowerBound {Γ : Configuration E} {ϑ : ℝ} (h : ApexAdmissible Γ ϑ) :
+    ApexLowerBound Γ ϑ := h.1
+
+/-- `Γ` is *`ϑ`-admissible* (Definition 2.1): `ϑ`-bounded and satisfying (M). -/
+def IsThetaAdmissible (Γ : Configuration E) (ϑ : ℝ) : Prop := IsThetaBounded Γ ϑ ∧ CondM Γ
+
+lemma IsThetaAdmissible.apexAdmissible {Γ : Configuration E} {ϑ : ℝ}
+    (h : IsThetaAdmissible Γ ϑ) : ApexAdmissible Γ ϑ := ⟨h.1.apexLowerBound, h.2⟩
 
 end Measurable
 

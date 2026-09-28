@@ -116,7 +116,7 @@ theorem lemmaAOne_ball (d : ℕ) :
 theorem theoremOneOne_uniform (d : ℕ) :
     ∀ ϑ Λ α₀ : ℝ, 0 < ϑ → 1 ≤ Λ → 0 < α₀ →
     ∃ c : ℝ, 1 ≤ c ∧ ∀ α : ℝ, α₀ ≤ α → α < 2 →
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsAdmissible Γ ϑ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexAdmissible Γ ϑ →
       ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞, KernelBounds Γ α Λ k →
       ∀ (x₀ : EuclideanSpace ℝ (Fin d)) (R : ℝ), 0 < R →
       ∀ f : EuclideanSpace ℝ (Fin d) → ℝ, MeasureTheory.MemLp f 2 (MeasureTheory.volume.restrict (Metric.ball x₀ R)) →
@@ -137,8 +137,8 @@ theorem theoremOneOne_uniform (d : ℕ) :
   refine ⟨max (c'⁻¹ * C₁) 1, le_max_right _ _, ?_⟩
   intro α hα₀α hα2 Γ hΓ k hk x₀ R hR f hf
   have hα : 0 < α := lt_of_lt_of_le hα₀ hα₀α
-  have hΓ₀ : IsBounded Γ ϑ₀ :=
-    ⟨hϑ₀pos, fun x => le_trans (min_le_left _ _) (hΓ.isBounded.2 x)⟩
+  have hΓ₀ : ApexLowerBound Γ ϑ₀ :=
+    ⟨hϑ₀pos, fun x => le_trans (min_le_left _ _) (hΓ.apexLowerBound.2 x)⟩
   -- the measurable lower kernel
   set S : Set (EuclideanSpace ℝ (Fin d) × EuclideanSpace ℝ (Fin d)) :=
     {p | p.2 - p.1 ∈ (Γ p.1).carrier} with hS

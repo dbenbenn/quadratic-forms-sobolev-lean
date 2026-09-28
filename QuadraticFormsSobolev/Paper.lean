@@ -48,12 +48,14 @@ The constant $c$ depends on $\Lambda$, the dimension $d$ and $\vartheta$. It is 
 theorem theorem_1_1 (d : ℕ) :
     ∀ ϑ Λ α₀ : ℝ, 0 < ϑ → 1 ≤ Λ → 0 < α₀ →
     ∃ c : ℝ, 1 ≤ c ∧ ∀ α : ℝ, α₀ ≤ α → α < 2 →
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsAdmissible Γ ϑ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsThetaAdmissible Γ ϑ →
       ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞, KernelBounds Γ α Λ k →
       ∀ (x₀ : EuclideanSpace ℝ (Fin d)) (R : ℝ), 0 < R →
       ∀ f : EuclideanSpace ℝ (Fin d) → ℝ, MeasureTheory.MemLp f 2 (MeasureTheory.volume.restrict (Metric.ball x₀ R)) →
-        formHs (Metric.ball x₀ R) α f ≤ ENNReal.ofReal c * form (Metric.ball x₀ R) k f :=
-  QFS.theoremOneOne_uniform d
+        formHs (Metric.ball x₀ R) α f ≤ ENNReal.ofReal c * form (Metric.ball x₀ R) k f := by
+  intro ϑ Λ α₀ hϑ hΛ hα₀
+  obtain ⟨c, hc, H⟩ := QFS.theoremOneOne_uniform d ϑ Λ α₀ hϑ hΛ hα₀
+  exact ⟨c, hc, fun α h1 h2 Γ hΓ => H α h1 h2 Γ hΓ.apexAdmissible⟩
 
 end QFS.Paper
 
@@ -73,12 +75,14 @@ holds. The constant $c$ depends on $\Lambda, \vartheta, R_0$ and on the dimensio
 theorem theorem_1_3 (d : ℕ) :
     ∀ ϑ Λ R₀ : ℝ, 0 < ϑ → 1 ≤ Λ → 0 < R₀ →
     ∃ κ c : ℝ, 1 ≤ κ ∧ 1 ≤ c ∧ ∀ α : ℝ, 0 < α → α < 2 →
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsThetaBounded Γ ϑ →
       ∀ ω, DiscreteKernelBounds Γ α Λ R₀ (lattice d) ω →
       ∀ (x₀ : EuclideanSpace ℝ (Fin d)) (R : ℝ) (f : EuclideanSpace ℝ (Fin d) → ℝ), 0 < R →
         discreteForm (Metric.ball x₀ R) R₀ (jumpKernel d α) f
-          ≤ ENNReal.ofReal c * discreteForm (Metric.ball x₀ (κ * R)) R₀ ω f :=
-  QFS.theoremOneThree_uniform d
+          ≤ ENNReal.ofReal c * discreteForm (Metric.ball x₀ (κ * R)) R₀ ω f := by
+  intro ϑ Λ R₀ hϑ hΛ hR₀
+  obtain ⟨κ, c, hκ, hc, H⟩ := QFS.theoremOneThree_uniform d ϑ Λ R₀ hϑ hΛ hR₀
+  exact ⟨κ, c, hκ, hc, fun α h1 h2 Γ hΓ => H α h1 h2 Γ hΓ.apexLowerBound⟩
 
 end QFS.Paper
 
@@ -94,7 +98,7 @@ namespace QFS.Paper
 “Let $\Omega \subset \mathbb{R}^d$ be a bounded Lipschitz domain. Then $H_k(\Omega) = H^{\frac{\alpha}{2}}(\Omega)$. The seminorms $|\cdot|_{H_k(\Omega)}$ and $|\cdot|_{H^{\frac{\alpha}{2}}(\Omega)}$ and the corresponding norms are comparable on $H_k(\Omega)$. Moreover, the subspace $C^\infty(\overline{\Omega})$ is dense in $H_k(\Omega)$. In addition $H_k(\mathbb{R}^d) = H^{\frac{\alpha}{2}}(\mathbb{R}^d)$ and the seminorms $|\cdot|_{H_k(\mathbb{R}^d)}$ and $|\cdot|_{H^{\frac{\alpha}{2}}(\mathbb{R}^d)}$ and the corresponding norms are comparable on $H_k(\mathbb{R}^d)$. The subspace $C_c^\infty(\mathbb{R}^d)$ of smooth functions with compact support in $\mathbb{R}^d$ is dense in $H_k(\mathbb{R}^d)$.” (p. 4) -/
 theorem theorem_1_4 (d : ℕ) :
     ∀ ϑ Λ α : ℝ, 0 < ϑ → 1 ≤ Λ → 0 < α → α < 2 →
-    ∃ c : ℝ, 1 ≤ c ∧ ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsAdmissible Γ ϑ →
+    ∃ c : ℝ, 1 ≤ c ∧ ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsThetaAdmissible Γ ϑ →
       ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞, KernelBounds Γ α Λ k →
       {g : EuclideanSpace ℝ (Fin d) → ℝ | MeasureTheory.MemLp g 2 MeasureTheory.volume ∧ form Set.univ k g ≠ ⊤}
           = {g : EuclideanSpace ℝ (Fin d) → ℝ | MeasureTheory.MemLp g 2 MeasureTheory.volume ∧
@@ -106,8 +110,10 @@ theorem theorem_1_4 (d : ℕ) :
           ≤ ENNReal.ofReal c * (MeasureTheory.eLpNorm f 2 MeasureTheory.volume ^ 2 + form Set.univ k f) ∧
         MeasureTheory.eLpNorm f 2 MeasureTheory.volume ^ 2 + form Set.univ k f
           ≤ ENNReal.ofReal Λ *
-            (MeasureTheory.eLpNorm f 2 MeasureTheory.volume ^ 2 + formHs Set.univ α f) :=
-  QFS.theoremOneFour_univ d
+            (MeasureTheory.eLpNorm f 2 MeasureTheory.volume ^ 2 + formHs Set.univ α f) := by
+  intro ϑ Λ α hϑ hΛ hα hα2
+  obtain ⟨c, hc, H⟩ := QFS.theoremOneFour_univ d ϑ Λ α hϑ hΛ hα hα2
+  exact ⟨c, hc, fun Γ hΓ => H Γ hΓ.apexAdmissible⟩
 
 end QFS.Paper
 
@@ -134,7 +140,7 @@ $\Omega$, as in the paper, where it comes from Lemma A.1. -/
 theorem theorem_1_4_domain (d : ℕ) {Ω : Set (EuclideanSpace ℝ (Fin d))}
     (hΩ : IsBoundedLipschitzDomain Ω) :
     ∀ ϑ Λ α : ℝ, 0 < ϑ → 1 ≤ Λ → 0 < α → α < 2 →
-    ∃ c : ℝ, 1 ≤ c ∧ ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsAdmissible Γ ϑ →
+    ∃ c : ℝ, 1 ≤ c ∧ ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsThetaAdmissible Γ ϑ →
       ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞, KernelBounds Γ α Λ k →
       {g : EuclideanSpace ℝ (Fin d) → ℝ | MeasureTheory.MemLp g 2 (MeasureTheory.volume.restrict Ω) ∧
           form Ω k g ≠ ⊤}
@@ -148,8 +154,10 @@ theorem theorem_1_4_domain (d : ℕ) {Ω : Set (EuclideanSpace ℝ (Fin d))}
             (MeasureTheory.eLpNorm f 2 (MeasureTheory.volume.restrict Ω) ^ 2 + form Ω k f) ∧
         MeasureTheory.eLpNorm f 2 (MeasureTheory.volume.restrict Ω) ^ 2 + form Ω k f
           ≤ ENNReal.ofReal Λ *
-            (MeasureTheory.eLpNorm f 2 (MeasureTheory.volume.restrict Ω) ^ 2 + formHs Ω α f) :=
-  QFS.theoremOneFour_domain d hΩ
+            (MeasureTheory.eLpNorm f 2 (MeasureTheory.volume.restrict Ω) ^ 2 + formHs Ω α f) := by
+  intro ϑ Λ α hϑ hΛ hα hα2
+  obtain ⟨c, hc, H⟩ := QFS.theoremOneFour_domain d hΩ ϑ Λ α hϑ hΛ hα hα2
+  exact ⟨c, hc, fun Γ hΓ => H Γ hΓ.apexAdmissible⟩
 
 end QFS.Paper
 
@@ -176,15 +184,16 @@ convergence in $h$. Cutting off needs $\int \min(1, |h|^2)|h|^{-d-\alpha}\,dh < 
 $0 < \alpha < 2$; mollifying needs the continuity of translation in $L^2$. -/
 theorem theorem_1_4_density_univ (d : ℕ) :
     ∀ ϑ Λ α : ℝ, 0 < ϑ → 1 ≤ Λ → 0 < α → α < 2 →
-    ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsAdmissible Γ ϑ →
+    ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsThetaAdmissible Γ ϑ →
     ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞, KernelBounds Γ α Λ k →
     ∀ f : EuclideanSpace ℝ (Fin d) → ℝ, MeasureTheory.MemLp f 2 MeasureTheory.volume →
       form Set.univ k f ≠ ⊤ →
     ∀ ε : ℝ, 0 < ε →
     ∃ g : EuclideanSpace ℝ (Fin d) → ℝ, ContDiff ℝ (⊤ : ℕ∞) g ∧ HasCompactSupport g ∧
       MeasureTheory.eLpNorm (f - g) 2 MeasureTheory.volume ^ 2 + form Set.univ k (f - g)
-        < ENNReal.ofReal ε :=
-  QFS.theoremOneFour_density_univ d
+        < ENNReal.ofReal ε := by
+  intro ϑ Λ α hϑ hΛ hα hα2 Γ hΓ
+  exact QFS.theoremOneFour_density_univ d ϑ Λ α hϑ hΛ hα hα2 Γ hΓ.apexAdmissible
 
 end QFS.Paper
 
@@ -215,15 +224,16 @@ $L^2(\mathbb{R}^d \times \mathbb{R}^d)$ for $1_{\Omega\times\Omega}(x,y)(f(y) - 
 theorem theorem_1_4_density_domain (d : ℕ) {Ω : Set (EuclideanSpace ℝ (Fin d))}
     (hΩ : IsBoundedLipschitzDomain Ω) :
     ∀ ϑ Λ α : ℝ, 0 < ϑ → 1 ≤ Λ → 0 < α → α < 2 →
-    ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsAdmissible Γ ϑ →
+    ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsThetaAdmissible Γ ϑ →
     ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞, KernelBounds Γ α Λ k →
     ∀ f : EuclideanSpace ℝ (Fin d) → ℝ, MeasureTheory.MemLp f 2 (MeasureTheory.volume.restrict Ω) →
       form Ω k f ≠ ⊤ →
     ∀ ε : ℝ, 0 < ε →
     ∃ g : EuclideanSpace ℝ (Fin d) → ℝ, ContDiff ℝ (⊤ : ℕ∞) g ∧ HasCompactSupport g ∧
       MeasureTheory.eLpNorm (f - g) 2 (MeasureTheory.volume.restrict Ω) ^ 2 + form Ω k (f - g)
-        < ENNReal.ofReal ε :=
-  QFS.theoremOneFour_density_domain d hΩ
+        < ENNReal.ofReal ε := by
+  intro ϑ Λ α hϑ hΛ hα hα2 Γ hΓ
+  exact QFS.theoremOneFour_density_domain d hΩ ϑ Λ α hϑ hΛ hα hα2 Γ hΓ.apexAdmissible
 
 end QFS.Paper
 
@@ -289,9 +299,10 @@ The finite family of axes is produced before `Γ` is mentioned: it depends only 
 `ϑ`, exactly as the paper asserts. -/
 theorem lemma_2_2 {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2) :
     ∃ S : Finset E, (∀ v ∈ S, ‖v‖ = 1) ∧
-      ∀ Γ : Configuration E, IsBounded Γ ϑ →
-        ∀ x : E, ∃ v ∈ S, doubleCone v (ϑ / 3) ⊆ (Γ x).carrier :=
-  QFS.ref_cones hϑ hϑ'
+      ∀ Γ : Configuration E, IsThetaBounded Γ ϑ →
+        ∀ x : E, ∃ v ∈ S, doubleCone v (ϑ / 3) ⊆ (Γ x).carrier := by
+  obtain ⟨S, hS, H⟩ := QFS.ref_cones (E := E) hϑ hϑ'
+  exact ⟨S, hS, fun Γ hΓ => H Γ hΓ.apexLowerBound⟩
 
 end QFS.Paper
 
@@ -310,7 +321,7 @@ namespace QFS.Paper
 
 /-- **Corollary 2.4 — Reduction of a bounded configuration to a finite family of reference cones**
 
-Let $E$ be a finite-dimensional real inner product space and let $\vartheta$ satisfy $0 < \vartheta \le \pi/2$. A *configuration* is a map $\Gamma$ assigning to each $x \in E$ a double cone $\Gamma(x)$, given by a unit axis and an apex angle in $(0,\pi/2]$; it is *$\vartheta$-bounded* when $\vartheta > 0$ and every apex angle $\Gamma(x).\mathrm{apex}$ is at least $\vartheta$. Let $\Gamma$ be $\vartheta$-bounded. Then there is a configuration $\Gamma'$ such that
+Let $E$ be a finite-dimensional real inner product space and let $\vartheta$ satisfy $0 < \vartheta \le \pi/2$. A *configuration* is a map $\Gamma$ assigning to each $x \in E$ a double cone $\Gamma(x)$, given by a unit axis and an apex angle in $(0,\pi/2]$; it is *$\vartheta$-bounded* (`IsThetaBounded`) when the infimum of its apex angles is $\vartheta > 0$, as in Definition 2.1. Let $\Gamma$ be $\vartheta$-bounded. Then there is a configuration $\Gamma'$ such that
 
 $$\text{(i) } \{\Gamma'(x) : x \in E\} \text{ is finite}; \qquad
 \text{(ii) } \Gamma'(x) \subseteq \Gamma(x) \text{ for every } x; \qquad
@@ -320,11 +331,12 @@ In (ii) the inclusion is between the underlying subsets of $E$ carried by the tw
 
 The point is that an arbitrary bounded configuration, which may use uncountably many axes, can be replaced by a subconfiguration taking only finitely many values, at the price of shrinking each aperture to $\vartheta/3$. Every argument that must treat cone types one at a time — decomposing space into the finitely many sets where a given reference cone is available — rests on this reduction. -/
 theorem corollary_2_4 {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2)
-    (Γ : Configuration E) (hΓ : IsBounded Γ ϑ) :
+    (Γ : Configuration E) (hΓ : IsThetaBounded Γ ϑ) :
     ∃ Γ' : Configuration E, (Set.range Γ').Finite ∧
       (∀ x, (Γ' x).carrier ⊆ (Γ x).carrier) ∧
-      (∀ x, (Γ' x).apex = ϑ / 3) ∧ IsBounded Γ' (ϑ / 3) :=
-  QFS.ref_config hϑ hϑ' Γ hΓ
+      (∀ x, (Γ' x).apex = ϑ / 3) ∧ IsThetaBounded Γ' (ϑ / 3) := by
+  obtain ⟨Γ', h1, h2, h3, -⟩ := QFS.ref_config hϑ hϑ' Γ hΓ.apexLowerBound
+  exact ⟨Γ', h1, h2, h3, isThetaBounded_of_apex_eq (by positivity) h3⟩
 
 end QFS.Paper
 
@@ -383,15 +395,16 @@ holds. The constant $c$ depends on $\Lambda, \vartheta, R_0$ and on the dimensio
 theorem corollary_3_1 (ϑ Λ α R₀ : ℝ) (hϑ : 0 < ϑ) (hΛ : 1 ≤ Λ) (hα : 0 < α)
     (hα2 : α < 2) (hR₀ : 0 < R₀) :
     ∃ κ c : ℝ, 1 ≤ κ ∧ 1 ≤ c ∧
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsThetaBounded Γ ϑ →
       ∀ h : ℝ, 0 < h →
       ∀ ω, DiscreteKernelBounds Γ α Λ (R₀ * h) (scaledLattice d h) ω →
       ∀ (x₀ : EuclideanSpace ℝ (Fin d)) (R : ℝ) (f : EuclideanSpace ℝ (Fin d) → ℝ),
         0 < R →
         discreteFormOn (scaledLattice d h) (ball x₀ R) (R₀ * h) (jumpKernel d α) f
           ≤ ENNReal.ofReal c *
-            discreteFormOn (scaledLattice d h) (ball x₀ (κ * R)) (R₀ * h) ω f :=
-  QFS.corollaryThreeOne ϑ Λ α R₀ hϑ hΛ hα hα2 hR₀
+            discreteFormOn (scaledLattice d h) (ball x₀ (κ * R)) (R₀ * h) ω f := by
+  obtain ⟨κ, c, hκ, hc, H⟩ := QFS.corollaryThreeOne ϑ Λ α R₀ hϑ hΛ hα hα2 hR₀
+  exact ⟨κ, c, hκ, hc, fun Γ hΓ => H Γ hΓ.apexLowerBound⟩
 
 end QFS.Paper
 
@@ -660,15 +673,22 @@ The angle $\vartheta'$ does only depend on $\theta$ and on the infimum $\varthet
 theorem proposition_3_5 {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2) :
     ∃ C θ' : ℝ, 0 < C ∧ 0 < θ' ∧ θ' ≤ π / 2 ∧
       ∀ α : ℝ, 0 < α → α ≤ 2 →
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ → CondMeas Γ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsThetaBounded Γ ϑ → CondMeas Γ →
       ∀ (Λ : ℝ) (k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞),
         KernelBounds Γ α Λ k →
-      ∃ Γ' : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ' θ' ∧
+      ∃ Γ' : Configuration (EuclideanSpace ℝ (Fin d)), IsThetaBounded Γ' θ' ∧
         ∀ x ∈ lattice d, ∀ y ∈ lattice d, Real.sqrt d < ‖x - y‖ →
           ENNReal.ofReal (C * Λ⁻¹) *
               ((indE (coneAt Γ' x) y + indE (coneAt Γ' y) x) * jumpKernel d α x y)
-            ≤ discreteKernel d k 1 x y :=
-  QFS.prop_test_fct hϑ hϑ'
+            ≤ discreteKernel d k 1 x y := by
+  obtain ⟨C, θ', hC, hθ, hθ', H⟩ := QFS.prop_test_fct (d := d) hϑ hϑ'
+  refine ⟨C, θ', hC, hθ, hθ', fun α ha hb Γ hΓ hM Λ k hk => ?_⟩
+  obtain ⟨Γ', hΓ', hbd⟩ := H α ha hb Γ hΓ.apexLowerBound hM Λ k hk
+  refine ⟨shrinkConfig Γ' hΓ', isThetaBounded_shrinkConfig Γ' hΓ',
+    fun x hx y hy hxy => le_trans ?_ (hbd x hx y hy hxy)⟩
+  gcongr
+  · exact indE_coneAt_mono (shrinkConfig_subset Γ' hΓ') x y
+  · exact indE_coneAt_mono (shrinkConfig_subset Γ' hΓ') y x
 
 end QFS.Paper
 
@@ -696,18 +716,23 @@ theorem corollary_3_6 {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2) :
       ∀ Λ : ℝ, 1 ≤ Λ →
       ∃ C : ℝ, 0 < C ∧
       ∀ α : ℝ, 0 < α → α ≤ 2 →
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ → CondMeas Γ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsThetaBounded Γ ϑ → CondMeas Γ →
       ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞,
         KernelBounds Γ α Λ k →
       ∀ h : ℝ, 0 < h →
       ∃ Γ' : Configuration (EuclideanSpace ℝ (Fin d)),
-        (∀ u, (Γ' u).apex = θ') ∧ IsBounded Γ' θ' ∧
+        (∀ u, (Γ' u).apex = θ') ∧ IsThetaBounded Γ' θ' ∧
         ∀ x ∈ scaledLattice d h, ∀ y ∈ scaledLattice d h, Real.sqrt d * h < ‖x - y‖ →
           ENNReal.ofReal C⁻¹ *
               ((indE (coneAt Γ' x) y + indE (coneAt Γ' y) x) * jumpKernel d α x y)
             ≤ discreteKernel d k h x y ∧
-          discreteKernel d k h x y ≤ ENNReal.ofReal C * jumpKernel d α x y :=
-  QFS.cor_rescaled_kernel_uniform hϑ hϑ'
+          discreteKernel d k h x y ≤ ENNReal.ofReal C * jumpKernel d α x y := by
+  obtain ⟨θ', hθ, hθ', H⟩ := QFS.cor_rescaled_kernel_uniform (d := d) hϑ hϑ'
+  refine ⟨θ', hθ, hθ', fun Λ hΛ => ?_⟩
+  obtain ⟨C, hC, H'⟩ := H Λ hΛ
+  refine ⟨C, hC, fun α ha hb Γ hΓ hM k hk h hh => ?_⟩
+  obtain ⟨Γ', hap, -, hbd⟩ := H' α ha hb Γ hΓ.apexLowerBound hM k hk h hh
+  exact ⟨Γ', hap, isThetaBounded_of_apex_eq hθ hap, hbd⟩
 
 end QFS.Paper
 
@@ -725,13 +750,15 @@ $$c|f|_{H^{\frac{\alpha}{2}}(B)} \le |f|_{H_k(B^*)} \quad \text{for all } f \in 
 This is true for every ball $B$, since $c$ is independent of $B$.” (p. 16; here $B = B_R(x_0)$ and $B^* = B_{\kappa R}(x_0)$, p. 14) -/
 theorem section_3_2 (d : ℕ) :
     ∀ ϑ Λ α : ℝ, 0 < ϑ → 1 ≤ Λ → 0 < α → α < 2 →
-    ∃ κ c : ℝ, 1 ≤ κ ∧ 0 < c ∧ ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsAdmissible Γ ϑ →
+    ∃ κ c : ℝ, 1 ≤ κ ∧ 0 < c ∧ ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsThetaAdmissible Γ ϑ →
       ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞, KernelBounds Γ α Λ k →
       ∀ (x₀ : EuclideanSpace ℝ (Fin d)) (R : ℝ), 0 < R →
       ∀ f : EuclideanSpace ℝ (Fin d) → ℝ,
         MeasureTheory.MemLp f 2 (MeasureTheory.volume.restrict (Metric.ball x₀ (κ * R))) →
-        ENNReal.ofReal c * formHs (Metric.ball x₀ R) α f ≤ form (Metric.ball x₀ (κ * R)) k f :=
-  QFS.formHs_ball_le_form_enlargedBall d
+        ENNReal.ofReal c * formHs (Metric.ball x₀ R) α f ≤ form (Metric.ball x₀ (κ * R)) k f := by
+  intro ϑ Λ α hϑ hΛ hα hα2
+  obtain ⟨κ, c, hκ, hc, H⟩ := QFS.formHs_ball_le_form_enlargedBall d ϑ Λ α hϑ hΛ hα hα2
+  exact ⟨κ, c, hκ, hc, fun Γ hΓ => H Γ hΓ.apexAdmissible⟩
 
 end QFS.Paper
 
@@ -753,10 +780,10 @@ namespace QFS.Paper
 /-- **Theorem 4.1 — connectivity in the continuum**
 
 “For any connected open set $U \subset \mathbb{R}^d$, any two points $x, y \in U$ are vertices in the same connected component of $G_U$.” (p. 17; $G_U$ has vertex set $\mathbb{R}^d$ and an edge from $x$ to $y$ when $x \in U$ and $y \in V^\Gamma[x]$, and “vertices outside $U$ still can be used in edge paths”, p. 17) -/
-theorem theorem_4_1 [FiniteDimensional ℝ E] {ϑ : ℝ} (hΓ : IsBounded Γ ϑ)
+theorem theorem_4_1 [FiniteDimensional ℝ E] {ϑ : ℝ} (hΓ : IsThetaBounded Γ ϑ)
     {U : Set E} (hU : IsOpen U) (hUc : IsPreconnected U)
-    {x y : E} (hx : x ∈ U) (hy : y ∈ U) : Conn Γ U x y :=
-  QFS.cont_connectivity hΓ hU hUc hx hy
+    {x y : E} (hx : x ∈ U) (hy : y ∈ U) : Conn Γ U x y := by
+  exact QFS.cont_connectivity hΓ.apexLowerBound hU hUc hx hy
 
 end QFS.Paper
 
@@ -1335,7 +1362,7 @@ namespace QFS.Paper
 
 /-- **Corollary 5.8 — Uniform outer radius for lattice connectivity of bounded configurations**
 
-Work in Euclidean space $\mathbb{R}^d$ with the integer lattice $\mathbb{Z}^d$. Call a configuration $\Gamma'$ *$\vartheta$-bounded* (`IsBounded Γ' ϑ`) when $0 < \vartheta$ and every double cone it assigns has apex angle at least $\vartheta$, i.e. $\vartheta \le (\Gamma' z).\mathrm{apex}$ for all $z$. Write $V^{\Gamma'}[a] = a + (\Gamma' a).\mathrm{carrier}$, let $\mathrm{ConnWithin}(\Gamma', T, a, b)$ be the reflexive–transitive closure of "$a,b \in T$ and ($b \in V^{\Gamma'}[a]$ or $a \in V^{\Gamma'}[b]$)", and let
+Work in Euclidean space $\mathbb{R}^d$ with the integer lattice $\mathbb{Z}^d$. Call a configuration $\Gamma'$ *$\vartheta$-bounded* (`IsThetaBounded Γ' ϑ`) when the infimum of the apex angles of the double cones it assigns is $\vartheta > 0$ (Definition 2.1). Write $V^{\Gamma'}[a] = a + (\Gamma' a).\mathrm{carrier}$, let $\mathrm{ConnWithin}(\Gamma', T, a, b)$ be the reflexive–transitive closure of "$a,b \in T$ and ($b \in V^{\Gamma'}[a]$ or $a \in V^{\Gamma'}[b]$)", and let
 $$\mathrm{RRConnected}(\Gamma', r, R, x) \quad :\Longleftrightarrow \quad \forall\, y \in B_r(x) \cap \mathbb{Z}^d, \ \ \mathrm{ConnWithin}\bigl(\Gamma',\ B_R(x) \cap \mathbb{Z}^d,\ x,\ y\bigr)$$
 be Definition 5.3: every lattice point within distance $r$ of $x$ is joined to $x$ by an edge path whose vertices are all lattice points of $B_R(x)$.
 
@@ -1346,9 +1373,10 @@ The essential feature is the order of the quantifiers: the outer radius $R$ is p
 
 **Formalization Note.** The hypothesis $0 < r$ is present in the statement but is marked as unused (`_hr`), so the conclusion is in fact established without it; it is retained only to match the shape in which the result is applied. Note also that no lower bound of the form $r \le R$ beyond the stated one, and no positivity of $R$, is asserted. -/
 theorem corollary_5_8 {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2) {r : ℝ} (_hr : 0 < r) :
-    ∃ R : ℝ, r ≤ R ∧ ∀ Γ' : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ' ϑ →
-      ∀ x ∈ lattice d, RRConnected Γ' r R x :=
-  QFS.discrete_template hϑ hϑ' _hr
+    ∃ R : ℝ, r ≤ R ∧ ∀ Γ' : Configuration (EuclideanSpace ℝ (Fin d)), IsThetaBounded Γ' ϑ →
+      ∀ x ∈ lattice d, RRConnected Γ' r R x := by
+  obtain ⟨R, hR, H⟩ := QFS.discrete_template (d := d) hϑ hϑ' _hr
+  exact ⟨R, hR, fun Γ' hΓ' => H Γ' hΓ'.apexLowerBound⟩
 
 end QFS.Paper
 
@@ -1470,12 +1498,13 @@ reflexive-transitive closure, so a block is trivially connected to itself, and t
 relation carries no $Q \ne P$ condition. -/
 theorem proposition_5_14 {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2) {r : ℝ} (hr : 0 < r) :
     ∃ R : ℝ, r ≤ R ∧
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsThetaBounded Γ ϑ →
       ∀ h ℓ : ℝ, 0 < h → 0 < ℓ → SparselyPopulated d ϑ h ℓ →
       ∀ z ∈ lattice d, ∀ x ∈ lattice d, ∀ y ∈ lattice d,
         ‖x - z‖ ≤ r → ‖y - z‖ ≤ r →
-        FavoredConn Γ (townBall h ℓ z R) (townIndex h ℓ x) (townIndex h ℓ y) :=
-  QFS.renormalization hϑ hϑ' hr
+        FavoredConn Γ (townBall h ℓ z R) (townIndex h ℓ x) (townIndex h ℓ y) := by
+  obtain ⟨R, hR, H⟩ := QFS.renormalization (d := d) hϑ hϑ' hr
+  exact ⟨R, hR, fun Γ hΓ => H Γ hΓ.apexLowerBound⟩
 
 end QFS.Paper
 
@@ -1588,12 +1617,13 @@ This is Lemma 5.16, the "first jump": it shows that from an arbitrary starting p
 theorem lemma_5_16 {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2)
     {Δ : ℝ} (hΔδ : apexShrinkConst d ϑ < Δ) (hΔ1 : 1 ≤ Δ) :
     ∃ R₁ : ℝ, 1 ≤ R₁ ∧
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsThetaBounded Γ ϑ →
       ∀ (x : EuclideanSpace ℝ (Fin d)) (n : ℕ),
         ∃ w ∈ lattice d,
           block (Δ ^ n) (Δ ^ (n + 1) • w) ⊆ ball x (Δ ^ (n + 1) * R₁) ∩ coneAt Γ x ∧
-          ∀ q ∈ block (Δ ^ n) (Δ ^ (n + 1) • w), Δ ^ n ≤ ‖q - x‖ :=
-  QFS.connect_first_jump hϑ hϑ' hΔδ hΔ1
+          ∀ q ∈ block (Δ ^ n) (Δ ^ (n + 1) • w), Δ ^ n ≤ ‖q - x‖ := by
+  obtain ⟨R₁, hR₁, H⟩ := QFS.connect_first_jump hϑ hϑ' hΔδ hΔ1
+  exact ⟨R₁, hR₁, fun Γ hΓ => H Γ hΓ.apexLowerBound⟩
 
 end QFS.Paper
 

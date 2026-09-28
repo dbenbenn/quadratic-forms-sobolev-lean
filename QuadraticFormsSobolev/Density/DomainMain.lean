@@ -343,7 +343,7 @@ in `H_k(Ω)`. -/
 theorem theoremOneFour_density_domain (d : ℕ) {Ω : Set (EuclideanSpace ℝ (Fin d))}
     (hΩ : IsBoundedLipschitzDomain Ω) :
     ∀ ϑ Λ α : ℝ, 0 < ϑ → 1 ≤ Λ → 0 < α → α < 2 →
-    ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsAdmissible Γ ϑ →
+    ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexAdmissible Γ ϑ →
     ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞, KernelBounds Γ α Λ k →
     ∀ f : EuclideanSpace ℝ (Fin d) → ℝ, MemLp f 2 (volume.restrict Ω) → form Ω k f ≠ ⊤ →
     ∀ ε : ℝ, 0 < ε →

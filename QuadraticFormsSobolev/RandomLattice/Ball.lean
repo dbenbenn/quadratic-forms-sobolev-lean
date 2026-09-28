@@ -161,7 +161,7 @@ the `H^{α/2}` integrand over pairs in `B_R(x₀)` is at most `c` times the `H_k
 pairs in `B_{3κR}(x₀)`, with `κ, c` depending only on `d, ϑ, Λ, α`. -/
 theorem latticeSum_ball_le {ϑ Λ α : ℝ} (hϑ : 0 < ϑ) (hΛ : 1 ≤ Λ) (hα : 0 ≤ α) :
     ∃ κ c : ℝ, 1 ≤ κ ∧ 0 ≤ c ∧ ∀ ε : ℝ, 0 ≤ ε → ε ≤ 1 / 2 → ε < Real.sin (ϑ / 2) →
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ ϑ →
       ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞, KernelBounds Γ α Λ k →
       ∀ (f : EuclideanSpace ℝ (Fin d) → ℝ) (h : ℝ), 0 < h →
       ∀ A : EuclideanSpace ℝ (Fin d) →L[ℝ] EuclideanSpace ℝ (Fin d),
@@ -228,7 +228,7 @@ theorem latticeSum_ball_le {ϑ Λ α : ℝ} (hϑ : 0 < ϑ) (hΛ : 1 ≤ Λ) (hα
       ≤ ENNReal.ofReal c * (ENNReal.ofReal (h ^ s) * Gs) := by
     calc discreteForm (ball cc r) (1 / 2) (jumpKernel d α) f'
         ≤ ENNReal.ofReal c * discreteForm (ball cc (κ * r)) (1 / 2) ω f' :=
-          H13 (halfConfig Γ T) (isBounded_halfConfig hΓ T) ω hωb cc r f' hrpos
+          H13 (halfConfig Γ T) (apexLowerBound_halfConfig hΓ T) ω hωb cc r f' hrpos
       _ ≤ ENNReal.ofReal c * (ENNReal.ofReal (h ^ s) * Gs) := by
           gcongr
           rw [discreteForm_eq_restrict]
@@ -307,7 +307,7 @@ integrand is measurable, and every ball. No condition (M), no finiteness assumpt
 `α ≥ 0`. -/
 theorem formHs_ball_le_form_ball_randomLattice (hd : 1 ≤ d) {ϑ Λ α : ℝ} (hϑ : 0 < ϑ)
     (hϑ' : ϑ ≤ Real.pi / 2) (hΛ : 1 ≤ Λ) (hα : 0 ≤ α) :
-    ∃ κ C : ℝ, 1 ≤ κ ∧ 0 ≤ C ∧ ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ →
+    ∃ κ C : ℝ, 1 ≤ κ ∧ 0 ≤ C ∧ ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ ϑ →
       ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞, KernelBounds Γ α Λ k →
       ∀ f : EuclideanSpace ℝ (Fin d) → ℝ, Measurable f →
       Measurable (fun p : EuclideanSpace ℝ (Fin d) × EuclideanSpace ℝ (Fin d) =>

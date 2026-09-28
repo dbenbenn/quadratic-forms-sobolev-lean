@@ -133,10 +133,10 @@ lemma exists_unit_dim_one : ∃ e : EuclideanSpace ℝ (Fin 1), ‖e‖ = 1 :=
 theorem prop_test_fct_dim_one {ϑ : ℝ} :
     ∃ C θ' : ℝ, 0 < C ∧ 0 < θ' ∧ θ' ≤ π / 2 ∧
       ∀ α : ℝ, 0 < α → α ≤ 2 →
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin 1)), IsBounded Γ ϑ → CondMeas Γ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin 1)), ApexLowerBound Γ ϑ → CondMeas Γ →
       ∀ (Λ : ℝ) (k : EuclideanSpace ℝ (Fin 1) → EuclideanSpace ℝ (Fin 1) → ℝ≥0∞),
         KernelBounds Γ α Λ k →
-      ∃ Γ' : Configuration (EuclideanSpace ℝ (Fin 1)), IsBounded Γ' θ' ∧
+      ∃ Γ' : Configuration (EuclideanSpace ℝ (Fin 1)), ApexLowerBound Γ' θ' ∧
         ∀ x ∈ lattice 1, ∀ y ∈ lattice 1, Real.sqrt ((1:ℕ):ℝ) < ‖x - y‖ →
           ENNReal.ofReal (C * Λ⁻¹) *
               ((indE (coneAt Γ' x) y + indE (coneAt Γ' y) x) * jumpKernel 1 α x y)
@@ -145,7 +145,7 @@ theorem prop_test_fct_dim_one {ϑ : ℝ} :
   refine ⟨2 ^ (-(3:ℝ)), π / 2, by positivity, by positivity, le_rfl, ?_⟩
   intro α hα hα2 Γ _ _ Λ k hk
   refine ⟨constConfig ⟨e, he, π / 2, by positivity, le_rfl⟩,
-    isBounded_constConfig (by positivity) le_rfl he, ?_⟩
+    apexLowerBound_constConfig (by positivity) le_rfl he, ?_⟩
   intro x hx y hy hxy
   have hxy1 : (1:ℝ) < ‖x - y‖ := by simpa using hxy
   calc ENNReal.ofReal (2 ^ (-(3:ℝ)) * Λ⁻¹) *
@@ -163,10 +163,10 @@ theorem prop_test_fct_dim_one {ϑ : ℝ} :
 theorem prop_test_fct {d : ℕ} {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2) :
     ∃ C θ' : ℝ, 0 < C ∧ 0 < θ' ∧ θ' ≤ π / 2 ∧
       ∀ α : ℝ, 0 < α → α ≤ 2 →
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ → CondMeas Γ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ ϑ → CondMeas Γ →
       ∀ (Λ : ℝ) (k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞),
         KernelBounds Γ α Λ k →
-      ∃ Γ' : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ' θ' ∧
+      ∃ Γ' : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ' θ' ∧
         ∀ x ∈ lattice d, ∀ y ∈ lattice d, Real.sqrt d < ‖x - y‖ →
           ENNReal.ofReal (C * Λ⁻¹) *
               ((indE (coneAt Γ' x) y + indE (coneAt Γ' y) x) * jumpKernel d α x y)
@@ -185,12 +185,12 @@ theorem cor_rescaled_kernel_uniform_dim_one {ϑ : ℝ} :
       ∀ Λ : ℝ, 1 ≤ Λ →
       ∃ C : ℝ, 0 < C ∧
       ∀ α : ℝ, 0 < α → α ≤ 2 →
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin 1)), IsBounded Γ ϑ → CondMeas Γ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin 1)), ApexLowerBound Γ ϑ → CondMeas Γ →
       ∀ k : EuclideanSpace ℝ (Fin 1) → EuclideanSpace ℝ (Fin 1) → ℝ≥0∞,
         KernelBounds Γ α Λ k →
       ∀ h : ℝ, 0 < h →
       ∃ Γ' : Configuration (EuclideanSpace ℝ (Fin 1)),
-        (∀ u, (Γ' u).apex = θ') ∧ IsBounded Γ' θ' ∧
+        (∀ u, (Γ' u).apex = θ') ∧ ApexLowerBound Γ' θ' ∧
         ∀ x ∈ scaledLattice 1 h, ∀ y ∈ scaledLattice 1 h, Real.sqrt ((1:ℕ):ℝ) * h < ‖x - y‖ →
           ENNReal.ofReal C⁻¹ *
               ((indE (coneAt Γ' x) y + indE (coneAt Γ' y) x) * jumpKernel 1 α x y)
@@ -205,7 +205,7 @@ theorem cor_rescaled_kernel_uniform_dim_one {ϑ : ℝ} :
     lt_of_lt_of_le (by positivity) (le_max_left _ _), ?_⟩
   intro α hα hα2 Γ _ _ k hk h hh
   refine ⟨constConfig ⟨e, he, π / 2, by positivity, le_rfl⟩, fun _ => rfl,
-    isBounded_constConfig (by positivity) le_rfl he, ?_⟩
+    apexLowerBound_constConfig (by positivity) le_rfl he, ?_⟩
   intro x hx y hy hxy
   have hxy1 : h < ‖x - y‖ := by simpa using hxy
   refine ⟨?_, ?_⟩
@@ -231,12 +231,12 @@ theorem cor_rescaled_kernel_uniform {d : ℕ} {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : 
       ∀ Λ : ℝ, 1 ≤ Λ →
       ∃ C : ℝ, 0 < C ∧
       ∀ α : ℝ, 0 < α → α ≤ 2 →
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ → CondMeas Γ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ ϑ → CondMeas Γ →
       ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞,
         KernelBounds Γ α Λ k →
       ∀ h : ℝ, 0 < h →
       ∃ Γ' : Configuration (EuclideanSpace ℝ (Fin d)),
-        (∀ u, (Γ' u).apex = θ') ∧ IsBounded Γ' θ' ∧
+        (∀ u, (Γ' u).apex = θ') ∧ ApexLowerBound Γ' θ' ∧
         ∀ x ∈ scaledLattice d h, ∀ y ∈ scaledLattice d h, Real.sqrt d * h < ‖x - y‖ →
           ENNReal.ofReal C⁻¹ *
               ((indE (coneAt Γ' x) y + indE (coneAt Γ' y) x) * jumpKernel d α x y)

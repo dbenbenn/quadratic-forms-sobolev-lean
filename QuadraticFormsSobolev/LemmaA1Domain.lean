@@ -170,7 +170,7 @@ theorem lemmaAOne_domain {Ω : Set (EuclideanSpace ℝ (Fin d))} (hΩ : IsBounde
 theorem theoremOneFour_domain (d : ℕ) {Ω : Set (EuclideanSpace ℝ (Fin d))}
     (hΩ : IsBoundedLipschitzDomain Ω) :
     ∀ ϑ Λ α : ℝ, 0 < ϑ → 1 ≤ Λ → 0 < α → α < 2 →
-    ∃ c : ℝ, 1 ≤ c ∧ ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsAdmissible Γ ϑ →
+    ∃ c : ℝ, 1 ≤ c ∧ ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexAdmissible Γ ϑ →
       ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞, KernelBounds Γ α Λ k →
       {g : EuclideanSpace ℝ (Fin d) → ℝ | MemLp g 2 (volume.restrict Ω) ∧ form Ω k g ≠ ⊤}
           = {g : EuclideanSpace ℝ (Fin d) → ℝ | MemLp g 2 (volume.restrict Ω) ∧
@@ -185,7 +185,7 @@ theorem theoremOneFour_domain (d : ℕ) {Ω : Set (EuclideanSpace ℝ (Fin d))}
   intro ϑ Λ α hϑ hΛ hα hα2
   -- the lower inequality with some `c ≥ 1`
   have key : ∃ c : ℝ, 1 ≤ c ∧ ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)),
-      IsAdmissible Γ ϑ →
+      ApexAdmissible Γ ϑ →
       ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞, KernelBounds Γ α Λ k →
       ∀ f : EuclideanSpace ℝ (Fin d) → ℝ, MemLp f 2 (volume.restrict Ω) →
         formHs Ω α f ≤ ENNReal.ofReal c * form Ω k f := by

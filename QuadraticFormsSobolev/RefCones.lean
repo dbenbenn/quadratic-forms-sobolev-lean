@@ -135,7 +135,7 @@ The finite family of axes is produced before `Γ` is mentioned: it depends only 
 the space and on `ϑ`, exactly as the paper asserts. -/
 theorem ref_cones {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2) :
     ∃ S : Finset E, (∀ v ∈ S, ‖v‖ = 1) ∧
-      ∀ Γ : Configuration E, IsBounded Γ ϑ →
+      ∀ Γ : Configuration E, ApexLowerBound Γ ϑ →
         ∀ x : E, ∃ v ∈ S, doubleCone v (ϑ / 3) ⊆ (Γ x).carrier := by
   obtain ⟨S, hS, hcov⟩ := exists_finite_axes (E := E) hϑ hϑ'
   refine ⟨S, hS, fun Γ hΓ x => ?_⟩
@@ -171,7 +171,7 @@ def RefFamily.shrunkAt {Γ : Configuration E} {θ : ℝ} (F : RefFamily Γ θ) (
 
 /-- Lemma 2.2 gives a family of reference cones with apex angle `ϑ/3`. -/
 noncomputable def refFamily {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2)
-    (Γ : Configuration E) (hΓ : IsBounded Γ ϑ) : RefFamily Γ (ϑ / 3) :=
+    (Γ : Configuration E) (hΓ : ApexLowerBound Γ ϑ) : RefFamily Γ (ϑ / 3) :=
   { axes := (ref_cones (E := E) hϑ hϑ').choose
     norm_axes := (ref_cones (E := E) hϑ hϑ').choose_spec.1
     covers := (ref_cones (E := E) hϑ hϑ').choose_spec.2 Γ hΓ }
@@ -186,10 +186,10 @@ cone of `Γ̃` has apex angle `ϑ/3`, so `Γ̃` is `ϑ/3`-bounded.
 reference cones have apex angle `ϑ/3`, which is what is proved here. Nothing
 downstream uses more than positivity of that angle. See the README.) -/
 theorem ref_config {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2)
-    (Γ : Configuration E) (hΓ : IsBounded Γ ϑ) :
+    (Γ : Configuration E) (hΓ : ApexLowerBound Γ ϑ) :
     ∃ Γ' : Configuration E, (Set.range Γ').Finite ∧
       (∀ x, (Γ' x).carrier ⊆ (Γ x).carrier) ∧
-      (∀ x, (Γ' x).apex = ϑ / 3) ∧ IsBounded Γ' (ϑ / 3) := by
+      (∀ x, (Γ' x).apex = ϑ / 3) ∧ ApexLowerBound Γ' (ϑ / 3) := by
   classical
   obtain ⟨S, hS, hprop⟩ := ref_cones (E := E) hϑ hϑ'
   have hθ : 0 < ϑ / 3 := by positivity
@@ -218,10 +218,10 @@ theorem ref_config {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2)
 proof of Corollary 5.8: the number `L` of reference cones is produced before the
 configuration, so it depends only on the space and on `ϑ`. -/
 theorem ref_config_uniform {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2) :
-    ∃ L : ℕ, ∀ Γ : Configuration E, IsBounded Γ ϑ →
+    ∃ L : ℕ, ∀ Γ : Configuration E, ApexLowerBound Γ ϑ →
       ∃ Γ' : Configuration E, (Set.range Γ').encard ≤ (L : ℕ∞) ∧
         (∀ x, (Γ' x).carrier ⊆ (Γ x).carrier) ∧
-        (∀ x, (Γ' x).apex = ϑ / 3) ∧ IsBounded Γ' (ϑ / 3) := by
+        (∀ x, (Γ' x).apex = ϑ / 3) ∧ ApexLowerBound Γ' (ϑ / 3) := by
   classical
   obtain ⟨S, hS, hprop⟩ := ref_cones (E := E) hϑ hϑ'
   have hθ : 0 < ϑ / 3 := by positivity

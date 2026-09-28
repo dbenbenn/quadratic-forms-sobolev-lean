@@ -121,7 +121,7 @@ finite sums and the double counting of Step 6 can be done with `Finset.sum_comm`
 theorem theoremOneThree_of_nonneg :
     ∀ ϑ Λ α R₀ : ℝ, 0 < ϑ → 1 ≤ Λ → 0 ≤ α → 0 < R₀ →
     ∃ κ c : ℝ, 1 ≤ κ ∧ 1 ≤ c ∧
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ ϑ →
       ∀ ω, DiscreteKernelBounds Γ α Λ R₀ (lattice d) ω →
       ∀ (x₀ : EuclideanSpace ℝ (Fin d)) (R : ℝ) (f : EuclideanSpace ℝ (Fin d) → ℝ), 0 < R →
         discreteForm (ball x₀ R) R₀ (jumpKernel d α) f
@@ -134,8 +134,8 @@ theorem theoremOneThree_of_nonneg :
     exact zero_le
   have hpi : (0:ℝ) < π / 2 := by positivity
   -- apex angles may be capped at `π/2`
-  have hmono : ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ →
-      IsBounded Γ (min ϑ (π / 2)) :=
+  have hmono : ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ ϑ →
+      ApexLowerBound Γ (min ϑ (π / 2)) :=
     fun Γ hΓ => ⟨lt_min hϑ hpi, fun x => le_trans (min_le_left _ _) (hΓ.2 x)⟩
   obtain ⟨N, M, lam0, hN, hM, hlamR₀, hprop⟩ :=
     path_props_long hd (lt_min hϑ hpi) (min_le_right ϑ (π / 2)) R₀

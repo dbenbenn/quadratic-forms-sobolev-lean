@@ -254,7 +254,7 @@ makes `δℓ < h ≤ ‖hx − hy‖` for distinct `x, y` — and Corollary 5.8 
 connectivity. -/
 theorem renormalization {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2) {r : ℝ} (hr : 0 < r) :
     ∃ R : ℝ, r ≤ R ∧
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ ϑ →
       ∀ h ℓ : ℝ, 0 < h → 0 < ℓ → SparselyPopulated d ϑ h ℓ →
       ∀ z ∈ lattice d, ∀ x ∈ lattice d, ∀ y ∈ lattice d,
         ‖x - z‖ ≤ r → ‖y - z‖ ≤ r →
@@ -270,7 +270,7 @@ theorem renormalization {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2) {r : �
     fun p : EuclideanSpace ℝ (Fin d) => exists_favoredIn Γ (block_finite hℓ.le (h • p))
   set Γ' : Configuration (EuclideanSpace ℝ (Fin d)) :=
     fun p => ⟨(W p).axis, (W p).norm_axis, ϑ / 2, hϑ2, hϑ2'⟩ with hΓ'
-  have hΓ'b : IsBounded Γ' (ϑ / 2) := ⟨hϑ2, fun p => le_refl _⟩
+  have hΓ'b : ApexLowerBound Γ' (ϑ / 2) := ⟨hϑ2, fun p => le_refl _⟩
   -- each edge of `Γ'` becomes an edge of the favored graph
   have hedge : ∀ p q : EuclideanSpace ℝ (Fin d), p ∈ lattice d → q ∈ lattice d →
       q ∈ coneAt Γ' p → FavoredEdge Γ (townIndex h ℓ p) (townIndex h ℓ q) := by

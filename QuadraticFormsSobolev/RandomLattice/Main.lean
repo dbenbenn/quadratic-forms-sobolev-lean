@@ -30,7 +30,7 @@ configuration and a kernel with the bounds (2), `|f|²_{H^{α/2}(ℝ^d)} ≤ C |
 assumed. The proof samples `f` on random lattices and applies Theorem 1.3 to each. -/
 theorem formHs_univ_le_form_univ_randomLattice (hd : 1 ≤ d) {ϑ Λ α : ℝ} (hϑ : 0 < ϑ)
     (hϑ' : ϑ ≤ Real.pi / 2) (hΛ : 1 ≤ Λ) (hα : 0 ≤ α) :
-    ∃ C : ℝ, 0 ≤ C ∧ ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ →
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ ϑ →
       ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞, KernelBounds Γ α Λ k →
       ∀ f : EuclideanSpace ℝ (Fin d) → ℝ, Measurable f →
       Measurable (fun p : EuclideanSpace ℝ (Fin d) × EuclideanSpace ℝ (Fin d) =>

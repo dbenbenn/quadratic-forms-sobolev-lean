@@ -570,7 +570,7 @@ types, the local data exists at every scale and every centre. -/
 theorem exists_blockData {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2) (hd : 1 ≤ d)
     {L : ℕ} (hL : 0 < L) (R₀ : ℝ) :
     ∃ (Δ : ℕ) (R : ℝ) (K₁ N₀ : ℕ), 2 ≤ Δ ∧ R₀ < (Δ : ℝ) ∧ 2 * Real.sqrt d < R ∧ 0 < K₁ ∧
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ ϑ →
         (∀ B : Set (EuclideanSpace ℝ (Fin d)), (Γ '' B).ncard ≤ L) →
       ∀ (m : ℕ) (z : EuclideanSpace ℝ (Fin d)), z ∈ lattice d →
         Nonempty (BlockData Γ (Δ : ℝ) R (schemeIndex Δ L d m) K₁ N₀ m z) := by

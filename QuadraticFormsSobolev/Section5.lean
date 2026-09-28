@@ -1064,7 +1064,7 @@ for each `k`, we take `k = max L ⌈r⌉₊` and use that `k ≤ r_k`, which is 
 (The hypothesis `0 < r` that the paper states is not needed — for `r ≤ 0` the
 ball `B_r(x)` is empty and the conclusion is vacuous. It is kept for fidelity.) -/
 theorem discrete_template {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2) {r : ℝ} (_hr : 0 < r) :
-    ∃ R : ℝ, r ≤ R ∧ ∀ Γ' : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ' ϑ →
+    ∃ R : ℝ, r ≤ R ∧ ∀ Γ' : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ' ϑ →
       ∀ x ∈ lattice d, RRConnected Γ' r R x := by
   obtain ⟨L, hL⟩ := ref_config_uniform (E := EuclideanSpace ℝ (Fin d)) hϑ hϑ'
   obtain ⟨δ, hδ0, hcore⟩ :=

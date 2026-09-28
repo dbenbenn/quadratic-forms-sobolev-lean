@@ -13,7 +13,7 @@ namespace QFS
 configuration: it satisfies the kernel bounds with constant `2Λ` and lies below every `k`
 satisfying them with constant `Λ`. -/
 lemma faith_lowerKernel {d : ℕ} {ϑ Λ α : ℝ} {Γ : Configuration (EuclideanSpace ℝ (Fin d))}
-    (hΓ : IsAdmissible Γ ϑ) {k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞}
+    (hΓ : ApexAdmissible Γ ϑ) {k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞}
     (hk : KernelBounds Γ α Λ k) :
     ∃ k₀ : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞,
       KernelBounds Γ α (2 * Λ) k₀ ∧ (∀ x y, k₀ x y ≤ k x y) ∧
@@ -91,7 +91,7 @@ theorem faith_add_le_mul_add {K : ℝ} (hK : 1 ≤ K) (e : ℝ≥0∞) {s t : �
 
 theorem theoremOneFour_univ (d : ℕ) :
     ∀ ϑ Λ α : ℝ, 0 < ϑ → 1 ≤ Λ → 0 < α → α < 2 →
-    ∃ c : ℝ, 1 ≤ c ∧ ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsAdmissible Γ ϑ →
+    ∃ c : ℝ, 1 ≤ c ∧ ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexAdmissible Γ ϑ →
       ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞, KernelBounds Γ α Λ k →
       {g : EuclideanSpace ℝ (Fin d) → ℝ | MeasureTheory.MemLp g 2 MeasureTheory.volume ∧ form Set.univ k g ≠ ⊤}
           = {g : EuclideanSpace ℝ (Fin d) → ℝ | MeasureTheory.MemLp g 2 MeasureTheory.volume ∧
@@ -107,7 +107,7 @@ theorem theoremOneFour_univ (d : ℕ) :
   intro ϑ Λ α hϑ hΛ hα hα2
   -- the lower inequality with some `c ≥ 1`
   have key : ∃ c : ℝ, 1 ≤ c ∧ ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)),
-      IsAdmissible Γ ϑ →
+      ApexAdmissible Γ ϑ →
       ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞, KernelBounds Γ α Λ k →
       ∀ f : EuclideanSpace ℝ (Fin d) → ℝ, MeasureTheory.MemLp f 2 MeasureTheory.volume →
         formHs Set.univ α f ≤ ENNReal.ofReal c * form Set.univ k f := by
@@ -120,8 +120,8 @@ theorem theoremOneFour_univ (d : ℕ) :
       (min_le_right _ _) (show 1 ≤ 2 * Λ by linarith) hα.le
     refine ⟨max C 1, le_max_right _ _, ?_⟩
     intro Γ hΓ k hk f hf
-    have hΓ₀ : IsBounded Γ ϑ₀ :=
-      ⟨hϑ₀pos, fun x => le_trans (min_le_left _ _) (hΓ.isBounded.2 x)⟩
+    have hΓ₀ : ApexLowerBound Γ ϑ₀ :=
+      ⟨hϑ₀pos, fun x => le_trans (min_le_left _ _) (hΓ.apexLowerBound.2 x)⟩
     obtain ⟨k₀, hk₀b, hk₀le, hk₀m⟩ := faith_lowerKernel hΓ hk
     obtain ⟨g, hgm, hfg⟩ : ∃ g : EuclideanSpace ℝ (Fin d) → ℝ, Measurable g ∧
         f =ᵐ[volume] g :=
@@ -153,7 +153,7 @@ theorem theoremOneFour_univ (d : ℕ) :
 
 theorem formHs_ball_le_form_enlargedBall (d : ℕ) :
     ∀ ϑ Λ α : ℝ, 0 < ϑ → 1 ≤ Λ → 0 < α → α < 2 →
-    ∃ κ c : ℝ, 1 ≤ κ ∧ 0 < c ∧ ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsAdmissible Γ ϑ →
+    ∃ κ c : ℝ, 1 ≤ κ ∧ 0 < c ∧ ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexAdmissible Γ ϑ →
       ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞, KernelBounds Γ α Λ k →
       ∀ (x₀ : EuclideanSpace ℝ (Fin d)) (R : ℝ), 0 < R →
       ∀ f : EuclideanSpace ℝ (Fin d) → ℝ,
@@ -170,8 +170,8 @@ theorem formHs_ball_le_form_enlargedBall (d : ℕ) :
   have hM : 0 < max C 1 := lt_of_lt_of_le one_pos (le_max_right _ _)
   refine ⟨κ, 1 / max C 1, hκ, by positivity, ?_⟩
   intro Γ hΓ k hk x₀ R hR f hf
-  have hΓ₀ : IsBounded Γ ϑ₀ :=
-    ⟨hϑ₀pos, fun x => le_trans (min_le_left _ _) (hΓ.isBounded.2 x)⟩
+  have hΓ₀ : ApexLowerBound Γ ϑ₀ :=
+    ⟨hϑ₀pos, fun x => le_trans (min_le_left _ _) (hΓ.apexLowerBound.2 x)⟩
   obtain ⟨k₀, hk₀b, hk₀le, hk₀m⟩ := faith_lowerKernel hΓ hk
   obtain ⟨g, hgm, hfg⟩ : ∃ g : EuclideanSpace ℝ (Fin d) → ℝ, Measurable g ∧
       f =ᵐ[volume.restrict (ball x₀ (κ * R))] g :=

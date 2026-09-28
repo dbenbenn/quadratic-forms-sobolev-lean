@@ -63,7 +63,7 @@ of that block. -/
 theorem connect_first_jump {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2)
     {Δ : ℝ} (hΔδ : apexShrinkConst d ϑ < Δ) (hΔ1 : 1 ≤ Δ) :
     ∃ R₁ : ℝ, 1 ≤ R₁ ∧
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ ϑ →
       ∀ (x : EuclideanSpace ℝ (Fin d)) (n : ℕ),
         ∃ w ∈ lattice d,
           block (Δ ^ n) (Δ ^ (n + 1) • w) ⊆ ball x (Δ ^ (n + 1) * R₁) ∩ coneAt Γ x ∧
@@ -224,6 +224,6 @@ def PathProps (Γ : Configuration (EuclideanSpace ℝ (Fin d))) (N M : ℕ) (lam
 `exists_blockData → scaleData_of_blockData → pathPropsLong_of_scaleData`. -/
 def PathPropsHolds (d : ℕ) (ϑ R₀ : ℝ) : Prop :=
   ∃ (N M : ℕ) (lam : ℝ), 0 < N ∧ 0 < M ∧ R₀ ≤ lam ∧
-    ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ → PathProps Γ N M lam
+    ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ ϑ → PathProps Γ N M lam
 
 end QFS

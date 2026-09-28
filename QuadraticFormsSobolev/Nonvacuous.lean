@@ -22,9 +22,9 @@ variable {d : ℕ}
 def constConfig (V : DCone (EuclideanSpace ℝ (Fin d))) :
     Configuration (EuclideanSpace ℝ (Fin d)) := fun _ => V
 
-lemma isBounded_constConfig {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2)
+lemma apexLowerBound_constConfig {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2)
     {v : EuclideanSpace ℝ (Fin d)} (hv : ‖v‖ = 1) :
-    IsBounded (constConfig ⟨v, hv, ϑ, hϑ, hϑ'⟩) ϑ := ⟨hϑ, fun _ => le_rfl⟩
+    ApexLowerBound (constConfig ⟨v, hv, ϑ, hϑ, hϑ'⟩) ϑ := ⟨hϑ, fun _ => le_rfl⟩
 
 /-- The constant configuration satisfies the measurability Proposition 3.5
 assumes: `{x | V ⊆ Γ(x)}` is `∅` or everything. -/
@@ -101,8 +101,8 @@ theorem theoremOneThree_nonvacuous {ϑ α R₀ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ 
     {v : EuclideanSpace ℝ (Fin d)} (hv : ‖v‖ = 1) :
     ∃ (Γ : Configuration (EuclideanSpace ℝ (Fin d)))
       (ω : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞),
-      IsBounded Γ ϑ ∧ CondMeas Γ ∧ DiscreteKernelBounds Γ α 2 R₀ (lattice d) ω :=
-  ⟨constConfig ⟨v, hv, ϑ, hϑ, hϑ'⟩, jumpKernel d α, isBounded_constConfig hϑ hϑ' hv,
+      ApexLowerBound Γ ϑ ∧ CondMeas Γ ∧ DiscreteKernelBounds Γ α 2 R₀ (lattice d) ω :=
+  ⟨constConfig ⟨v, hv, ϑ, hϑ, hϑ'⟩, jumpKernel d α, apexLowerBound_constConfig hϑ hϑ' hv,
     condMeas_constConfig _, discreteKernelBounds_jumpKernel _ α R₀ _⟩
 
 end QFS

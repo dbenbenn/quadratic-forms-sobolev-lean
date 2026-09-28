@@ -319,10 +319,10 @@ from Lemma 3.3, which is false in dimension one. -/
 theorem prop_test_fct_of_two_le {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2) (hd : 2 ≤ d) :
     ∃ C θ' : ℝ, 0 < C ∧ 0 < θ' ∧ θ' ≤ π / 2 ∧
       ∀ α : ℝ, 0 < α → α ≤ 2 →
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ → CondMeas Γ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ ϑ → CondMeas Γ →
       ∀ (Λ : ℝ) (k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞),
         KernelBounds Γ α Λ k →
-      ∃ Γ' : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ' θ' ∧
+      ∃ Γ' : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ' θ' ∧
         ∀ x ∈ lattice d, ∀ y ∈ lattice d, Real.sqrt d < ‖x - y‖ →
           ENNReal.ofReal (C * Λ⁻¹) *
               ((indE (coneAt Γ' x) y + indE (coneAt Γ' y) x) * jumpKernel d α x y)
@@ -620,12 +620,12 @@ theorem cor_rescaled_kernel_uniform_of_two_le {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : 
       ∀ Λ : ℝ, 1 ≤ Λ →
       ∃ C : ℝ, 0 < C ∧
       ∀ α : ℝ, 0 < α → α ≤ 2 →
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ → CondMeas Γ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ ϑ → CondMeas Γ →
       ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞,
         KernelBounds Γ α Λ k →
       ∀ h : ℝ, 0 < h →
       ∃ Γ' : Configuration (EuclideanSpace ℝ (Fin d)),
-        (∀ u, (Γ' u).apex = θ') ∧ IsBounded Γ' θ' ∧
+        (∀ u, (Γ' u).apex = θ') ∧ ApexLowerBound Γ' θ' ∧
         ∀ x ∈ scaledLattice d h, ∀ y ∈ scaledLattice d h, Real.sqrt d * h < ‖x - y‖ →
           ENNReal.ofReal C⁻¹ *
               ((indE (coneAt Γ' x) y + indE (coneAt Γ' y) x) * jumpKernel d α x y)

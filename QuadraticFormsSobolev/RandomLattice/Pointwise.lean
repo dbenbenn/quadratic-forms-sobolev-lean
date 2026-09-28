@@ -82,9 +82,9 @@ noncomputable def halfConfig (Γ : Configuration (EuclideanSpace ℝ (Fin d)))
     apex_pos := half_pos (Γ (T x)).apex_pos
     apex_le := by linarith [(Γ (T x)).apex_le, (Γ (T x)).apex_pos] }
 
-lemma isBounded_halfConfig {Γ : Configuration (EuclideanSpace ℝ (Fin d))} {ϑ : ℝ}
-    (hΓ : IsBounded Γ ϑ) (T : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d)) :
-    IsBounded (halfConfig Γ T) (ϑ / 2) :=
+lemma apexLowerBound_halfConfig {Γ : Configuration (EuclideanSpace ℝ (Fin d))} {ϑ : ℝ}
+    (hΓ : ApexLowerBound Γ ϑ) (T : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d)) :
+    ApexLowerBound (halfConfig Γ T) (ϑ / 2) :=
   ⟨half_pos hΓ.1, fun x => by
     show ϑ / 2 ≤ (Γ (T x)).apex / 2
     linarith [hΓ.2 (T x)]⟩
@@ -101,7 +101,7 @@ lemma latMap_sub (h : ℝ) (A : EuclideanSpace ℝ (Fin d) →L[ℝ] EuclideanSp
 
 /-- The pulled-back kernel satisfies the hypotheses of Theorem 1.3 with `Λ' = Λ 2^{d+α}`. -/
 lemma discreteKernelBounds_pullback {Γ : Configuration (EuclideanSpace ℝ (Fin d))}
-    {ϑ α Λ ε h : ℝ} (hΓ : IsBounded Γ ϑ) (hα : 0 ≤ α) (hε : 0 ≤ ε) (hε2 : ε ≤ 1 / 2)
+    {ϑ α Λ ε h : ℝ} (hΓ : ApexLowerBound Γ ϑ) (hα : 0 ≤ α) (hε : 0 ≤ ε) (hε2 : ε ≤ 1 / 2)
     (hεs : ε < Real.sin (ϑ / 2))
     {k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞}
     (hk : KernelBounds Γ α Λ k) (hh : 0 < h)
@@ -338,7 +338,7 @@ constant multiple of the sum of the `H_k` integrand, the constant depending only
 `d, ϑ, Λ, α`. -/
 theorem latticeSum_le {ϑ Λ α : ℝ} (hϑ : 0 < ϑ) (hΛ : 1 ≤ Λ) (hα : 0 ≤ α) :
     ∃ c : ℝ, 0 ≤ c ∧ ∀ ε : ℝ, 0 ≤ ε → ε ≤ 1 / 2 → ε < Real.sin (ϑ / 2) →
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ ϑ →
       ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞, KernelBounds Γ α Λ k →
       ∀ (f : EuclideanSpace ℝ (Fin d) → ℝ) (h : ℝ), 0 < h →
       ∀ A : EuclideanSpace ℝ (Fin d) →L[ℝ] EuclideanSpace ℝ (Fin d),
@@ -374,7 +374,7 @@ theorem latticeSum_le {ϑ Λ α : ℝ} (hϑ : 0 < ϑ) (hΛ : 1 ≤ Λ) (hα : 0 
     intro R hR
     calc discreteForm (ball 0 R) (1 / 2) (jumpKernel d α) f'
         ≤ ENNReal.ofReal c * discreteForm (ball 0 (κ * R)) (1 / 2) ω f' :=
-          H13 (halfConfig Γ T) (isBounded_halfConfig hΓ T) ω hωb 0 R f' hR
+          H13 (halfConfig Γ T) (apexLowerBound_halfConfig hΓ T) ω hωb 0 R f' hR
       _ ≤ ENNReal.ofReal c * ∑' p : (Fin d → ℤ) × (Fin d → ℤ),
             ENNReal.ofReal ((f' (L p.1) - f' (L p.2)) ^ 2) * ω (L p.1) (L p.2) := by
           gcongr; exact discreteForm_le_tsum _ _ _ _

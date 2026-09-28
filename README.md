@@ -172,17 +172,26 @@ Each departure from the paper, and why.
    therefore about an arbitrary `V : Set (EuclideanSpace ℝ (Fin d))`. The
    paper's own reading is the special case where `V` is a double cone.
 
-2. **`ϑ`-boundedness is formalised as a positive lower bound.** Definition 2.1
-   says `Γ` is `ϑ`-bounded when the *infimum* `ϑ` of the apex angles of `Γ(ℝ^d)`
-   is positive. `QFS.IsBounded Γ ϑ` says `0 < ϑ` and `ϑ ≤ (Γ x).apex` for all
-   `x`. These agree on what every later argument uses (a uniform positive lower
-   bound), and avoid carrying an infimum that is never needed as such.
+2. **`ϑ`-boundedness: the paper's definition in the statements, a lower bound in
+   the proofs.** Definition 2.1 says `Γ` is `ϑ`-bounded when the *infimum* `ϑ` of
+   the apex angles of `Γ(ℝ^d)` is positive. `QFS.IsThetaBounded Γ ϑ` is exactly
+   this, and `QFS.IsThetaAdmissible` adds condition (M); `Paper.lean` states every
+   result with them. The proofs work with the weaker `QFS.ApexLowerBound Γ ϑ`
+   (`0 < ϑ` and `ϑ ≤ (Γ x).apex` for all `x`), because halving the angles or passing
+   to a subconfiguration keeps a lower bound but changes the infimum. The link is:
+   - `IsThetaBounded.apexLowerBound`: a `ϑ`-bounded configuration has `ϑ` as a lower
+     bound, which turns every result proved for lower bounds into the paper's form;
+   - `ApexLowerBound.isThetaBounded_iInf`: a lower bound `ϑ` makes `Γ` bounded in the
+     paper's sense by its infimum, which is at least `ϑ`;
+   - `isThetaBounded_of_apex_eq` and `shrinkConfig`: conclusions that produce a
+     `ϑ'`-bounded configuration (Corollary 2.4, Proposition 3.5, Corollary 3.6) get
+     one whose apex angles all equal `ϑ'`, shrinking the cones where needed.
 
 3. **Corollary 2.4: the apex angle of `Γ̃` is `ϑ/3`, not `ϑ`.** The corollary's
    last sentence reads "The minimum of apex angles of cones in `Γ̃(ℝ^d)` is
    `ϑ`". But `Γ̃` is built from the reference cones of Lemma 2.2, whose apex
-   angle is `θ = ϑ/3`. `QFS.ref_config` proves `(Γ' x).apex = ϑ/3` and
-   `IsBounded Γ' (ϑ/3)`. This is a slip in the paper with no consequences: every
+   angle is `θ = ϑ/3`. `QFS.ref_config` proves `(Γ' x).apex = ϑ/3`, so `Γ'` is
+   `(ϑ/3)`-bounded (`corollary_2_4`). This is a slip in the paper with no consequences: every
    later use of Corollary 2.4 needs only that the angle is positive and depends
    on `d` and `ϑ` alone.
 
@@ -577,7 +586,7 @@ semantic macro, the Lean name is given beside it.
 | --- | --- | --- |
 | `Γ` | `Γ` | a configuration; `Γ'` where a second one is quantified over |
 | `G` | — | the paper's **directed graph**; never used here for a configuration |
-| `ϑ` | `ϑ` | the apex bound, `IsBounded Γ ϑ` |
+| `ϑ` | `ϑ` | the apex bound: `IsThetaBounded Γ ϑ` in the statements, `ApexLowerBound Γ ϑ` in the proofs |
 | `α`, `Λ`, `c`, `κ`, `λ` | same | order, kernel constant, comparability constant, ball enlargement, factor |
 | `k(x,y)` | `k` | the kernel of `(2)` |
 | `ω(x,y)` | `ω` | the discrete kernel of `(4)` |

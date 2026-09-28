@@ -128,7 +128,7 @@ theorem formHs_univ_dense {α : ℝ} (hα0 : 0 < α) (hα2 : α < 2) {f : Euclid
 /-- **Theorem 1.4, density on `ℝ^d`: `C_c^∞(ℝ^d)` is dense in `H_k(ℝ^d)`.** -/
 theorem theoremOneFour_density_univ (d : ℕ) :
     ∀ ϑ Λ α : ℝ, 0 < ϑ → 1 ≤ Λ → 0 < α → α < 2 →
-    ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsAdmissible Γ ϑ →
+    ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexAdmissible Γ ϑ →
     ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞, KernelBounds Γ α Λ k →
     ∀ f : EuclideanSpace ℝ (Fin d) → ℝ, MemLp f 2 volume → form univ k f ≠ ⊤ →
     ∀ ε : ℝ, 0 < ε →

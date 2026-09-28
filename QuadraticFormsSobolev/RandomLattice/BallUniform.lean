@@ -30,7 +30,7 @@ lemma bu_mono {Γ : Configuration (EuclideanSpace ℝ (Fin d))} {α Λ₁ Λ₂ 
 theorem bu_latticeSum_ball_le {ϑ Λ : ℝ} (hϑ : 0 < ϑ) (hΛ : 1 ≤ Λ) :
     ∃ κ c : ℝ, 1 ≤ κ ∧ 0 ≤ c ∧ ∀ α : ℝ, 0 < α → α < 2 →
       ∀ ε : ℝ, 0 ≤ ε → ε ≤ 1 / 2 → ε < Real.sin (ϑ / 2) →
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ ϑ →
       ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞, KernelBounds Γ α Λ k →
       ∀ (f : EuclideanSpace ℝ (Fin d) → ℝ) (h : ℝ), 0 < h →
       ∀ A : EuclideanSpace ℝ (Fin d) →L[ℝ] EuclideanSpace ℝ (Fin d),
@@ -103,7 +103,7 @@ theorem bu_latticeSum_ball_le {ϑ Λ : ℝ} (hϑ : 0 < ϑ) (hΛ : 1 ≤ Λ) :
       ≤ ENNReal.ofReal c * (ENNReal.ofReal (h ^ s) * Gs) := by
     calc discreteForm (ball cc r) (1 / 2) (jumpKernel d α) f'
         ≤ ENNReal.ofReal c * discreteForm (ball cc (κ * r)) (1 / 2) ω f' :=
-          H13 α hα0 hα2 (halfConfig Γ T) (isBounded_halfConfig hΓ T) ω hωb cc r f' hrpos
+          H13 α hα0 hα2 (halfConfig Γ T) (apexLowerBound_halfConfig hΓ T) ω hωb cc r f' hrpos
       _ ≤ ENNReal.ofReal c * (ENNReal.ofReal (h ^ s) * Gs) := by
           gcongr
           rw [discreteForm_eq_restrict]
@@ -180,7 +180,7 @@ theorem bu_latticeSum_ball_le {ϑ Λ : ℝ} (hϑ : 0 < ϑ) (hΛ : 1 ≤ Λ) :
 theorem formHs_ball_le_form_ball_uniform (hd : 1 ≤ d) {ϑ Λ : ℝ} (hϑ : 0 < ϑ)
     (hϑ' : ϑ ≤ Real.pi / 2) (hΛ : 1 ≤ Λ) :
     ∃ κ C : ℝ, 1 ≤ κ ∧ 0 ≤ C ∧ ∀ α : ℝ, 0 < α → α < 2 →
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ ϑ →
       ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞, KernelBounds Γ α Λ k →
       ∀ f : EuclideanSpace ℝ (Fin d) → ℝ, Measurable f →
       Measurable (fun p : EuclideanSpace ℝ (Fin d) × EuclideanSpace ℝ (Fin d) =>

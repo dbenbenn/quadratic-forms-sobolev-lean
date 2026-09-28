@@ -24,6 +24,12 @@ noncomputable def jumpKernel (d : ℕ) (α : ℝ) (x y : EuclideanSpace ℝ (Fin
 noncomputable def indE (S : Set (EuclideanSpace ℝ (Fin d))) (x : EuclideanSpace ℝ (Fin d)) :
     ℝ≥0∞ := S.indicator (fun _ => 1) x
 
+/-- Smaller cones give smaller cone indicators. -/
+lemma indE_coneAt_mono {Γ Γ' : Configuration (EuclideanSpace ℝ (Fin d))}
+    (h : ∀ x, (Γ x).carrier ⊆ (Γ' x).carrier) (x y : EuclideanSpace ℝ (Fin d)) :
+    indE (coneAt Γ x) y ≤ indE (coneAt Γ' x) y :=
+  Set.indicator_le_indicator_of_subset (shift_mono (h x) x) (fun _ => zero_le) y
+
 /-- The quadratic form `∫_{Ω×Ω} (f(y) − f(x))² k(x,y) d(x,y)` of Section 1.
 
 The paper writes this integral as `|f|_{H_k(Ω)}` and then uses `|f|²_{H_k(Ω)}`
@@ -149,7 +155,7 @@ at lattice points of the relevant balls, quantifying over functions on all of
 def TheoremOneThree (d : ℕ) : Prop :=
   ∀ ϑ Λ α R₀ : ℝ, 0 < ϑ → 1 ≤ Λ → 0 < α → α < 2 → 0 < R₀ →
     ∃ κ c : ℝ, 1 ≤ κ ∧ 1 ≤ c ∧
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ ϑ →
       ∀ ω, DiscreteKernelBounds Γ α Λ R₀ (lattice d) ω →
       ∀ (x₀ : EuclideanSpace ℝ (Fin d)) (R : ℝ) (f : EuclideanSpace ℝ (Fin d) → ℝ), 0 < R →
         discreteForm (ball x₀ R) R₀ (jumpKernel d α) f

@@ -341,7 +341,7 @@ theorem conn_of_isPreconnected_of_finite (hfin : (Set.range Γ).Finite)
 /-- **Theorem 4.1** of Bux–Kassmann–Schulze: for a `ϑ`-bounded configuration and
 any preconnected open `U ⊆ ℝ^d`, all points of `U` lie in one connected component
 of `G[U]`. -/
-theorem cont_connectivity [FiniteDimensional ℝ E] {ϑ : ℝ} (hΓ : IsBounded Γ ϑ)
+theorem cont_connectivity [FiniteDimensional ℝ E] {ϑ : ℝ} (hΓ : ApexLowerBound Γ ϑ)
     {U : Set E} (hU : IsOpen U) (hUc : IsPreconnected U)
     {x y : E} (hx : x ∈ U) (hy : y ∈ U) : Conn Γ U x y := by
   have hϑ : 0 < ϑ := hΓ.1

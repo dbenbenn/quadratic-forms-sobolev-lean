@@ -180,7 +180,7 @@ same assertion with `c` replaced by `c⁻¹`. -/
 theorem corollaryThreeOne (ϑ Λ α R₀ : ℝ) (hϑ : 0 < ϑ) (hΛ : 1 ≤ Λ) (hα : 0 < α)
     (hα2 : α < 2) (hR₀ : 0 < R₀) :
     ∃ κ c : ℝ, 1 ≤ κ ∧ 1 ≤ c ∧
-      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ →
+      ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ ϑ →
       ∀ h : ℝ, 0 < h →
       ∀ ω, DiscreteKernelBounds Γ α Λ (R₀ * h) (scaledLattice d h) ω →
       ∀ (x₀ : EuclideanSpace ℝ (Fin d)) (R : ℝ) (f : EuclideanSpace ℝ (Fin d) → ℝ),
@@ -191,7 +191,7 @@ theorem corollaryThreeOne (ϑ Λ α R₀ : ℝ) (hϑ : 0 < ϑ) (hΛ : 1 ≤ Λ) 
   obtain ⟨κ, c, hκ, hc, hmain⟩ := theoremOneThree (d := d) ϑ Λ α R₀ hϑ hΛ hα hα2 hR₀
   refine ⟨κ, c, hκ, hc, ?_⟩
   intro Γ hΓ h hh ω hω x₀ R f hR
-  have hΓh : IsBounded (fun x => Γ (h • x)) ϑ := ⟨hΓ.1, fun x => hΓ.2 _⟩
+  have hΓh : ApexLowerBound (fun x => Γ (h • x)) ϑ := ⟨hΓ.1, fun x => hΓ.2 _⟩
   have hmain' := hmain (fun x => Γ (h • x)) hΓh _ (discreteKernelBounds_rescale hh hω)
     (h⁻¹ • x₀) (R / h) (fun x => f (h • x)) (by positivity)
   rw [discreteForm_eq_discreteFormOn, discreteForm_eq_discreteFormOn] at hmain'

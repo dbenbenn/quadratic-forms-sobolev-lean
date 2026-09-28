@@ -357,8 +357,8 @@ theorem theoremOneThree : TheoremOneThree d := by
     exact zero_le
   have hpi : (0:ℝ) < π / 2 := by positivity
   -- apex angles may be capped at `π/2`
-  have hmono : ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsBounded Γ ϑ →
-      IsBounded Γ (min ϑ (π / 2)) :=
+  have hmono : ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ ϑ →
+      ApexLowerBound Γ (min ϑ (π / 2)) :=
     fun Γ hΓ => ⟨lt_min hϑ hpi, fun x => le_trans (min_le_left _ _) (hΓ.2 x)⟩
   obtain ⟨N, M, lam0, hN, hM, hlamR₀, hprop⟩ :=
     path_props_long hd (lt_min hϑ hpi) (min_le_right ϑ (π / 2)) R₀
