@@ -36,5 +36,6 @@ import QuadraticFormsSobolev.RandomLattice.GoalUniform
 import QuadraticFormsSobolev.Paper
 import QuadraticFormsSobolev.GapNote
 import QuadraticFormsSobolev.ChakerSilvestre
+import QuadraticFormsSobolev.BoundaryDefect
 import QuadraticFormsSobolev.Density.Main
 import QuadraticFormsSobolev.Density.DomainMain
