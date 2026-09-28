@@ -109,10 +109,10 @@ Theorem~1.1 of \cite{BKS} (Section~\ref{sec:consequences}).
 \medskip\noindent\textbf{The idea.} In \cite{BKS} the function is replaced by its averages
 $f_h$ over the cells of $h\Z^d$. The averages destroy the oscillation of $f$ inside a cell, and
 recovering the continuous form in the limit is what requires domination. We instead
-\emph{sample} $f$ at the points of a lattice. Sampling keeps every difference $f(s)-f(t)$ between
-lattice points exactly: on each lattice the discrete theorem compares sums of the two integrands,
-$(f(t)-f(s))^2\norm{s-t}^{-d-\alpha}$ and $(f(t)-f(s))^2k(s,t)$, at the same pairs of points, and
-the kernel is never paired with averages of $f$. The lattice is then made random, by a shift
+\emph{sample} $f$ at the points of a lattice. On each lattice the discrete theorem then compares
+sums of the two integrands, $(f(t)-f(s))^2\norm{s-t}^{-d-\alpha}$ and $(f(t)-f(s))^2k(s,t)$, over
+pairs of lattice points $s,t$. Unlike with averages, the kernel $k(s,t)$ always meets the
+difference $f(t)-f(s)$ at the same pair of points. The lattice is then made random, by a shift
 $\eta\in[-\tfrac12,\tfrac12)^d$ and a linear map $A$ close to the identity. Averaging the discrete
 inequality over the lattices reproduces both continuous forms, up to constants and up to pairs at
 distance $O(h)$. The random shift alone would sample only differences in directions of $h\Z^d$;
