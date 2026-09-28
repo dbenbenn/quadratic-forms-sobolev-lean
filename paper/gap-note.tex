@@ -84,11 +84,10 @@ $\alpha\in[\alpha_0,2)$. The proof has three steps.
   inequality of Dyda~\cite{Dyda}.
 \end{enumerate}
 
-Step~2 contains a gap, described in Section~\ref{sec:domination}. As written, the limit $h\to0$ on the
+Step~2 contains a gap, described in Section~\ref{sec:gap}. As written, the limit $h\to0$ on the
 kernel side of the discretized inequality is justified by dominated convergence, but no dominating
 function is available for a general $f\in H_k(B^*)$, and the lemma is applied, and must be
-applied, to every such $f$. Separately, for $\alpha>1$ the limit asserted there is false: the
-discretization mishandles the cells at the boundary of $B^*$ (Section~\ref{sec:boundary}).
+applied, to every such $f$.
 
 Our main result closes the gap. It uses nothing from \cite{BKS} beyond Theorem~1.3 and its proof.
 
@@ -136,8 +135,6 @@ also proves Theorem~1.3 of \cite{BKS} itself.
 
 \section{The gap}\label{sec:gap}
 
-\subsection{The domination step}\label{sec:domination}
-
 We follow the proof of Lemma~3.7 of \cite{BKS} (pp.~14--16). Let $f\in H_k(B^*)$. For $h\in(0,1)$
 let $f_h(x)=h^{-d}\int_{A_h(x)\cap B^*}f$ for $x\in h\Z^d\cap B^*$, where $A_h(x)$ is the cell of
 side $h$ about $x$. By their Corollary~3.6 there are a constant $C$ and a $\vartheta'$-bounded
@@ -180,23 +177,6 @@ Nor can the step be rescued by approximating $f\in H_k(B^*)$ by smooth functions
 norm: that would require the density statement of Theorem~1.4, whose proof uses Lemma~3.7.
 The final inequality of Lemma~3.7 is true (Corollary~\ref{cor:bks}), but its proof in \cite{BKS}
 is incomplete at this step.
-
-\subsection{A separate defect at the boundary}\label{sec:boundary}
-
-As printed, the step is moreover false when $\alpha>1$, for a reason unrelated to domination. For
-a cell that meets $\partial B^*$, $f_h(x)$ is still normalized by $h^{-d}$, so it is not an average
-of $f$. Take $d=1$, $B^*=(-1,1)$, $f\equiv1$ and $k(x,y)=\abs{x-y}^{-1-\alpha}$, which satisfies
-\eqref{eq:2} with $\Lambda=2$ for every $\Gamma$. Then $g=0$. For $h=1/(n+\frac14)$ the points of
-$h\Z\cap B^*$ are $jh$, $\abs j\le n$, and the cell of $nh=1-h/4$ gives $f_h(nh)=\frac34$, while
-$f_h=1$ at the interior points. For $s\in A_h(nh)$ and $t\in A_h(nh-2h)$ we have
-$\abs{s-t}\le3h$, so this single pair of points contributes to $\int g_h$ at least
-\[
-  \frac1{16}\,h^2\,(3h)^{-1-\alpha}=\frac{h^{1-\alpha}}{16\cdot3^{1+\alpha}},
-\]
-which tends to infinity as $h\to0$ (formalized as \texttt{QFS.BoundaryDefect.rhs15\_tendsto\_top}).
-This defect goes away if $f_h$ is formed on a slightly larger
-ball, so that every cell used lies inside it. The domination problem of Section~\ref{sec:domination}
-does not.
 
 \section{Proof of Theorem~\ref{thm:A}}\label{sec:proof}
 
@@ -573,9 +553,6 @@ Lemma~\ref{lem:onelattice} assumes only that $\vartheta$ is a lower bound for th
 (\texttt{QFS.ApexLowerBound}), and allows $\alpha\ge0$. The two tiling inequalities combine Lemma~\ref{lem:tiling} with the bound
 \eqref{eq:nearid} on the determinant. Some constants differ harmlessly: $4^d$ in
 Lemma~\ref{lem:count}(1) and $(\delta/(4d^2))^d$ in Lemma~\ref{lem:count}(2).
-
-The example of Section~\ref{sec:boundary}, where the limit step of \cite{BKS} fails for $\alpha>1$, is
-formalized on $\R$ in the file \texttt{BoundaryDefect.lean}.
 
 The formalization also proves Theorem~1.3 of \cite{BKS} in full, in the $\alpha$-uniform form of
 Remark~\ref{rem:alpha}, and Theorem~1.1 with the $\alpha_0$ clause. The statement of

@@ -512,6 +512,15 @@ Each departure from the paper, and why.
     Theorem 1.4 are stated. The seminorm statements, including inequality (3) of
     Theorem 1.1, involve only the integral and read the same either way.
 
+21. **The limit step on p. 16 also fails at the boundary when `α > 1`.** Separately
+    from the domination gap, the proof of Lemma 3.7 sets
+    `f_h(x) = h^{-d} ∫_{A_h(x) ∩ B*} f`, which for a cell sticking out of `B*` is
+    not an average of `f`. For `d = 1`, `B* = (−1, 1)`, `f ≡ 1` and
+    `k(s, t) = |s − t|^{−1−α}`, the right-hand side of (15) tends to `∞` along
+    `h = 1/(n + 1/4)` while the asserted limit is `0`
+    (`QFS.BoundaryDefect.rhs15_tendsto_top`). This slip is easily repaired by
+    forming `f_h` on a slightly larger ball; it is not the gap the note is about.
+
 ## Citations
 
 Every reference to a numbered result or equation cites **arXiv:1707.09277v1**,
@@ -618,7 +627,7 @@ and the same `#print axioms` for every theorem of `Paper.lean` and `GapNote.lean
 | `LemmaA1Domain` | Dyda's inequality on dilates of a domain in the paper's forms; Lemma A.1 and Theorem 1.4 on bounded Lipschitz domains |
 | `Nonvacuous` | witnesses that the hypotheses are satisfiable |
 | `GapNote` | the note's Theorem A, Remark 7 and Lemma 9, stated exactly as in the note |
-| `BoundaryDefect` | the note's §2 example: for `α > 1` the limit step on p. 16 fails as printed (`f ≡ 1` on `(−1, 1)`) |
+| `BoundaryDefect` | Deviation 21: for `α > 1` the limit step on p. 16 fails as printed (`f ≡ 1` on `(−1, 1)`) |
 | `ChakerSilvestre` | condition (2) implies Assumption 1.1 of Chaker and Silvestre, with `μ = (sin²ϑ/16)^d` |
 | `paper/` | the note on the §3.2 gap and its repair by random lattice sampling (LaTeX source and PDF) |
 
