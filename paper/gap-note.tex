@@ -426,10 +426,12 @@ only on $d$, $\vartheta$, $\Lambda$ and $\alpha$.
 \end{proof}
 
 \begin{remark}\label{rem:alpha}
-If the constants of Theorem~1.3 of \cite{BKS} can be chosen independently of $\alpha\in(0,2)$, as
-its statement in \cite{BKS} suggests, then so can $\kappa$ and $C$. Use
-$\Lambda'=2^{d+2}\Lambda$ in Lemma~\ref{lem:onelattice}, and $2^{d+\alpha}\le2^{d+2}$. The
-formalization proves Theorem~1.3 of \cite{BKS} in this uniform form.
+The constants $\kappa$ and $C$ of Theorem~\ref{thm:A} can be chosen independently of
+$\alpha\in(0,2)$. Indeed, the constants of Theorem~1.3 of \cite{BKS} can be: its statement lists no
+dependence on $\alpha$, and its proof produces a factor $\lambda^{d+\alpha}\le\lambda^{d+2}$, since
+$\lambda\ge1$. Then use $\Lambda'=2^{d+2}\Lambda$ in Lemma~\ref{lem:onelattice}, and
+$2^{d+\alpha}\le2^{d+2}$. Both uniform statements are formalized
+(\texttt{QFS.theoremOneThree\_uniform} and \texttt{QFS.formHs\_ball\_le\_form\_ball\_uniform}).
 \end{remark}
 
 \section{Consequences}\label{sec:consequences}
@@ -465,6 +467,7 @@ The repository is \url{https://github.com/dbenbenn/quadratic-forms-sobolev-lean}
 \begin{center}
 \begin{tabular}{ll}
 Theorem~\ref{thm:A} & \texttt{QFS.formHs\_ball\_le\_form\_ball\_randomLattice}\\
+Remark~\ref{rem:alpha} & \texttt{QFS.formHs\_ball\_le\_form\_ball\_uniform}\\
 Lemma~\ref{lem:cone} & \texttt{QFS.mem\_doubleCone\_of\_near}\\
 Lemma~\ref{lem:onelattice} & \texttt{QFS.latticeSum\_ball\_le}\\
 Lemma~\ref{lem:tiling} & \texttt{QFS.lintegral\_latticeSum\_le}, \texttt{QFS.le\_lintegral\_latticeSum}\\
