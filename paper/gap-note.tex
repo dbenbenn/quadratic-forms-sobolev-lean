@@ -40,15 +40,15 @@ $H^{\alpha/2}$ of a larger ball, which is what is to be proved. We explain the g
 it along the paper's own route. Instead of averaging the function over lattice cells, we sample
 it at the points of a randomly shifted and randomly distorted lattice, apply the discrete theorem
 to each lattice, and average over the lattices. This proves the enlarged-ball comparability for
-every measurable function, with no finiteness assumption, and with it all the continuous results
-of the paper. The argument has been checked in Lean~4.
+every measurable function, with no finiteness assumption, and with it the paper's main theorem,
+Theorem~1.1. The argument has been checked in Lean~4.
 \end{abstract}
 \maketitle
 
 \section{Introduction}\label{sec:intro}
 
-We use the notation of Bux, Kassmann and Schulze~\cite{BKS}, and cite the numbering of the arXiv
-version~\cite{BKS}. A \emph{double cone} with axis a unit vector $v\in\R^d$ and apex angle
+We use the notation of Bux, Kassmann and Schulze~\cite{BKS}, and the numbering of its arXiv
+version. A \emph{double cone} with axis a unit vector $v\in\R^d$ and apex angle
 $\theta\in(0,\pi/2]$ is
 \[
   V=\{\,u\in\R^d\setminus\{0\} : \abs{\langle u,v\rangle}>\cos\theta\,\norm{u}\,\},
@@ -90,7 +90,7 @@ function is available for a general $f\in H_k(B^*)$, and the lemma is applied, a
 applied, to every such $f$. Separately, for $\alpha>1$ the limit asserted there is false: the
 discretization mishandles the cells at the boundary of $B^*$ (Section~\ref{sec:gap}).
 
-Our main result closes the gap. It uses nothing from \cite{BKS} beyond Theorem~1.3.
+Our main result closes the gap. It uses nothing from \cite{BKS} beyond Theorem~1.3 and its proof.
 
 \begin{theorem}\label{thm:A}
 Let $d\ge1$, $\vartheta\in(0,\pi/2]$, $\Lambda\ge1$ and $\alpha\in(0,2)$. There are $\kappa\ge1$
@@ -112,7 +112,7 @@ $f_h$ over the cells of $h\Z^d$. The averages destroy the oscillation of $f$ ins
 recovering the continuous form in the limit is what requires domination. We instead
 \emph{sample} $f$ at the points of a lattice. Sampling keeps every difference $f(s)-f(t)$ between
 lattice points exactly, so the discrete theorem applies to the sampled function for every
-lattice, with no limit to take. The lattice is then made random, by a shift
+lattice, with nothing lost in the discretization. The lattice is then made random, by a shift
 $\eta\in[-\tfrac12,\tfrac12)^d$ and a linear map $A$ close to the identity. Averaging the discrete
 inequality over the lattices reproduces both continuous forms, up to constants and up to pairs at
 distance $O(h)$. The random shift alone would sample only differences in directions of $h\Z^d$;
@@ -150,7 +150,7 @@ Corollary~3.1 (Theorem~1.3 on $h\Z^d$) and Lemma~3.4 then give the discrete ineq
     \int_{A_h(x)\times A_h(y)}k(s,t)\dd(s,t).
 \end{multline*}
 The right-hand side is $\int g_h$, where $g_h(s,t)=(f_h(x)-f_h(y))^2k(s,t)$ for
-$(s,t)\in\tilde A_h(x)\times\tilde A_h(y)$ with $x,y$ as in the sum, and $g_h=0$ otherwise.
+$(s,t)\in A_h(x)\times A_h(y)$ with $x,y$ as in the sum, and $g_h=0$ otherwise.
 By Lebesgue differentiation (their Lemma~A.2), $g_h\to g=(f(s)-f(t))^2k(s,t)\1_{B^*\times B^*}$
 almost everywhere. The proof then states, on p.~16:
 \begin{quote}
@@ -479,7 +479,7 @@ Lemma~3.7 as in \cite{BKS}. So do the comparabilities in Theorem~1.4: on $\R^d$ 
 radius tend to infinity, and on bounded Lipschitz domains through Lemma~A.1.
 \end{proof}
 
-The dependence on $\alpha_0$ asserted in Theorem~1.1 follows from Remark~\ref{rem:alpha} and the
+The dependence on $\alpha_0$ asserted in Lemma~3.7 and Theorem~1.1 follows from Remark~\ref{rem:alpha} and the
 corresponding statement of Lemma~A.1.
 
 \subsection{The route through Chaker and Silvestre}
@@ -501,23 +501,23 @@ $\mu=(\sin^2\vartheta/16)^d$.
 \begin{proof}
 Put $\sigma=\sin\vartheta$. Let $v$ be the axis of $\Gamma(x)$, with its sign chosen so that
 $\langle v,p-x\rangle\ge0$. Since the apex angle of $\Gamma(x)$ is at least $\vartheta$, $\Gamma(x)$
-contains the half-cone $W=\{h\ne0:\angle(h,v)<\vartheta\}$. For $h\in\R^d$ put
-$g(h)=\langle v,h\rangle\sigma-\norm{h-\langle v,h\rangle v}\cos\vartheta$. Then
-$g(h)=\norm h\sin(\vartheta-\angle(h,v))$ for $h\ne0$, so $g>0$ exactly on $W$. By the
-Cauchy--Schwarz inequality for the pair $(\sigma,\cos\vartheta)$, $g$ is $1$-Lipschitz, and
-$g(h+tv)=g(h)+t\sigma$.
+contains the half-cone $W=\{u\ne0:\angle(u,v)<\vartheta\}$. For $u\in\R^d$ put
+$\phi(u)=\langle v,u\rangle\sigma-\norm{u-\langle v,u\rangle v}\cos\vartheta$. Then
+$\phi(u)=\norm u\sin(\vartheta-\angle(u,v))$ for $u\ne0$, so $\phi>0$ exactly on $W$. By the
+Cauchy--Schwarz inequality for the pair $(\sigma,\cos\vartheta)$, $\phi$ is $1$-Lipschitz, and
+$\phi(u+tv)=\phi(u)+t\sigma$.
 
-Let $a=r\sigma/4$, $\varepsilon=\sigma^2/8$, $\rho=r\sigma^2/16$ and
-$q=x+av+\varepsilon(p-x)$. We show that $B_\rho(q)\subseteq B$ and $B_\rho(q)-x\subseteq W$.
+Let $a=r\sigma/4$, $\tau=\sigma^2/8$, $\rho=r\sigma^2/16$ and
+$q=x+av+\tau(p-x)$. We show that $B_\rho(q)\subseteq B$ and $B_\rho(q)-x\subseteq W$.
 
-First, $q-p=av-(1-\varepsilon)(p-x)$, and $\langle v,p-x\rangle\ge0$, $\norm{p-x}<r$, so
+First, $q-p=av-(1-\tau)(p-x)$, and $\langle v,p-x\rangle\ge0$, $\norm{p-x}<r$, so
 \[
-  \norm{q-p}^2\le a^2+(1-\varepsilon)^2r^2=(r-\rho)^2-\frac{r^2\sigma^2(16-3\sigma^2)}{256}\le(r-\rho)^2 .
+  \norm{q-p}^2\le a^2+(1-\tau)^2r^2=(r-\rho)^2-\frac{r^2\sigma^2(16-3\sigma^2)}{256}\le(r-\rho)^2 .
 \]
 Hence $\norm{q-p}+\rho\le r$, and $B_\rho(q)\subseteq B$.
 
-Second, $g(q-x)=g(\varepsilon(p-x))+a\sigma\ge-\varepsilon\norm{p-x}+a\sigma>-\varepsilon r+a\sigma
-=r\sigma^2/8$, using $g(0)=0$. For $z\in B_\rho(q)$, $g(z-x)\ge g(q-x)-\norm{z-q}>r\sigma^2/8-\rho>0$,
+Second, $\phi(q-x)=\phi(\tau(p-x))+a\sigma\ge-\tau\norm{p-x}+a\sigma>-\tau r+a\sigma
+=r\sigma^2/8$, using $\phi(0)=0$. For $z\in B_\rho(q)$, $\phi(z-x)\ge \phi(q-x)-\norm{z-q}>r\sigma^2/8-\rho>0$,
 so $z-x\in W\subseteq\Gamma(x)$.
 
 For $z\in B_\rho(q)$, therefore, $z\in B$ and $z\in V^\Gamma[x]$, and \eqref{eq:2} gives
