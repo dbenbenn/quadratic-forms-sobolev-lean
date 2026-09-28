@@ -201,7 +201,7 @@ closed. Integrals of $[0,\infty]$-valued functions are Lebesgue integrals, and a
 and inequalities are between elements of $[0,\infty]$. We use the convention $0\cdot\infty=0$, and read
 the integrand of $\abs{f}^2_{H^{\alpha/2}}$ as $0$ on the diagonal.
 
-\subsection{The discrete theorem}
+\subsection{The discrete theorem}\label{sec:discrete}
 
 \begin{bksthm}
 Let $\Gamma$ be a $\vartheta$-bounded configuration and $\alpha\in(0,2)$. Let
@@ -451,9 +451,10 @@ only on $d$, $\vartheta$, $\Lambda$ and $\alpha$.
 
 \begin{remark}\label{rem:alpha}
 The constants $\kappa$ and $C$ of Theorem~\ref{thm:A} can be chosen independently of
-$\alpha\in(0,2)$. Indeed, the constants of Theorem~1.3 of \cite{BKS} can be: its statement lists no
-dependence on $\alpha$, and its proof produces a factor $\lambda^{d+\alpha}\le\lambda^{d+2}$, since
-$\lambda\ge1$. Then use $\Lambda'=2^{d+2}\Lambda$ in Lemma~\ref{lem:onelattice}, and
+$\alpha\in(0,2)$. Indeed, so can the constants of the uniform form of Theorem~1.3
+(Section~\ref{sec:discrete}). Its proof produces a factor $\lambda^{d+\alpha}$, where $\lambda\ge R_0$
+is the constant of Theorem~5.15 of \cite{BKS}. Since $\lambda$ may be taken $\ge1$, this is at most
+$\lambda^{d+2}$. Then use $\Lambda'=2^{d+2}\Lambda$ in Lemma~\ref{lem:onelattice}, and
 $2^{d+\alpha}\le2^{d+2}$. Both uniform statements are formalized (Section~\ref{sec:lean}).
 \end{remark}
 
