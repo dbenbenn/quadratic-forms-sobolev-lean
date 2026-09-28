@@ -472,8 +472,11 @@ Each departure from the paper, and why.
 17. **Two further notes on hypotheses, neither a defect.** Theorem 1.3's
     dependency sentence — "the constant `c` depends on `Λ`, `ϑ`, `R₀` and on the
     dimension `d`" — omits `α`, and rightly: the proof produces `λ^{d+α}`, which is
-    at most `λ^{d+2}` because `λ ≥ 1` and `α < 2`. So `κ` and `c` can be chosen
-    before `α`, and `theorem_1_3` does so. And Proposition 3.5 assumes `k`
+    at most `λ^{d+2}` because `λ ≥ 1` and `α < 2`. So `c` can be chosen before
+    `α`, and `theorem_1_3` does so. The statement leaves `κ` open; `theorem_1_3` chooses it
+    after `α`, `Γ` and `ω`, as printed. The proof gives more, `κ` depending only on
+    `Λ, ϑ, R₀, d`, and the proof of Lemma 3.7 needs it: that is
+    `QFS.theoremOneThree_uniform`. And Proposition 3.5 assumes `k`
     measurable; `QFS.KernelBounds` does not, because the argument runs entirely
     through the lower Lebesgue integral and never needs it — a weaker hypothesis,
     hence a stronger result. That omission does bite once, and only once:

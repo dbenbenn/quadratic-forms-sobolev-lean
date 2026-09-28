@@ -216,8 +216,15 @@ for every $R>0$, every $x_0\in\R^d$ and every $f\colon B_{\kappa R}(x_0)\cap\Z^d
   \sum_{\substack{x,y\in B_R(x_0)\cap\Z^d\\ \abs{x-y}>R_0}}(f(x)-f(y))^2\abs{x-y}^{-d-\alpha}
   \le c\sum_{\substack{x,y\in B_{\kappa R}(x_0)\cap\Z^d\\ \abs{x-y}>R_0}}(f(x)-f(y))^2\omega(x,y).
 \]
-The constants depend on $\Lambda$, $\vartheta$, $R_0$ and $d$, and not on $\omega$ or $\Gamma$.
+The constant $c$ depends on $\Lambda$, $\vartheta$, $R_0$ and $d$. It does not depend on $\omega$
+and $\Gamma$.
 \end{bksthm}
+
+The statement leaves the dependence of $\kappa$ open. The proof in \cite{BKS} gives
+$\kappa=(N-1)\lambda$ (p.~29), and $\kappa$, like $c$, can be chosen depending only on $\Lambda$,
+$\vartheta$, $R_0$ and $d$. We use Theorem~1.3 in this uniform form. So does the proof of Lemma~3.7
+in \cite{BKS}, which fixes $\kappa$ and then applies Corollary~3.1 to configurations and kernels
+that vary with $h$.
 
 We use it with $R_0=\tfrac12$. Then the condition $\abs{x-y}>R_0$ holds for all distinct lattice
 points, and the sums run over all pairs of distinct points, or all pairs, since diagonal terms
@@ -260,7 +267,7 @@ an angle less than $\vartheta\le\theta$ with the same half-line, so $Aw\in V$.
 \end{proof}
 
 \begin{lemma}[The inequality for one lattice]\label{lem:onelattice}
-Let $\kappa_0$ and $c_0$ be the constants of Theorem~1.3 of \cite{BKS} for the parameters
+Let $\kappa_0$ and $c_0$ be the constants of the uniform form of Theorem~1.3 of \cite{BKS} for the parameters
 $\vartheta/2$, $\Lambda'=2^{d+\alpha}\Lambda$ and $R_0=\tfrac12$. Let $\Gamma$ be
 $\vartheta$-bounded, let $k$ be symmetric and satisfy \eqref{eq:2}, and let $f\colon\R^d\to\R$ be
 any function. Write
@@ -550,7 +557,8 @@ Lemma~\ref{lem:onelattice} & \texttt{QFS.latticeSum\_ball\_le}\\
 Lemma~\ref{lem:tiling} & \texttt{QFS.lintegral\_latticeSum\_le}, \texttt{QFS.le\_lintegral\_latticeSum}\\
 Lemma~\ref{lem:column} & \texttt{QFS.lintegral\_colBox\_le}, \texttt{QFS.le\_lintegral\_colBox}\\
 Lemma~\ref{lem:count} & \texttt{QFS.tsum\_count\_le}, \texttt{QFS.le\_tsum\_count}\\
-Proposition~\ref{prop:avg} & \texttt{QFS.latAvg\_le}, \texttt{QFS.le\_latAvg}
+Proposition~\ref{prop:avg} & \texttt{QFS.latAvg\_le}, \texttt{QFS.le\_latAvg}\\
+Uniform Theorem~1.3 & \texttt{QFS.theoremOneThree\_uniform}
 \end{tabular}
 \end{center}
 

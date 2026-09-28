@@ -71,18 +71,24 @@ namespace QFS.Paper
 $$\Lambda^{-1}\big(\mathbb{1}_{V^\Gamma[x]}(y) + \mathbb{1}_{V^\Gamma[y]}(x)\big)|x-y|^{-d-\alpha} \le \omega(x,y) \le \Lambda|x-y|^{-d-\alpha} \qquad (4)$$
 for $|x-y| > R_0$, where $R_0 > 0$, $\Lambda \ge 1$ are some constants. There exist constants $\kappa \ge 1$, $c \ge 1$ such that for every $R > 0$, $x_0 \in \mathbb{R}^d$ and every function $f : (B_{\kappa R}(x_0) \cap \mathbb{Z}^d) \to \mathbb{R}$, the inequality
 $$\sum_{\substack{x,y \in B_R(x_0)\cap\mathbb{Z}^d\\ |x-y|>R_0}} (f(x)-f(y))^2|x-y|^{-d-\alpha} \le c \sum_{\substack{x,y\in B_{\kappa R}(x_0)\cap\mathbb{Z}^d\\ |x-y|>R_0}} (f(x)-f(y))^2\omega(x,y)$$
-holds. The constant $c$ depends on $\Lambda, \vartheta, R_0$ and on the dimension $d$. It does not depend on $\omega$ and $\Gamma$.” (p. 3) -/
+holds. The constant $c$ depends on $\Lambda, \vartheta, R_0$ and on the dimension $d$. It does not depend on $\omega$ and $\Gamma$.” (p. 3)
+
+*Reading.* The dependence sentence fixes `c` by `Λ, ϑ, R₀, d` alone, so `c` is chosen before `α`,
+`Γ` and `ω`. It says nothing about `κ`, which is therefore chosen after them. The stronger form
+with `κ` also depending only on `Λ, ϑ, R₀, d`, which the proof gives and the proof of Lemma 3.7
+uses, is `QFS.theoremOneThree_uniform`. -/
 theorem theorem_1_3 (d : ℕ) :
     ∀ ϑ Λ R₀ : ℝ, 0 < ϑ → 1 ≤ Λ → 0 < R₀ →
-    ∃ κ c : ℝ, 1 ≤ κ ∧ 1 ≤ c ∧ ∀ α : ℝ, 0 < α → α < 2 →
+    ∃ c : ℝ, 1 ≤ c ∧ ∀ α : ℝ, 0 < α → α < 2 →
       ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsThetaBounded Γ ϑ →
       ∀ ω, DiscreteKernelBounds Γ α Λ R₀ (lattice d) ω →
+      ∃ κ : ℝ, 1 ≤ κ ∧
       ∀ (x₀ : EuclideanSpace ℝ (Fin d)) (R : ℝ) (f : EuclideanSpace ℝ (Fin d) → ℝ), 0 < R →
         discreteForm (Metric.ball x₀ R) R₀ (jumpKernel d α) f
           ≤ ENNReal.ofReal c * discreteForm (Metric.ball x₀ (κ * R)) R₀ ω f := by
   intro ϑ Λ R₀ hϑ hΛ hR₀
   obtain ⟨κ, c, hκ, hc, H⟩ := QFS.theoremOneThree_uniform d ϑ Λ R₀ hϑ hΛ hR₀
-  exact ⟨κ, c, hκ, hc, fun α h1 h2 Γ hΓ => H α h1 h2 Γ hΓ.apexLowerBound⟩
+  exact ⟨c, hc, fun α h1 h2 Γ hΓ ω hω => ⟨κ, hκ, H α h1 h2 Γ hΓ.apexLowerBound ω hω⟩⟩
 
 end QFS.Paper
 
