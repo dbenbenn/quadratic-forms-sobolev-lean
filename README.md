@@ -614,7 +614,7 @@ and the same `#print axioms` for every theorem of `Paper.lean` and `GapNote.lean
 | `Density/` | density of smooth functions in `H_k`: on `ℝ^d` (the seminorm as an average of `L²` differences, continuity of translation, mollification, cutting off) and on a bounded Lipschitz domain (a partition of unity over the boundary charts, translation into the domain along each chart direction before mollifying) |
 | `LemmaA1Domain` | Dyda's inequality on dilates of a domain in the paper's forms; Lemma A.1 and Theorem 1.4 on bounded Lipschitz domains |
 | `Nonvacuous` | witnesses that the hypotheses are satisfiable |
-| `GapNote` | the note's Theorem A and Remark 3.7, stated exactly as in the note |
+| `GapNote` | the note's Theorem A and Remark 7, stated exactly as in the note |
 | `paper/` | the note on the §3.2 gap and its repair by random lattice sampling (LaTeX source and PDF) |
 
 ## Building

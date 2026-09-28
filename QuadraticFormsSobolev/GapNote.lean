@@ -6,7 +6,7 @@ import QuadraticFormsSobolev.RandomLattice.BallUniform
 
 /-! # The gap note's headline results, as stated there
 
-`paper/gap-note.tex` states Theorem A and Remark 3.7 with the hypotheses of Bux, Kassmann and
+`paper/gap-note.tex` states Theorem A and Remark 7 with the hypotheses of Bux, Kassmann and
 Schulze: a `ϑ`-bounded configuration, a measurable kernel satisfying (2), and `α ∈ (0, 2)`. The
 theorems here are exactly those statements. They are wrappers around the more general
 `QFS.formHs_ball_le_form_ball_randomLattice` and `QFS.formHs_ball_le_form_ball_uniform`.
@@ -43,8 +43,8 @@ theorem theorem_A (hd : 1 ≤ d) {ϑ Λ α : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ 
   exact ⟨κ, C, hκ, hC, fun Γ hΓ k hkm hk f hf =>
     H Γ hΓ.apexLowerBound k hk f hf (integrand_measurable hf hkm)⟩
 
-/-- **Remark 3.7.** Theorem A with `κ` and `C` independent of `α ∈ (0, 2)`. -/
-theorem remark_3_7 (hd : 1 ≤ d) {ϑ Λ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ Real.pi / 2) (hΛ : 1 ≤ Λ) :
+/-- **Remark 7.** Theorem A with `κ` and `C` independent of `α ∈ (0, 2)`. -/
+theorem remark_7 (hd : 1 ≤ d) {ϑ Λ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ Real.pi / 2) (hΛ : 1 ≤ Λ) :
     ∃ κ C : ℝ, 1 ≤ κ ∧ 0 ≤ C ∧ ∀ α : ℝ, 0 < α → α < 2 →
       ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsThetaBounded Γ ϑ →
       ∀ k : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → ℝ≥0∞,
