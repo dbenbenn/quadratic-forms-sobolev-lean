@@ -110,8 +110,9 @@ Theorem~1.1 of \cite{BKS} (Section~\ref{sec:consequences}).
 $f_h$ over the cells of $h\Z^d$. The averages destroy the oscillation of $f$ inside a cell, and
 recovering the continuous form in the limit is what requires domination. We instead
 \emph{sample} $f$ at the points of a lattice. Sampling keeps every difference $f(s)-f(t)$ between
-lattice points exactly, so the discrete theorem applies to the sampled function for every
-lattice, with nothing lost in the discretization. The lattice is then made random, by a shift
+lattice points exactly: on each lattice the discrete theorem compares sums of the two integrands,
+$(f(t)-f(s))^2\norm{s-t}^{-d-\alpha}$ and $(f(t)-f(s))^2k(s,t)$, at the same pairs of points, and
+the kernel is never paired with averages of $f$. The lattice is then made random, by a shift
 $\eta\in[-\tfrac12,\tfrac12)^d$ and a linear map $A$ close to the identity. Averaging the discrete
 inequality over the lattices reproduces both continuous forms, up to constants and up to pairs at
 distance $O(h)$. The random shift alone would sample only differences in directions of $h\Z^d$;
@@ -185,6 +186,14 @@ $\abs{\,\cdot\,}$ also denotes Lebesgue measure. Balls $B_r(x)$ are open and $\b
 closed. Integrals of $[0,\infty]$-valued functions are Lebesgue integrals, and all identities
 and inequalities are between elements of $[0,\infty]$. We use the convention $0\cdot\infty=0$, and read
 the integrand of $\abs{f}^2_{H^{\alpha/2}}$ as $0$ on the diagonal.
+
+The proof has three parts. Lemma~\ref{lem:onelattice} applies Theorem~1.3 of \cite{BKS} on a single
+lattice. Proposition~\ref{prop:avg} averages over lattices: for every nonnegative measurable $H$,
+the average of $\sum H(Tz,Tz')$ is comparable to $h^{-2d}\iint H$, except that pairs at distance
+$O(h)$ are lost on the lower side, and no integrability of $H$ is needed. Applied to the two
+integrands, this gives the inequality of Theorem~\ref{thm:A} for each $h$, up to those short
+pairs. The only limit, $h\to0$, is on the $H^{\alpha/2}$ side, where it is monotone. The $H_k$ side,
+where the proof in \cite{BKS} needed domination, involves no limit.
 
 \subsection{The discrete theorem}\label{sec:discrete}
 
@@ -317,6 +326,12 @@ For measurable $H\colon\R^d\times\R^d\to[0,\infty]$ put
 \]
 Here $\dd Q$ is Lebesgue measure on $(\R^d)^d$, and the integrand is jointly measurable in
 $(Q,\eta)$.
+
+Without the distortion, that is for $Q=0$, the average over $\eta$ alone is
+$h^{-d}\sum_{w\ne0}\int H(s,s+hw)\dd s$ (Lemma~\ref{lem:tiling}), which sees $H$ only at offsets in
+$h\Z^d$. Averaging over $Q$ replaces each offset $hw$ by a ball about it of radius comparable to
+$\delta h\supn w$ (Lemma~\ref{lem:column}), and these balls cover all offsets of length at least
+$C_0h$ with bounded overlap (Lemma~\ref{lem:count}).
 
 \begin{lemma}[Tiling]\label{lem:tiling}
 Let $H$ be measurable, nonnegative and zero on the diagonal. For $h>0$ and $Q\in\Qd$,
