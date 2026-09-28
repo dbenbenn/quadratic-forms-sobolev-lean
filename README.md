@@ -476,7 +476,7 @@ Each departure from the paper, and why.
     `QFS.exists_mem_ball_inter_shift` carries `ϑ ≤ V.apex`, and with it the
     paper's constant `λ = (sin ϑ)/2` is correct.
 
-19. **Five smaller slips in printed statements, each repaired silently.**
+19. **Four smaller slips in printed statements, each repaired silently.**
 
     * **Definition 2.3** writes `V^m_r = {u ∈ V^m | B̄_r ⊂ V^m}` — the ball has
       no centre, so read literally `V^m_r` is `V^m` or `∅`. Definition 2.1
@@ -488,8 +488,6 @@ Each departure from the paper, and why.
     * **Proposition 5.14** says "there exists `R ≥ r` depending only on `ϑ` and
       `d`", but `R ≥ r` cannot be independent of `r`. `QFS.renormalization`
       takes `r` first, as Corollary 5.8 correctly states.
-    * **Definition 5.3** restricts to `r ≤ R` and `x ∈ ℤ^d`; `QFS.RRConnected`
-      imposes neither, which only widens the definition and is never used.
     * **Corollary 5.2** prints `R = (r + √d)/sin ϑ`, which is the radius of
       Lemma 5.1 **(1)**. A two-edge path needs Lemma 5.1 **(2)**, whose own
       hypothesis is `R > (r + √d)/sin ϑ + r`: the extra `r` is what translating
@@ -538,6 +536,22 @@ Each departure from the paper, and why.
     says nothing, so `k(x,x)` is free, as in the paper. (`jumpKernel` is written
     with the real power, which is `0` at `x = y`; asking the bound there as well
     would force `k(x,x) = 0`.)
+
+24. **The norms of `H_k(Ω)` and `H^{α/2}(Ω)` (p. 4).** The paper defines the
+    seminorm as the integral itself, `|f|_{H_k(Ω)} = ∫_{Ω×Ω} (f(y) − f(x))² k`,
+    with no square root, and then the norm by
+    `‖f‖²_{H_k(Ω)} = ‖f‖²_{L²(Ω)} + |f|²_{H_k(Ω)}`, and the same for `H^{α/2}(Ω)`.
+    Read literally, the integral is squared a second time. That is not a norm (it
+    is not homogeneous), let alone the Hilbert norm the paper intends, so this is
+    a slip. We read it in the standard way: `QFS.form Ω k f` is the integral, the
+    paper's `|f|_{H_k(Ω)}` as printed. The squared norm is
+    `‖f‖²_{L²(Ω)} + form Ω k f`, which is how the norm comparabilities of
+    Theorem 1.4 are stated. The seminorm statements, including inequality (3) of
+    Theorem 1.1, involve only the integral and read the same either way.
+
+25. **`r`-`R`-connectedness is Definition 5.3 exactly.** `QFS.RRConnected`
+    includes the side conditions `r ≤ R` and `x ∈ ℤ^d`. The proofs use
+    `QFS.RRConnectedCore`, the connectivity clause alone.
 
 ## Citations
 

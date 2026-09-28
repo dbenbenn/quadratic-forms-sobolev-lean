@@ -17,7 +17,7 @@ theorem lemmaFiveSeven {d : ℕ} {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ Real.p
           r i < r (i + 1) ∧ ρ i < ρ (i + 1) ∧ R i < R (i + 1)) ∧
         ∀ k : ℕ, 1 ≤ k → ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), (∀ z, ϑ ≤ (Γ z).apex) →
           ∀ x ∈ lattice d, (typesIn Γ (Metric.ball x (ρ k))).encard ≤ (k : ℕ∞) →
-            RRConnected Γ (r k) (R k) x := by
+            RRConnectedCore Γ (r k) (R k) x := by
   obtain ⟨δ, hδ0, h56⟩ := exists_closer_lattice_nearby (d := d) hϑ hϑ'
   obtain ⟨δc, -, hcore⟩ := core_induction (d := d) (ϑ := ϑ) hϑ hϑ'
   choose rr ρρ RR _hδc hkr hrρ hρR hconn using hcore

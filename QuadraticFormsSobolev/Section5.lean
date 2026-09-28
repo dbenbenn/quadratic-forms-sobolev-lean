@@ -216,12 +216,19 @@ theorem discr_connect_two_of_same_type (hϑ : 0 < ϑ) (hb : ∀ z, ϑ ≤ (Γ z)
   exact ConnWithin.trans (ConnWithin.of_edge hxb hzb hzcx)
     (ConnWithin.of_edge hyb hzb hzcy).symm
 
-/-- **Definition 5.3**: a lattice point `x` is *`r`-`R`-connected* when every
-lattice point of `B_r(x)` is joined to `x` by an undirected edge path that does
-not leave `B_R(x)`. -/
-def RRConnected (Γ : Configuration (EuclideanSpace ℝ (Fin d))) (r R : ℝ)
+/-- The connectivity clause of Definition 5.3, without its side conditions `r ≤ R` and
+`x ∈ ℤ^d`: every lattice point of `B_r(x)` is joined to `x` by an undirected edge path that
+does not leave `B_R(x)`. -/
+def RRConnectedCore (Γ : Configuration (EuclideanSpace ℝ (Fin d))) (r R : ℝ)
     (x : EuclideanSpace ℝ (Fin d)) : Prop :=
   ∀ y ∈ ball x r, y ∈ lattice d → ConnWithin Γ (ball x R ∩ lattice d) x y
+
+/-- **Definition 5.3**, exactly: for `r ≤ R`, a *lattice point* `x` is `r`-`R`-connected if every
+lattice point of `B_r(x)` is joined to `x` by an undirected edge path that does not leave
+`B_R(x)`. The proofs work with `RRConnectedCore`, the connectivity clause alone. -/
+def RRConnected (Γ : Configuration (EuclideanSpace ℝ (Fin d))) (r R : ℝ)
+    (x : EuclideanSpace ℝ (Fin d)) : Prop :=
+  r ≤ R ∧ x ∈ lattice d ∧ RRConnectedCore Γ r R x
 
 /-- **Lemma 5.4**, the discrete counterpart of the density of well-connected
 points (Lemma 4.5 (3)): for `R > (√d + r)/sin ϑ` every lattice point `x` has an
@@ -229,7 +236,7 @@ points (Lemma 4.5 (3)): for `R > (√d + r)/sin ϑ` every lattice point `x` has 
 theorem exists_rrConnected (hϑ : 0 < ϑ) (hb : ∀ z, ϑ ≤ (Γ z).apex) {r R : ℝ} (hr : 0 ≤ r)
     (hR : (Real.sqrt d + r) / Real.sin ϑ < R) {x : EuclideanSpace ℝ (Fin d)}
     (hx : x ∈ lattice d) :
-    ∃ y ∈ lattice d, ‖y - x‖ < R ∧ RRConnected Γ r R y := by
+    ∃ y ∈ lattice d, ‖y - x‖ < R ∧ RRConnectedCore Γ r R y := by
   have hs0 : 0 < Real.sin ϑ :=
     Real.sin_pos_of_pos_of_lt_pi hϑ (by linarith [pi_pos, (Γ x).apex_le, hb x])
   have hs1 : Real.sin ϑ ≤ 1 := Real.sin_le_one ϑ
@@ -800,7 +807,7 @@ would be far too strong to apply. -/
 theorem connWithin_of_chain {W : Set (EuclideanSpace ℝ (Fin d))}
     {c b : EuclideanSpace ℝ (Fin d)} {δ r R Rb : ℝ} (hδr : δ ≤ r)
     {x y : EuclideanSpace ℝ (Fin d)}
-    (hconn : ∀ p ∈ W ∩ lattice d, ‖p - c‖ ≤ ‖x - c‖ → RRConnected Γ r R p)
+    (hconn : ∀ p ∈ W ∩ lattice d, ‖p - c‖ ≤ ‖x - c‖ → RRConnectedCore Γ r R p)
     (hsub : ∀ p ∈ W ∩ lattice d, ‖p - c‖ ≤ ‖x - c‖ → R + dist p b ≤ Rb)
     (hchain : Relation.ReflTransGen (Jump W c δ) x y) :
     ConnWithin Γ (ball b Rb ∩ lattice d) x y := by
@@ -837,11 +844,11 @@ theorem core_induction_step (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2)
     (hrρ' : r' ≤ ρ') (hρR' : ρ' ≤ R')
     (IH : ∀ Γ' : Configuration (EuclideanSpace ℝ (Fin d)), (∀ z, ϑ ≤ (Γ' z).apex) →
       ∀ p ∈ lattice d, (typesIn Γ' (ball p ρ')).encard ≤ (k : ℕ∞) →
-        RRConnected Γ' r' R' p) :
+        RRConnectedCore Γ' r' R' p) :
     ∃ r ρ R : ℝ, δ < r ∧ ((k + 1 : ℕ) : ℝ) ≤ r ∧ r ≤ ρ ∧ ρ ≤ R ∧
       ∀ Γ' : Configuration (EuclideanSpace ℝ (Fin d)), (∀ z, ϑ ≤ (Γ' z).apex) →
       ∀ x ∈ lattice d, (typesIn Γ' (ball x ρ)).encard ≤ ((k + 1 : ℕ) : ℕ∞) →
-        RRConnected Γ' r R x := by
+        RRConnectedCore Γ' r R x := by
   have hσ0 : 0 < Real.sin ϑ := Real.sin_pos_of_pos_of_lt_pi hϑ (by linarith [pi_pos])
   have hσ1 : Real.sin ϑ ≤ 1 := Real.sin_le_one ϑ
   have hD : (0:ℝ) ≤ Real.sqrt d := Real.sqrt_nonneg _
@@ -972,7 +979,7 @@ theorem core_induction_step (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2)
           rw [he]
           exact le_of_lt hu
       have hconnp : ∀ p ∈ shift (cone (Γ' y).axis (Γ' y).apex) a ∩ lattice d,
-          ‖p - a‖ ≤ ‖z - a‖ → RRConnected Γ' r' R' p := by
+          ‖p - a‖ ≤ ‖z - a‖ → RRConnectedCore Γ' r' R' p := by
         intro p hp hpd
         exact IH Γ' hb p hp.2
           (le_trans (Set.encard_mono (typesIn_mono (hballReg p hp hpd))) hRegcard)
@@ -1008,7 +1015,7 @@ theorem core_induction (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ k : ℕ, ∃ r ρ R : ℝ, δ < r ∧ (k : ℝ) ≤ r ∧ r ≤ ρ ∧ ρ ≤ R ∧
       ∀ Γ' : Configuration (EuclideanSpace ℝ (Fin d)), (∀ z, ϑ ≤ (Γ' z).apex) →
       ∀ x ∈ lattice d, (typesIn Γ' (ball x ρ)).encard ≤ (k : ℕ∞) →
-        RRConnected Γ' r R x := by
+        RRConnectedCore Γ' r R x := by
   obtain ⟨δ, t₀, hδ0, ht₀0, hchain⟩ := exists_chain_to_apex (d := d) hϑ hϑ'
   refine ⟨δ, hδ0, fun k => ?_⟩
   induction k with
@@ -1039,15 +1046,15 @@ lemma ConnWithin.mono_config {Γ' : Configuration (EuclideanSpace ℝ (Fin d))}
       refine ConnWithin.trans ih (Relation.ReflTransGen.single ?_)
       exact ⟨hstep.1, hstep.2.1, hstep.2.2.imp (fun e => h _ e) (fun e => h _ e)⟩
 
-lemma RRConnected.mono_config {Γ' : Configuration (EuclideanSpace ℝ (Fin d))}
+lemma RRConnectedCore.mono_config {Γ' : Configuration (EuclideanSpace ℝ (Fin d))}
     (h : ∀ z, (Γ' z).carrier ⊆ (Γ z).carrier) {r R : ℝ} {x : EuclideanSpace ℝ (Fin d)}
-    (hx : RRConnected Γ' r R x) : RRConnected Γ r R x :=
+    (hx : RRConnectedCore Γ' r R x) : RRConnectedCore Γ r R x :=
   fun y hy hylat => ConnWithin.mono_config h (hx y hy hylat)
 
 /-- The observation closing the proof of Corollary 5.8: an `r`-`R`-connected point
 is `r'`-`R`-connected for every `r' ≤ r`. -/
-lemma RRConnected.mono_radius {r₁ r₂ R : ℝ} (h : r₂ ≤ r₁) {x : EuclideanSpace ℝ (Fin d)}
-    (hx : RRConnected Γ r₁ R x) : RRConnected Γ r₂ R x :=
+lemma RRConnectedCore.mono_radius {r₁ r₂ R : ℝ} (h : r₂ ≤ r₁) {x : EuclideanSpace ℝ (Fin d)}
+    (hx : RRConnectedCore Γ r₁ R x) : RRConnectedCore Γ r₂ R x :=
   fun y hy hylat => hx y (Metric.ball_subset_ball h hy) hylat
 
 /-- **Corollary 5.8** of Bux–Kassmann–Schulze. For every `r > 0` there is `R ≥ r`,
@@ -1056,7 +1063,7 @@ angles bounded below by `ϑ`, every lattice point is `r`-`R`-connected.
 
 By Corollary 2.4 one may replace the configuration by one taking at most `L`
 values, with `L` depending only on `ϑ` and `d` (`ref_config_uniform`); Lemma 5.7
-then applies with `k = L`, and the observation `RRConnected.mono_radius` brings
+then applies with `k = L`, and the observation `RRConnectedCore.mono_radius` brings
 the small radius down to `r`. Because the paper's `r_k` are only known to exist
 for each `k`, we take `k = max L ⌈r⌉₊` and use that `k ≤ r_k`, which is how
 `core_induction` records the growth of the radii.
@@ -1065,7 +1072,7 @@ for each `k`, we take `k = max L ⌈r⌉₊` and use that `k ≤ r_k`, which is 
 ball `B_r(x)` is empty and the conclusion is vacuous. It is kept for fidelity.) -/
 theorem discrete_template {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2) {r : ℝ} (_hr : 0 < r) :
     ∃ R : ℝ, r ≤ R ∧ ∀ Γ' : Configuration (EuclideanSpace ℝ (Fin d)), ApexLowerBound Γ' ϑ →
-      ∀ x ∈ lattice d, RRConnected Γ' r R x := by
+      ∀ x ∈ lattice d, RRConnectedCore Γ' r R x := by
   obtain ⟨L, hL⟩ := ref_config_uniform (E := EuclideanSpace ℝ (Fin d)) hϑ hϑ'
   obtain ⟨δ, hδ0, hcore⟩ :=
     core_induction (d := d) (ϑ := ϑ / 3) (by positivity) (by linarith [pi_pos])
@@ -1077,7 +1084,7 @@ theorem discrete_template {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2) {r : 
     linarith
   refine ⟨Rk, by linarith, fun Γ' hΓ' x hxlat => ?_⟩
   obtain ⟨G', hcard, hsub, _hapex, hb'⟩ := hL Γ' hΓ'
-  refine RRConnected.mono_config hsub (RRConnected.mono_radius hrk ?_)
+  refine RRConnectedCore.mono_config hsub (RRConnectedCore.mono_radius hrk ?_)
   refine h4 G' hb'.2 x hxlat ?_
   calc (typesIn G' (ball x ρk)).encard
       ≤ ((fun V : DCone (EuclideanSpace ℝ (Fin d)) => V.carrier) '' (Set.range G')).encard := by

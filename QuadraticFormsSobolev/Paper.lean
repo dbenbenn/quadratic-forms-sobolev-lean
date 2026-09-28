@@ -1131,12 +1131,12 @@ not reused. Both are `Proved`.
 **The radius is $R > \frac{r+\sqrt d}{\sin\vartheta} + r$, where the source prints
 $R = \frac{r+\sqrt d}{\sin\vartheta}$** — the radius of Lemma 5.1 (1) rather than of
 Lemma 5.1 (2), which is what a two-edge path needs. -/
-theorem corollary_5_2 (hϑ : 0 < ϑ) (hb : ∀ z, ϑ ≤ (Γ z).apex)
+theorem corollary_5_2 (hΓ : IsThetaBounded Γ ϑ)
     {r R : ℝ} {x y : EuclideanSpace ℝ (Fin d)} (hx : x ∈ lattice d) (hy : y ∈ lattice d)
     (htype : (Γ x).carrier = (Γ y).carrier) (hxy : ‖x - y‖ < r)
     (hR : (r + Real.sqrt d) / Real.sin ϑ + r < R) :
     ConnWithin Γ (ball x R ∩ lattice d) x y :=
-  QFS.discr_connect_two_of_same_type hϑ hb hx hy htype hxy hR
+  QFS.discr_connect_two_of_same_type hΓ.1 hΓ.apexLowerBound.2 hx hy htype hxy hR
 
 end QFS.Paper
 
@@ -1169,13 +1169,20 @@ lattice point $y$ whose $r$-ball lies inside $V^\Gamma[x]$; then any two points 
 are joined through $x$, and $x$ is within $R$ of $y$.
 
 The hypotheses and the constant are the source's exactly, including the non-strict $r \ge 0$
-and the strict inequality on $R$. The configuration is required only to have apex angles
-bounded below by $\vartheta > 0$; no upper bound on $\vartheta$ is assumed. -/
-theorem lemma_5_4 (hϑ : 0 < ϑ) (hb : ∀ z, ϑ ≤ (Γ z).apex) {r R : ℝ} (hr : 0 ≤ r)
+and the strict inequality on $R$. The configuration is $\vartheta$-bounded (Definition 2.1),
+the standing assumption of Section 5. -/
+theorem lemma_5_4 (hΓ : IsThetaBounded Γ ϑ) {r R : ℝ} (hr : 0 ≤ r)
     (hR : (Real.sqrt d + r) / Real.sin ϑ < R) {x : EuclideanSpace ℝ (Fin d)}
     (hx : x ∈ lattice d) :
-    ∃ y ∈ lattice d, ‖y - x‖ < R ∧ RRConnected Γ r R y :=
-  QFS.exists_rrConnected hϑ hb hr hR hx
+    ∃ y ∈ lattice d, ‖y - x‖ < R ∧ RRConnected Γ r R y := by
+  obtain ⟨y, hy, hyx, hc⟩ := QFS.exists_rrConnected hΓ.1 hΓ.apexLowerBound.2 hr hR hx
+  refine ⟨y, hy, hyx, ?_, hy, hc⟩
+  have hϑ2 : ϑ ≤ π / 2 := (hΓ.apexLowerBound.2 0).trans (Γ 0).apex_le
+  have hs0 : 0 < Real.sin ϑ := Real.sin_pos_of_pos_of_lt_pi hΓ.1 (by linarith [Real.pi_pos])
+  have hs1 := Real.sin_le_one ϑ
+  have hle : r ≤ (Real.sqrt d + r) / Real.sin ϑ := by
+    rw [le_div_iff₀ hs0]; nlinarith [Real.sqrt_nonneg (d : ℝ)]
+  linarith
 
 end QFS.Paper
 
@@ -1200,8 +1207,8 @@ Work in Euclidean space $\mathbb{R}^d$ with the integer lattice $\mathbb{Z}^d$. 
 $$(\Gamma w).\mathrm{carrier} \;=\; \tilde V\bigl(v_w, (\Gamma w).\mathrm{apex}\bigr) \cup \bigl(-\tilde V(v_w, (\Gamma w).\mathrm{apex})\bigr), \qquad \tilde V(v,\vartheta) = \Bigl\{h \ne 0 : \cos\vartheta < \tfrac{\langle v,h\rangle}{\lVert h\rVert}\Bigr\}.$$
 Write $S[x] = x + S$ for the translate of a set $S$ by $x$, and $V^{\Gamma}[a] = a + (\Gamma a).\mathrm{carrier}$. Finally, $\mathrm{ConnWithin}(\Gamma, T, y, x)$ is the reflexive–transitive closure of the relation "$a, b \in T$ and ($b \in V^\Gamma[a]$ or $a \in V^\Gamma[b]$)", i.e. the property that $y$ and $x$ are joined by an edge path all of whose vertices lie in the set $T$.
 
-Assume $\vartheta > 0$ and that every cone of the configuration is at least this wide:
-$$\vartheta \le (\Gamma w).\mathrm{apex} \quad \text{for all } w \in \mathbb{R}^d .$$
+Assume that $\Gamma$ is $\vartheta$-bounded (Definition 2.1): the infimum of its apex angles is
+$\vartheta > 0$.
 Let $r, R \in \mathbb{R}$ and let $x, y, z \in \mathbb{Z}^d$ be lattice points such that
 
 - $\|x - y\| < r$ and $\|z - x\| < r$;
@@ -1217,14 +1224,14 @@ that is, $y$ and $x$ are connected by an edge path whose vertices are lattice po
 This is the "bank shot" step of the discrete chaining: two nearby lattice points that are not directly joined are connected by routing through a third point of a common cone type, and the whole detour is confined to a ball whose radius is controlled explicitly by $r$, $d$ and the aperture bound $\vartheta$. Confinement, not mere connectedness, is the point: the later multiplicity counts need to know how far a path may wander.
 
 **Formalization Note.** The quantitative hypothesis mixes $r$ and $\sqrt{d}$ in the numerator $2r + \sqrt{d}$, the $\sqrt{d}$ accounting for the density of the lattice (every closed ball of radius $\sqrt d/2$ contains a lattice point); the division by $\sin \vartheta$ is legitimate because $\vartheta > 0$, and the hypothesis is stated as a strict inequality, so $R$ is genuinely larger than the detour bound. -/
-theorem lemma_5_5 (hϑ : 0 < ϑ) (hb : ∀ w, ϑ ≤ (Γ w).apex)
+theorem lemma_5_5 (hΓ : IsThetaBounded Γ ϑ)
     {r R : ℝ} {x y z : EuclideanSpace ℝ (Fin d)}
     (hx : x ∈ lattice d) (hy : y ∈ lattice d) (hz : z ∈ lattice d)
     (hxy : ‖x - y‖ < r) (hzx : ‖z - x‖ < r) (hzV : z ∈ shift (Γ y).carrier x)
     (htype : (Γ z).carrier = (Γ y).carrier)
     (hR : r + (2 * r + Real.sqrt d) / Real.sin ϑ < R) :
     ConnWithin Γ (ball x R ∩ lattice d) y x :=
-  QFS.discr_ueber_bande hϑ hb hx hy hz hxy hzx hzV htype hR
+  QFS.discr_ueber_bande hΓ.1 hΓ.apexLowerBound.2 hx hy hz hxy hzx hzV htype hR
 
 end QFS.Paper
 
@@ -1337,10 +1344,12 @@ theorem lemma_5_7 {d : ℕ} {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ Real.pi / 2
       ∃ r ρ R : ℕ → ℝ, δ < r 1 ∧
         (∀ i : ℕ, 1 ≤ i → r i ≤ ρ i ∧ ρ i ≤ R i ∧
           r i < r (i + 1) ∧ ρ i < ρ (i + 1) ∧ R i < R (i + 1)) ∧
-        ∀ k : ℕ, 1 ≤ k → ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), (∀ z, ϑ ≤ (Γ z).apex) →
+        ∀ k : ℕ, 1 ≤ k → ∀ Γ : Configuration (EuclideanSpace ℝ (Fin d)), IsThetaBounded Γ ϑ →
           ∀ x ∈ lattice d, (typesIn Γ (Metric.ball x (ρ k))).encard ≤ (k : ℕ∞) →
-            RRConnected Γ (r k) (R k) x :=
-  QFS.lemmaFiveSeven hϑ hϑ'
+            RRConnected Γ (r k) (R k) x := by
+  obtain ⟨δ, hδ, hδV, r, ρ, R, hr1, hmono, H⟩ := QFS.lemmaFiveSeven (d := d) hϑ hϑ'
+  refine ⟨δ, hδ, hδV, r, ρ, R, hr1, hmono, fun k hk Γ hΓ x hx ht => ?_⟩
+  exact ⟨((hmono k hk).1).trans ((hmono k hk).2.1), hx, H k hk Γ hΓ.apexLowerBound.2 x hx ht⟩
 
 end QFS.Paper
 
@@ -1363,7 +1372,7 @@ namespace QFS.Paper
 /-- **Corollary 5.8 — Uniform outer radius for lattice connectivity of bounded configurations**
 
 Work in Euclidean space $\mathbb{R}^d$ with the integer lattice $\mathbb{Z}^d$. Call a configuration $\Gamma'$ *$\vartheta$-bounded* (`IsThetaBounded Γ' ϑ`) when the infimum of the apex angles of the double cones it assigns is $\vartheta > 0$ (Definition 2.1). Write $V^{\Gamma'}[a] = a + (\Gamma' a).\mathrm{carrier}$, let $\mathrm{ConnWithin}(\Gamma', T, a, b)$ be the reflexive–transitive closure of "$a,b \in T$ and ($b \in V^{\Gamma'}[a]$ or $a \in V^{\Gamma'}[b]$)", and let
-$$\mathrm{RRConnected}(\Gamma', r, R, x) \quad :\Longleftrightarrow \quad \forall\, y \in B_r(x) \cap \mathbb{Z}^d, \ \ \mathrm{ConnWithin}\bigl(\Gamma',\ B_R(x) \cap \mathbb{Z}^d,\ x,\ y\bigr)$$
+$$\mathrm{RRConnected}(\Gamma', r, R, x) \quad :\Longleftrightarrow \quad r \le R,\ \ x \in \mathbb{Z}^d \ \text{ and } \ \forall\, y \in B_r(x) \cap \mathbb{Z}^d, \ \ \mathrm{ConnWithin}\bigl(\Gamma',\ B_R(x) \cap \mathbb{Z}^d,\ x,\ y\bigr)$$
 be Definition 5.3: every lattice point within distance $r$ of $x$ is joined to $x$ by an edge path whose vertices are all lattice points of $B_R(x)$.
 
 Let $\vartheta$ satisfy $0 < \vartheta \le \pi/2$ and let $r \in \mathbb{R}$. Then there exists $R \in \mathbb{R}$ with $r \le R$ such that
@@ -1376,7 +1385,7 @@ theorem corollary_5_8 {ϑ : ℝ} (hϑ : 0 < ϑ) (hϑ' : ϑ ≤ π / 2) {r : ℝ}
     ∃ R : ℝ, r ≤ R ∧ ∀ Γ' : Configuration (EuclideanSpace ℝ (Fin d)), IsThetaBounded Γ' ϑ →
       ∀ x ∈ lattice d, RRConnected Γ' r R x := by
   obtain ⟨R, hR, H⟩ := QFS.discrete_template (d := d) hϑ hϑ' _hr
-  exact ⟨R, hR, fun Γ' hΓ' => H Γ' hΓ'.apexLowerBound⟩
+  exact ⟨R, hR, fun Γ' hΓ' x hx => ⟨hR, hx, H Γ' hΓ'.apexLowerBound x hx⟩⟩
 
 end QFS.Paper
 
@@ -1600,7 +1609,7 @@ Let $d \in \mathbb{N}$ and let $\vartheta \in \mathbb{R}$ with $0 < \vartheta \l
 $$\delta(d,\vartheta) \;=\; \frac{\sqrt{d} + 1}{\sin(\vartheta/2)} \;<\; \Delta \qquad\text{and}\qquad 1 \le \Delta,$$
 where $\delta(d,\vartheta)$ is the apex-shrinking constant of Lemma 5.9 — the corrected one, the paper's $3\sqrt{d}/(2\sin\vartheta)$ being too small. Then there exists a radius $R_1 \ge 1$ with the following property.
 
-For every configuration $\Gamma$ on $\mathbb{R}^d$ that is $\vartheta$-bounded, meaning $0 < \vartheta$ and $\vartheta \le (\Gamma x).\mathrm{apex}$ for every $x$, for every point $x \in \mathbb{R}^d$ and every $n \in \mathbb{N}$, there is a lattice point $w \in \mathbb{Z}^d$ such that the block
+For every configuration $\Gamma$ on $\mathbb{R}^d$ that is $\vartheta$-bounded, meaning that the infimum of its apex angles is $\vartheta > 0$ (Definition 2.1), for every point $x \in \mathbb{R}^d$ and every $n \in \mathbb{N}$, there is a lattice point $w \in \mathbb{Z}^d$ such that the block
 $$Q_{\Delta^n}\bigl(\Delta^{n+1} w\bigr) \;=\; \mathbb{Z}^d \cap \Bigl\{y : \lVert y - \Delta^{n+1}w\rVert_\infty \le \tfrac{\Delta^n}{2}\Bigr\}$$
 of side $\Delta^n$ centred at $\Delta^{n+1} w$ satisfies
 
