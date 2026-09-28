@@ -151,7 +151,7 @@ almost everywhere. The proof then states, on p.~16:
 \end{quote}
 No dominating function is given, and none is available from the hypothesis $f\in H_k(B^*)$.
 
-The only upper bound on $g_h$ comes from Jensen's inequality,
+The natural upper bound on $g_h$ comes from Jensen's inequality,
 \[
   (f_h(x)-f_h(y))^2\le h^{-2d}\int_{A_h(x)\times A_h(y)}(f(s')-f(t'))^2\dd(s',t'),
 \]
@@ -168,8 +168,9 @@ while being of full size at $(s,t)$ in the same pair of cells.
 
 Nor can the step be rescued cheaply:
 \begin{itemize}
-\item Restricting to $f\in H^{\alpha/2}(B^*)$ makes the step valid, but then the resulting
-  inequality holds only for such $f$. It does not yield the inclusion
+\item Restricting to $f\in H^{\alpha/2}(B^*)$ makes the step valid, by the generalized dominated
+  convergence theorem: the Jensen majorants are then cell averages of an integrable function, and
+  converge in $L^1$. But the resulting inequality holds only for such $f$. It does not yield the inclusion
   $H_k(B)\subseteq H^{\alpha/2}(B)$, which is the content of Lemma~3.7.
 \item Approximating $f\in H_k(B^*)$ by smooth functions in the $H_k$ norm would require the
   density statement of Theorem~1.4, whose proof uses Lemma~3.7.
