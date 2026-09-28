@@ -185,7 +185,8 @@ in \cite{BKS} is incomplete at this step.
 Throughout, $d\ge1$, $\norm{\cdot}$ is the Euclidean norm and $\supn{\cdot}$ the maximum norm, and
 $\abs{\,\cdot\,}$ also denotes Lebesgue measure. Balls $B_r(x)$ are open and $\bar B_r(x)$
 closed. Integrals of $[0,\infty]$-valued functions are Lebesgue integrals, and all identities
-and inequalities are between elements of $[0,\infty]$.
+and inequalities are between elements of $[0,\infty]$. We use the convention $0\cdot\infty=0$, and read
+the integrand of $\abs{f}^2_{H^{\alpha/2}}$ as $0$ on the diagonal.
 
 \subsection{The discrete theorem}
 
@@ -410,9 +411,9 @@ and the substitution $t=s+hy$ turns $\{\norm y\ge C_0\}$ into $\{\norm{t-s}\ge C
 \subsection{Conclusion}
 
 \begin{proof}[Proof of Theorem~\ref{thm:A}]
-The case $d=0$ is trivial; let $d\ge1$. With $\kappa_0,c_0$ as in Lemma~\ref{lem:onelattice},
+With $\kappa_0,c_0$ as in Lemma~\ref{lem:onelattice},
 put $\kappa=3\kappa_0$ and $B^*=B_{\kappa R}(x_0)$. Since $f$ and $k$ are measurable, $F_B$ and
-$G_{B^*}$ are measurable, and both vanish on the diagonal. Lemma~\ref{lem:onelattice} holds for
+$G_{B^*}$ are measurable, and both vanish on the diagonal, whatever the value of $k$ there. Lemma~\ref{lem:onelattice} holds for
 every $(h,Q,\eta)$. Integrating it over $\eta\in P$ and $Q\in\Qd$ gives
 $L_h(F_B)\le2^{d+\alpha}c_0L_h(G_{B^*})$. By Proposition~\ref{prop:avg},
 \[
