@@ -35,8 +35,8 @@ Bux--Kassmann--Schulze:\\ a gap and a repair by random lattice sampling}
 Bux, Kassmann and Schulze prove that quadratic forms whose kernels are nondegenerate only on
 double cones of arbitrary orientation are comparable, on every ball, to the Gagliardo seminorm of
 $H^{\alpha/2}$. Their proof passes from a discrete comparability theorem on $\Z^d$ to the
-continuous one by a limit which, as written, requires the function to lie a priori in
-$H^{\alpha/2}$ of a larger ball, which is what is to be proved. We explain the gap and close
+continuous one by a limit that, as written, requires the function to lie a priori in
+$H^{\alpha/2}$ of a larger ball: the very conclusion being proved. We explain the gap and close
 it along the paper's own route. Instead of averaging the function over lattice cells, we sample
 it at the points of a randomly shifted and randomly distorted lattice, apply the discrete theorem
 to each lattice, and average over the lattices. This proves the enlarged-ball comparability for
@@ -86,7 +86,7 @@ $\alpha\in[\alpha_0,2)$. The proof has three steps.
 
 Step~2 contains a gap, described in Section~\ref{sec:gap}. As written, the limit $h\to0$ on the
 kernel side of the discretized inequality is justified by dominated convergence, but no dominating
-function is available for a general $f\in H_k(B^*)$, and the lemma is applied, and must be
+function is available for a general $f\in H_k(B^*)$, and Lemma~3.7 is applied, and must be
 applied, to every such $f$.
 
 Our main result closes the gap. It uses nothing from \cite{BKS} beyond Theorem~1.3 and its proof.
@@ -220,7 +220,7 @@ $\vartheta$, $R_0$ and $d$. We use Theorem~1.3 in this uniform form. So does the
 in \cite{BKS}, which fixes $\kappa$ and then applies Corollary~3.1 to configurations and kernels
 that vary with $h$.
 
-We use it with $R_0=\tfrac12$. Then the condition $\abs{x-y}>R_0$ holds for all distinct lattice
+We take $R_0=\tfrac12$. Then the condition $\abs{x-y}>R_0$ holds for all distinct lattice
 points, and the sums run over all pairs of distinct points, or all pairs, since diagonal terms
 vanish.
 
@@ -440,7 +440,7 @@ $L_h(F_B)\le2^{d+\alpha}c_0L_h(G_{B^*})$. By Proposition~\ref{prop:avg},
   K_-\iint_{\norm{t-s}\ge C_0h}F_B\le2^{d+\alpha}c_0K_+\iint G_{B^*}\qquad(h>0).
 \]
 As $h\downarrow0$ the sets $\{\norm{t-s}\ge C_0h\}$ increase to the complement of the diagonal,
-a null set. By monotone convergence,
+and the diagonal is a null set. By monotone convergence,
 \[
   \abs{f}^2_{H^{\alpha/2}(B)}=\iint F_B\le\frac{2^{d+\alpha}c_0K_+}{K_-}\iint G_{B^*}
   =C\,\abs{f}^2_{H_k(B^*)} .
@@ -528,8 +528,8 @@ $k(x,z)\ge\Lambda^{-1}\norm{x-z}^{-d-\alpha}$. Finally $\abs{B_\rho(q)}=(\rho/r)
 \begin{remark}\label{rem:cs}
 By Lemma~\ref{lem:cs}, \cite[Theorem~1.3]{CS} applies to every kernel satisfying \eqref{eq:2}.
 Rescaling $B_R(x_0)$ to $B_1(0)$ preserves \eqref{eq:2}, since double cones are invariant under
-positive dilations, so it gives the enlarged-ball inequality of Theorem~\ref{thm:A} with
-$\kappa=2$.
+positive dilations, so \cite[Theorem~1.3]{CS} gives the enlarged-ball inequality of
+Theorem~\ref{thm:A} with $\kappa=2$.
 \end{remark}
 
 \section{Formalization}\label{sec:lean}
