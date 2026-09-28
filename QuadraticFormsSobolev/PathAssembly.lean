@@ -63,7 +63,7 @@ scale lower: a pair at distance in `[1, Δ)` would be routed through the town
 only to such pairs — and claim (4) of Theorem 5.15 does not give that, since it
 only bounds an edge below by `λ^{-1}‖x − y‖`. Routing one scale up costs a
 factor `Δ` in `λ` and makes every edge at least `Δ > R₀` long. See the README,
-Deviation 17. -/
+Deviation 14. -/
 def Admissible (Δ : ℝ) (m : ℕ) (z x y : EuclideanSpace ℝ (Fin d)) : Prop :=
   x ∈ lattice d ∧ y ∈ lattice d ∧ 1 ≤ m ∧
     Δ ^ m ≤ Δ * ‖x - y‖ ∧ ‖x - y‖ < Δ ^ m ∧
@@ -199,7 +199,7 @@ assumption (4), which holds only for pairs at distance more than `R₀`. Claim
 (4) of Theorem 5.15 bounds an edge below only by `λ^{-1}‖x − y‖`, which for
 `‖x − y‖` just above `R₀` is far less than `R₀`. `PathPropsLong` records the
 extra fact the construction actually delivers: every edge is longer than `R₀`.
-See the README, Deviation 17. -/
+See the README, Deviation 14. -/
 
 /-- Theorem 5.15 with the extra clause Section 6 needs. -/
 def PathPropsLong (Γ : Configuration (EuclideanSpace ℝ (Fin d))) (N M : ℕ)

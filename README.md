@@ -172,22 +172,7 @@ Each departure from the paper, and why.
    therefore about an arbitrary `V : Set (EuclideanSpace ℝ (Fin d))`. The
    paper's own reading is the special case where `V` is a double cone.
 
-2. **`ϑ`-boundedness: the paper's definition in the statements, a lower bound in
-   the proofs.** Definition 2.1 says `Γ` is `ϑ`-bounded when the *infimum* `ϑ` of
-   the apex angles of `Γ(ℝ^d)` is positive. `QFS.IsThetaBounded Γ ϑ` is exactly
-   this, and `QFS.IsThetaAdmissible` adds condition (M); `Paper.lean` states every
-   result with them. The proofs work with the weaker `QFS.ApexLowerBound Γ ϑ`
-   (`0 < ϑ` and `ϑ ≤ (Γ x).apex` for all `x`), because halving the angles or passing
-   to a subconfiguration keeps a lower bound but changes the infimum. The link is:
-   - `IsThetaBounded.apexLowerBound`: a `ϑ`-bounded configuration has `ϑ` as a lower
-     bound, which turns every result proved for lower bounds into the paper's form;
-   - `ApexLowerBound.isThetaBounded_iInf`: a lower bound `ϑ` makes `Γ` bounded in the
-     paper's sense by its infimum, which is at least `ϑ`;
-   - `isThetaBounded_of_apex_eq` and `shrinkConfig`: conclusions that produce a
-     `ϑ'`-bounded configuration (Corollary 2.4, Proposition 3.5, Corollary 3.6) get
-     one whose apex angles all equal `ϑ'`, shrinking the cones where needed.
-
-3. **Corollary 2.4: the apex angle of `Γ̃` is `ϑ/3`, not `ϑ`.** The corollary's
+2. **Corollary 2.4: the apex angle of `Γ̃` is `ϑ/3`, not `ϑ`.** The corollary's
    last sentence reads "The minimum of apex angles of cones in `Γ̃(ℝ^d)` is
    `ϑ`". But `Γ̃` is built from the reference cones of Lemma 2.2, whose apex
    angle is `θ = ϑ/3`. `QFS.ref_config` proves `(Γ' x).apex = ϑ/3`, so `Γ'` is
@@ -195,14 +180,14 @@ Each departure from the paper, and why.
    later use of Corollary 2.4 needs only that the angle is positive and depends
    on `d` and `ϑ` alone.
 
-4. **Corollary 2.4: the sets `M_i` in the paper's proof.** The displayed
+3. **Corollary 2.4: the sets `M_i` in the paper's proof.** The displayed
    definition ends with `M_L = {x | V^L ⊆ Γ(x)} \ M_{L-1}`, which does not make
    the union `⋃ M_i` disjoint (it should subtract `M_1 ∪ ⋯ ∪ M_{L-1}`). The Lean
    proof takes the equivalent and cleaner route of choosing, for each `x`, some
    index with `V^m ⊆ Γ(x)`; the paper's `M_i` are exactly the fibres of that
    choice.
 
-5. **Lemma 3.4 is stated with `ℤ^d` but proved for `hℤ^d` — the literal
+4. **Lemma 3.4 is stated with `ℤ^d` but proved for `hℤ^d` — the literal
    statement is false.** The lemma reads "For every `h > 0`, all `x, y ∈ ℤ^d`
    with `|x − y| > √d·h` …". Its proof, however, treats the case `h = 1` and
    closes with "The general case for arbitrary `h > 0` follows by scaling" —
@@ -219,13 +204,13 @@ Each departure from the paper, and why.
    argument yields and what the applications (Proposition 3.5 with `h = 1`,
    Corollary 3.6 on `hℤ^d`) actually use — is `QFS.lemma_cubes`.
 
-6. **Lemma 3.2 needs neither the lattice nor the favouring.** The lemma is
+5. **Lemma 3.2 needs neither the lattice nor the favouring.** The lemma is
    stated for `x, y ∈ ℤ^d` and `1`-favoured indices `m` at `x`, `n` at `y`, with
    `s ∈ A_1^m(x)` and `t ∈ A_1^n(y)`. Its proof uses only `s ∈ A_1(x)` and
    `t ∈ A_1(y)`. `QFS.lemma_min_dist` proves that (more general) statement;
    `QFS.lemma_min_dist_favoured` is the paper's exact form, deduced from it.
 
-7. **Lemma 3.3 is false in dimension one**, at the radius `r = √d` at which
+6. **Lemma 3.3 is false in dimension one**, at the radius `r = √d` at which
    Proposition 3.5 applies it. The paper introduces it with "The assertion of
    the following lemma is obviously true". In `d = 1` every double cone
    `V(v, θ)` with `θ ∈ (0, π/2]` is all of `ℝ \ {0}`, so
@@ -264,7 +249,7 @@ Each departure from the paper, and why.
      boundary of `V^m`, which is membership in `V^m_r`
      (`QFS.closedBall_subset_cone`).
 
-8. **Lemma 4.6 needs `z ∈ U`, which the paper does not state.** The lemma reads
+7. **Lemma 4.6 needs `z ∈ U`, which the paper does not state.** The lemma reads
    "Assume that the translated double cone `V[x]` contains a point `z` of type
    `V`. Then `x` and `y` are connected." The proof uses the edge from `z` to
    `x`, which exists in `G[U]` only if `z ∈ U`. `QFS.ueber_bande` therefore
@@ -272,7 +257,7 @@ Each departure from the paper, and why.
    lemma to a point of `U ∩ V[x]`. (Conversely, the hypothesis `x ∈ U` that the
    paper does state is not needed; it is kept for fidelity.)
 
-9. **Theorem 4.1: the induction is run on a different open set.** The paper's
+8. **Theorem 4.1: the induction is run on a different open set.** The paper's
    induction is on the number of cone types realised in `U`, and in the
    inductive step it applies the inductive hypothesis to
 
@@ -309,33 +294,24 @@ Each departure from the paper, and why.
    well-connected the connectivity classes are open, so a preconnected `U` is a
    single class.
 
-10. **`DCone` carries a unit axis, not a point of projective space.** The paper's
-    family `𝒱` is `(0, π/2] × ℙ^{d-1}`, so a double cone is named by a *line*.
-    `QFS.DCone` bundles a unit vector instead, which is a 2:1 cover of `𝒱`:
-    the axes `v` and `−v` give different `DCone`s with the same underlying set.
-    Wherever the paper speaks of two points having the *same type*
-    (Definition 4.2, Lemmas 4.3 and 4.6), the Lean statements therefore ask for
-    equality of the underlying double cones — `(Γ x).carrier = (Γ y).carrier` —
-    which is the paper's notion, rather than the finer `Γ x = Γ y`.
+9. **Lemma 5.6 is not obvious.** The paper introduces it with "The assertion of
+   the following lemma is obvious." The natural first attempt — step from `x`
+   radially inward toward the tip — fails: scaling does not change the *angle*
+   to the cone axis, so a lattice point close to the boundary of the cone stays
+   close to it, and no ball of radius `√d/2` fits, so no lattice point is
+   produced. The proof formalised here steps radially inward by a fixed amount
+   *and* along the cone axis; the second move raises the distance to the cone
+   boundary by exactly `a sin ϑ` (`QFS.coneGap_add_smul_axis`), which is what
+   makes room for a lattice point.
 
-11. **Lemma 5.6 is not obvious.** The paper introduces it with "The assertion of
-    the following lemma is obvious." The natural first attempt — step from `x`
-    radially inward toward the tip — fails: scaling does not change the *angle*
-    to the cone axis, so a lattice point close to the boundary of the cone stays
-    close to it, and no ball of radius `√d/2` fits, so no lattice point is
-    produced. The proof formalised here steps radially inward by a fixed amount
-    *and* along the cone axis; the second move raises the distance to the cone
-    boundary by exactly `a sin ϑ` (`QFS.coneGap_add_smul_axis`), which is what
-    makes room for a lattice point.
+   This motivated the auxiliary notion `QFS.coneGap v ϑ p = ⟪v,p⟫ sin ϑ −
+   ‖p − ⟪v,p⟫v‖ cos ϑ`, the signed distance from `p` to the cone boundary. It is
+   positive exactly on the cone, `1`-Lipschitz, and positively homogeneous, and
+   `QFS.closedBall_subset_cone` subsumes the earlier
+   `QFS.mem_cone_of_norm_sub_lt` (which is the case `p = t·v`, where the gap is
+   `t sin ϑ`).
 
-    This motivated the auxiliary notion `QFS.coneGap v ϑ p = ⟪v,p⟫ sin ϑ −
-    ‖p − ⟪v,p⟫v‖ cos ϑ`, the signed distance from `p` to the cone boundary. It is
-    positive exactly on the cone, `1`-Lipschitz, and positively homogeneous, and
-    `QFS.closedBall_subset_cone` subsumes the earlier
-    `QFS.mem_cone_of_norm_sub_lt` (which is the case `p = t·v`, where the gap is
-    `t sin ϑ`).
-
-12. **Lemma 5.7's monotonicity clause is proved separately — and is not what is
+10. **Lemma 5.7's monotonicity clause is proved separately — and is not what is
     needed.** The lemma asserts `r_i < r_{i+1}`, `ρ_i < ρ_{i+1}`, `R_i < R_{i+1}`
     and `δ < r_1`. The induction (`QFS.core_induction`) gives each `k` its own
     `r_k ≤ ρ_k ≤ R_k` with `δ < r_k`, which is all the proof of Lemma 5.7 itself
@@ -351,7 +327,7 @@ Each departure from the paper, and why.
     `QFS.core_induction` and falls out of the construction
     (`r_{k+1} > ρ_k + 1 ≥ r_k + 1`).
 
-13. **Lemma 5.9's constant is too small, and its intermediate estimate fails for
+11. **Lemma 5.9's constant is too small, and its intermediate estimate fails for
     every admissible apex angle.** The proof passes through
 
     > if `y ∈ Ṽ[x]` and `|x − y| ≥ ℓ√d/(2 sin ϑ)`, then `B_{ℓ√d/2}(y) ⊆ V̄[x]`,
@@ -375,22 +351,13 @@ Each departure from the paper, and why.
     `δ = (√d + 1)/sin(ϑ/2)`, which is the sharp `√d/sin(ϑ/2)` plus enough to make
     the inequalities strict. Nothing downstream needs the particular value.
 
-14. **Section 5.2 uses closed cubes, Definition 2.5 open ones.** The paper
+12. **Section 5.2 uses closed cubes, Definition 2.5 open ones.** The paper
     "recalls" the cube notation as `A_ℓ(x) = {y : ‖y−x‖_∞ ≤ ℓ/2}`, but
     Definition 2.5 defines `A_h(u)` with a strict inequality. `QFS.cube` and
     `QFS.closedCube` are both provided; Lemma 5.9 is proved for the closed cube,
     as Section 5.2 states it, which is the stronger reading.
 
-15. **Remark 5.12 is reflected in the design.** The remark observes that a cone
-    favored by majority in a block need not be unique. `QFS.FavoredIn` is
-    therefore a *predicate* rather than a choice function, and
-    `QFS.FavoredEdge` quantifies over *some* favored cone, as Definition 5.13
-    does. `QFS.exists_favoredIn` supplies existence in a nonempty finite block —
-    which needs blocks to be finite, hence
-    `QFS.lattice_inter_closedBall_finite`. Without finiteness the phrase "has
-    maximal size" in Definition 5.11 would be satisfied by every cone.
-
-16. **Step 2's assignment `φ_z` is too weak for Step 6, and the paper's own
+13. **Step 2's assignment `φ_z` is too weak for Step 6, and the paper's own
     scheme repairs it.** This is the one substantive gap found in Section 5.
 
     Step 2 asks only that `φ_z : A → M` be *globally* balanced,
@@ -436,7 +403,7 @@ Each departure from the paper, and why.
     of one *global* covering walk, so Step 1 is used only in its pairwise form
     (Proposition 5.14 plus `QFS.exists_choiceWalk_of_choiceConn`).
 
-17. **Section 6's chaining needs edges longer than `R₀`, and claim (4) does not
+14. **Section 6's chaining needs edges longer than `R₀`, and claim (4) does not
     give it.** The computation displayed in Section 6 applies the *lower* bound
     of assumption (4) at each edge `{z_i, z_{i+1}}` of `p_xy`, to replace
     `|z_{i+1} − z_i|^{-d-α}` by `Λ ω(z_i, z_{i+1})`. That bound is only assumed
@@ -460,7 +427,7 @@ Each departure from the paper, and why.
     `QFS.path_props_long` proves it; `QFS.PathPropsLong.toPathProps` forgets the
     clause, so `QFS.path_props_of_pos` still records exactly the paper's statement.
 
-18. **The `λ`-observation in the proof of Theorem 4.1 is false as printed.** The
+15. **The `λ`-observation in the proof of Theorem 4.1 is false as printed.** The
     proof opens the case `#Γ(U) > 1` with
 
     > There is a constant `λ > 0` depending only on the minimum apex angle `ϑ`
@@ -476,7 +443,7 @@ Each departure from the paper, and why.
     `QFS.exists_mem_ball_inter_shift` carries `ϑ ≤ V.apex`, and with it the
     paper's constant `λ = (sin ϑ)/2` is correct.
 
-19. **Four smaller slips in printed statements, each repaired silently.**
+16. **Four smaller slips in printed statements, each repaired silently.**
 
     * **Definition 2.3** writes `V^m_r = {u ∈ V^m | B̄_r ⊂ V^m}` — the ball has
       no centre, so read literally `V^m_r` is `V^m` or `∅`. Definition 2.1
@@ -497,13 +464,11 @@ Each departure from the paper, and why.
       argument; what fails is that the stated constant follows from the input the
       paper cites.
 
-    Two more definitional notes, neither a defect: `QFS.CondM` asks for
-    measurability with respect to the ambient `MeasurableSpace` instance, which
-    for `EuclideanSpace ℝ (Fin d)` is the Borel σ-algebra the paper names; and
-    `QFS.RefFamily` does not constrain its apex angle `θ` to `(0, π/2]`, which
-    only weakens the hypothesis of everything proved from it.
+    One more note, not a defect: `QFS.RefFamily` does not constrain its apex
+    angle `θ` to `(0, π/2]`, which only weakens the hypothesis of everything
+    proved from it.
 
-20. **Two further notes on hypotheses, neither a defect.** Theorem 1.3's
+17. **Two further notes on hypotheses, neither a defect.** Theorem 1.3's
     dependency sentence — "the constant `c` depends on `Λ`, `ϑ`, `R₀` and on the
     dimension `d`" — omits `α`, and rightly: the proof produces `λ^{d+α}`, which is
     at most `λ^{d+2}` because `λ ≥ 1` and `α < 2`. So `κ` and `c` can be chosen
@@ -515,7 +480,7 @@ Each departure from the paper, and why.
     integrand as an explicit hypothesis, because summing the forms over a Whitney
     family goes through `lintegral_tsum`, which needs it.
 
-21. **Lemma A.1's overlap constant can be `M`, not `M²`.** Display (18) bounds
+18. **Lemma A.1's overlap constant can be `M`, not `M²`.** Display (18) bounds
     `∑_{B∈ℬ} ∫_{B*×B*} … ≤ M² ∫_{Ω×Ω} …` from the finite-overlap property
     "each point of `Ω` belongs to at most `M` balls `B*`". One factor suffices: a
     pair `(x,y)` lies in `B* × B*` only for those `B` with `x ∈ B*`, of which
@@ -523,7 +488,7 @@ Each departure from the paper, and why.
     form. Nothing
     downstream depends on the difference.
 
-22. **Where the constant sits.** The paper puts the comparability constant
+19. **Where the constant sits.** The paper puts the comparability constant
     sometimes on the left (`c Σ ≤ Σ` in Corollary 3.1 and in Lemma A.1's chain)
     and sometimes on the right (`∫ ≤ c ∫` in Theorems 1.1 and 1.3). Each Lean
     statement follows the orientation of the result it is used with, so
@@ -531,13 +496,7 @@ Each departure from the paper, and why.
     replaced by `c⁻¹` — to match Theorem 1.3, while Lemma A.1 keeps the constant
     on the left, as (18) has it.
 
-23. **The kernel on the diagonal.** `KernelBounds` asks the upper bound of (2)
-    only for `x ≠ y`. On the diagonal the paper's `Λ|x − y|^{−d−α}` is `+∞` and
-    says nothing, so `k(x,x)` is free, as in the paper. (`jumpKernel` is written
-    with the real power, which is `0` at `x = y`; asking the bound there as well
-    would force `k(x,x) = 0`.)
-
-24. **The norms of `H_k(Ω)` and `H^{α/2}(Ω)` (p. 4).** The paper defines the
+20. **The norms of `H_k(Ω)` and `H^{α/2}(Ω)` (p. 4).** The paper defines the
     seminorm as the integral itself, `|f|_{H_k(Ω)} = ∫_{Ω×Ω} (f(y) − f(x))² k`,
     with no square root, and then the norm by
     `‖f‖²_{H_k(Ω)} = ‖f‖²_{L²(Ω)} + |f|²_{H_k(Ω)}`, and the same for `H^{α/2}(Ω)`.
@@ -548,10 +507,6 @@ Each departure from the paper, and why.
     `‖f‖²_{L²(Ω)} + form Ω k f`, which is how the norm comparabilities of
     Theorem 1.4 are stated. The seminorm statements, including inequality (3) of
     Theorem 1.1, involve only the integral and read the same either way.
-
-25. **`r`-`R`-connectedness is Definition 5.3 exactly.** `QFS.RRConnected`
-    includes the side conditions `r ≤ R` and `x ∈ ℤ^d`. The proofs use
-    `QFS.RRConnectedCore`, the connectivity clause alone.
 
 ## Citations
 

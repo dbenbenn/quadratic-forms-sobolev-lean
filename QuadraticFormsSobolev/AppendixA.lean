@@ -137,7 +137,7 @@ comparability as an input for one fixed kernel and one fixed function.
 This is the content of the passage from `B*` to `B`.
 
 The measurability hypothesis on the integrand is where the paper's assumption
-that `k` be measurable — which `QFS.KernelBounds` drops, see Deviation 20 — is
+that `k` be measurable — which `QFS.KernelBounds` drops, see Deviation 17 — is
 actually needed: without it the family of integrals over the Whitney balls
 cannot be summed. -/
 theorem formHs_le_form_of_ballComparability {α κ c₀ : ℝ} (hc₀ : 1 ≤ c₀)
