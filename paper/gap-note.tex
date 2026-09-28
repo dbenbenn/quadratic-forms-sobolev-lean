@@ -45,7 +45,7 @@ of the paper. The argument has been checked in Lean~4.
 \end{abstract}
 \maketitle
 
-\section{Introduction}
+\section{Introduction}\label{sec:intro}
 
 We use the notation of Bux, Kassmann and Schulze~\cite{BKS}, and cite the numbering of the arXiv
 version~\cite{BKS}. A \emph{double cone} with axis a unit vector $v\in\R^d$ and apex angle
@@ -116,12 +116,18 @@ inequality over the lattices reproduces both continuous forms, up to constants a
 distance $O(h)$. The random shift alone would sample only differences in directions of $h\Z^d$;
 the random distortion spreads the differences over all directions.
 
-\medskip\noindent\textbf{Related work.} Chaker and Silvestre \cite[Theorem~1.3]{CS} prove a
-localized coercivity estimate, $\iint_{B_2\times B_2}(u(x)-u(y))^2K\ge c\lambda\abs{u}^2_{\dot H^s(B_1)}$
-for every $u$, under a condition on the density of the nondegeneracy set of the kernel. They
-remark that their result implies that of \cite{BKS}. Their method is different: an iteration on
-kernels with a covering argument, not a discretization. So the continuous conclusions of
-\cite{BKS} were already available through \cite{CS}. The point of the present note is that the
+\medskip\noindent\textbf{Related work.} Chaker and Silvestre \cite[Theorem~1.3]{CS} prove
+$\iint_{B_2\times B_2}(u(x)-u(y))^2K\ge c\lambda\abs{u}^2_{\dot H^s(B_1)}$ for every $u$, with $c$
+depending only on $d$ and $\mu$, under their Assumption~1.1: for every ball $B$ and $x\in B$, the
+set of $z\in B$ with $K(x,z)\ge\lambda\norm{x-z}^{-d-2s}$ has measure at least $\mu\abs B$. After
+scaling, this is the enlarged-ball inequality of Theorem~\ref{thm:A} with $\kappa=2$. They remark
+that their result implies that of \cite{BKS}. For this, a kernel satisfying \eqref{eq:2} should
+satisfy Assumption~1.1 with $s=\alpha/2$, $\lambda=\Lambda^{-1}$ and $\mu$ depending only on $d$
+and $\vartheta$, since a double cone of apex angle $\vartheta$ at $x$ meets every ball containing
+$x$ in a proportion of its volume bounded below. We have not checked the details. With
+Lemma~A.1 of \cite{BKS}, the continuous conclusions of \cite{BKS} would then follow from
+\cite{CS}. Their method is different: an iteration on kernels with a covering argument, not a
+discretization. The point of the present note is that the
 discretization route of \cite{BKS}, through their Theorem~1.3, can itself be completed. We are
 not aware of any earlier discussion of the gap.
 
@@ -177,7 +183,8 @@ Nor can the step be rescued cheaply:
 \item Approximating $f\in H_k(B^*)$ by smooth functions in the $H_k$ norm would require the
   density statement of Theorem~1.4, whose proof uses Lemma~3.7.
 \end{itemize}
-The final inequality of Lemma~3.7 is true, by Theorem~\ref{thm:A} or by \cite{CS}. But its proof
+The final inequality of Lemma~3.7 is true, by Theorem~\ref{thm:A} (or, modulo the verification
+mentioned in Section~\ref{sec:intro}, by \cite{CS}). But its proof
 in \cite{BKS} is incomplete at this step.
 
 \section{Proof of Theorem~\ref{thm:A}}
