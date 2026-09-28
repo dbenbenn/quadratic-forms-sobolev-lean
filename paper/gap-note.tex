@@ -295,19 +295,19 @@ of lattice points, because \eqref{eq:2} holds at every pair of points; no measur
 $\Gamma$ enters. So $(\Gamma',\omega)$ satisfies the hypotheses of Theorem~1.3 of \cite{BKS} with
 $\vartheta/2$, $\Lambda'$ and $R_0=\tfrac12$.
 
-\emph{The balls.} Let $c=T^{-1}x_0$ and $r=R/(h(1-\varepsilon))$. If $Tz\in B$ then
-$\norm{z-c}\le\norm{Tz-x_0}/(h(1-\varepsilon))<r$, so $z\in B_r(c)$. If $z\in B_{\kappa_0r}(c)$
+\emph{The balls.} Let $\xi=T^{-1}x_0$ and $r=R/(h(1-\varepsilon))$. If $Tz\in B$ then
+$\norm{z-\xi}\le\norm{Tz-x_0}/(h(1-\varepsilon))<r$, so $z\in B_r(\xi)$. If $z\in B_{\kappa_0r}(\xi)$
 then $\norm{Tz-x_0}<h(1+\varepsilon)\kappa_0r=\kappa_0R(1+\varepsilon)/(1-\varepsilon)\le3\kappa_0R$,
 so $Tz\in B^*$.
 
-\emph{Conclusion.} Apply Theorem~1.3 of \cite{BKS} to $f\circ T$ on $B_r(c)$. Using
+\emph{Conclusion.} Apply Theorem~1.3 of \cite{BKS} to $f\circ T$ on $B_r(\xi)$. Using
 $\norm{Tz-Tz'}^{-d-\alpha}\le2^{d+\alpha}h^{-d-\alpha}\norm{z-z'}^{-d-\alpha}$ on the left,
 \begin{align*}
   \sum_{z,z'}F_B(Tz,Tz')
-  &\le2^{d+\alpha}h^{-d-\alpha}\sum_{z,z'\in B_r(c)}(f(Tz)-f(Tz'))^2\norm{z-z'}^{-d-\alpha}\\
-  &\le2^{d+\alpha}c_0h^{-d-\alpha}\sum_{z,z'\in B_{\kappa_0r}(c)}(f(Tz)-f(Tz'))^2\omega(z,z').
+  &\le2^{d+\alpha}h^{-d-\alpha}\sum_{z,z'\in B_r(\xi)}(f(Tz)-f(Tz'))^2\norm{z-z'}^{-d-\alpha}\\
+  &\le2^{d+\alpha}c_0h^{-d-\alpha}\sum_{z,z'\in B_{\kappa_0r}(\xi)}(f(Tz)-f(Tz'))^2\omega(z,z').
 \end{align*}
-The last sum is $h^{d+\alpha}\sum_{z,z'\in B_{\kappa_0r}(c)}G(Tz,Tz')$, and every such pair has
+The last sum is $h^{d+\alpha}\sum_{z,z'\in B_{\kappa_0r}(\xi)}G(Tz,Tz')$, and every such pair has
 $Tz,Tz'\in B^*$.
 \end{proof}
 
@@ -345,14 +345,14 @@ Let $g\colon\R^d\to[0,\infty]$ be measurable and $w\in\Z^d\setminus\{0\}$, with 
 
 \begin{proof}
 Choose $j$ with $\abs{w_j}=m$. Fix the columns $Q_i$, $i\ne j$, and put
-$c=w+\sum_{i\ne j}w_iQ_i$, so that $A_Qw=c+w_jQ_j$. The substitution $y=c+w_jQ_j$ gives
-$\int_{\bar B_\delta(0)}g(c+w_jQ_j)\dd Q_j=m^{-d}\int_{\bar B_{\delta m}(c)}g$.
+$b=w+\sum_{i\ne j}w_iQ_i$, so that $A_Qw=b+w_jQ_j$. The substitution $y=b+w_jQ_j$ gives
+$\int_{\bar B_\delta(0)}g(b+w_jQ_j)\dd Q_j=m^{-d}\int_{\bar B_{\delta m}(b)}g$.
 
-For the upper bound, $\norm{c-w}\le(d-1)\delta m$, so $\bar B_{\delta m}(c)\subseteq\bar B_{d\delta m}(w)$.
+For the upper bound, $\norm{b-w}\le(d-1)\delta m$, so $\bar B_{\delta m}(b)\subseteq\bar B_{d\delta m}(w)$.
 Integrating over the other $d-1$ columns gives the factor $\abs{B_\delta}^{d-1}$.
 
 For the lower bound, restrict the other columns to $\bar B_{\delta/d}(0)$. Then
-$\norm{c-w}\le(d-1)\delta m/d$ and $\bar B_{\delta m}(c)\supseteq\bar B_{\delta m/d}(w)$, and the
+$\norm{b-w}\le(d-1)\delta m/d$ and $\bar B_{\delta m}(b)\supseteq\bar B_{\delta m/d}(w)$, and the
 restricted columns contribute $\abs{B_{\delta/d}}^{d-1}$.
 \end{proof}
 
